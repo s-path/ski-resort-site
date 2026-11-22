@@ -73,6 +73,7 @@ export function ResortExplorer({
   const [query, setQuery] = useState(initialQuery ?? "");
   const [minutes, setMinutes] = useState(150);
   const [sort, setSort] = useState<SortKey>("recommended");
+  const [panelOpen, setPanelOpen] = useState(false);
 
   const countBy = useMemo(() => {
     const m = new Map<AreaKey, number>();
@@ -129,6 +130,7 @@ export function ResortExplorer({
     });
 
   const two = list.length >= 5;
+  const activeCount = (selected.size < ALL_KEYS.length ? 1 : 0) + features.size;
   const h = Math.floor(minutes / 60);
   const m = minutes % 60;
   const filterKey = `${[...selected].join()}|${[...features].join()}|${query}|${sort}`;
@@ -137,7 +139,7 @@ export function ResortExplorer({
     <div className="flex flex-wrap items-start gap-8">
       <aside
         aria-label="絞り込み"
-        className="reveal flex max-w-[300px] flex-[1_1_260px] flex-col gap-6 rounded-xl border border-line p-6"
+        className="reveal flex w-full flex-col gap-6 rounded-xl border border-line p-5 md:max-w-[300px] md:flex-[1_1_260px] md:p-6"
         style={{ animationDelay: "0.1s" }}
       >
         <div className="flex items-center justify-between">
@@ -175,105 +177,130 @@ export function ResortExplorer({
           />
         </label>
 
-        <fieldset className="flex flex-col gap-3.5 border-t border-line pt-5">
-          <legend className="mb-2.5 text-xs font-semibold text-sub">
-            エリア
-          </legend>
-          {AREA_GROUPS.map((g) => {
-            const keys = g.areas.map((a) => a.key);
-            const n = keys.filter((k) => selected.has(k)).length;
-            const state =
-              n === 0
-                ? ""
-                : n === keys.length
-                  ? "すべて"
-                  : `${n}/${keys.length}`;
-            const dot = prefColor(g.label).dot;
-            return (
-              <div key={g.label} className="flex flex-col gap-2">
-                <label className="flex cursor-pointer items-center gap-2.5 text-sm font-bold text-navy-950">
-                  <input
-                    type="checkbox"
-                    checked={n === keys.length}
-                    onChange={() => toggleGroup(keys)}
-                    aria-label={`${g.label}のエリアをすべて選択`}
-                    className={checkbox}
-                  />
-                  <span
-                    aria-hidden
-                    className="h-2 w-2 rounded-full"
-                    style={{ background: dot }}
-                  />
-                  {g.label}
-                  <span className="ml-auto text-xs font-medium text-muted">
-                    {state}
-                  </span>
-                </label>
-                {g.areas.map((a) => (
-                  <label
-                    key={a.key}
-                    className="flex cursor-pointer items-center gap-2.5 pl-7 text-sm"
-                  >
+        <button
+          type="button"
+          onClick={() => setPanelOpen((v) => !v)}
+          aria-expanded={panelOpen}
+          aria-controls="filter-details"
+          className="btn flex h-11 cursor-pointer items-center justify-between rounded-lg border border-field px-4 text-sm font-semibold text-ink md:hidden"
+        >
+          <span>
+            エリア・設備で絞り込む
+            {activeCount > 0 && (
+              <span className="ml-2 rounded-full bg-navy-700 px-2 py-0.5 text-xs text-white">
+                {activeCount}
+              </span>
+            )}
+          </span>
+          <span aria-hidden="true">{panelOpen ? "▲" : "▼"}</span>
+        </button>
+
+        <div
+          id="filter-details"
+          className={`${panelOpen ? "flex" : "hidden"} flex-col gap-6 md:flex`}
+        >
+          <fieldset className="flex flex-col gap-3.5 border-t border-line pt-5">
+            <legend className="mb-2.5 text-xs font-semibold text-sub">
+              エリア
+            </legend>
+            {AREA_GROUPS.map((g) => {
+              const keys = g.areas.map((a) => a.key);
+              const n = keys.filter((k) => selected.has(k)).length;
+              const state =
+                n === 0
+                  ? ""
+                  : n === keys.length
+                    ? "すべて"
+                    : `${n}/${keys.length}`;
+              const dot = prefColor(g.label).dot;
+              return (
+                <div key={g.label} className="flex flex-col gap-2">
+                  <label className="flex cursor-pointer items-center gap-2.5 text-sm font-bold text-navy-950">
                     <input
                       type="checkbox"
-                      checked={selected.has(a.key)}
-                      onChange={() => toggleArea(a.key)}
+                      checked={n === keys.length}
+                      onChange={() => toggleGroup(keys)}
+                      aria-label={`${g.label}のエリアをすべて選択`}
                       className={checkbox}
                     />
-                    {a.label}
-                    <span className="ml-auto text-xs tabular-nums text-muted">
-                      {countBy.get(a.key) ?? 0}
+                    <span
+                      aria-hidden
+                      className="h-2 w-2 rounded-full"
+                      style={{ background: dot }}
+                    />
+                    {g.label}
+                    <span className="ml-auto text-xs font-medium text-muted">
+                      {state}
                     </span>
                   </label>
-                ))}
-              </div>
-            );
-          })}
-        </fieldset>
+                  {g.areas.map((a) => (
+                    <label
+                      key={a.key}
+                      className="flex cursor-pointer items-center gap-2.5 pl-7 text-sm"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selected.has(a.key)}
+                        onChange={() => toggleArea(a.key)}
+                        className={checkbox}
+                      />
+                      {a.label}
+                      <span className="ml-auto text-xs tabular-nums text-muted">
+                        {countBy.get(a.key) ?? 0}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              );
+            })}
+          </fieldset>
 
-        <fieldset className="flex flex-col gap-2.5 border-t border-line pt-5">
-          <legend className="mb-2.5 text-xs font-semibold text-sub">
-            練馬ICからの時間
-          </legend>
-          <input
-            type="range"
-            min={60}
-            max={240}
-            step={30}
-            value={minutes}
-            onChange={(e) => setMinutes(Number(e.target.value))}
-            aria-label="練馬ICからの最大時間"
-            className="accent-navy-700"
-          />
-          <div className="flex justify-between text-xs text-sub">
-            <span>1時間</span>
-            <span className="font-semibold text-ink">
-              {m ? `${h}時間${m}分` : `${h}時間`}以内
-            </span>
-            <span>4時間</span>
-          </div>
-          <p className="text-[11px] text-muted">所要時間のデータは準備中です</p>
-        </fieldset>
+          <fieldset className="flex flex-col gap-2.5 border-t border-line pt-5">
+            <legend className="mb-2.5 text-xs font-semibold text-sub">
+              練馬ICからの時間
+            </legend>
+            <input
+              type="range"
+              min={60}
+              max={240}
+              step={30}
+              value={minutes}
+              onChange={(e) => setMinutes(Number(e.target.value))}
+              aria-label="練馬ICからの最大時間"
+              className="accent-navy-700"
+            />
+            <div className="flex justify-between text-xs text-sub">
+              <span>1時間</span>
+              <span className="font-semibold text-ink">
+                {m ? `${h}時間${m}分` : `${h}時間`}以内
+              </span>
+              <span>4時間</span>
+            </div>
+            <p className="text-[11px] text-muted">
+              所要時間のデータは準備中です
+            </p>
+          </fieldset>
 
-        <fieldset className="flex flex-col gap-2.5 border-t border-line pt-5">
-          <legend className="mb-2.5 text-xs font-semibold text-sub">
-            設備・特徴
-          </legend>
-          {FEATURES.map((f) => (
-            <label
-              key={f.key}
-              className="flex cursor-pointer items-center gap-2.5 text-sm"
-            >
-              <input
-                type="checkbox"
-                checked={features.has(f.key)}
-                onChange={() => toggleFeature(f.key)}
-                className={checkbox}
-              />
-              {f.label}
-            </label>
-          ))}
-        </fieldset>
+          <fieldset className="flex flex-col gap-2.5 border-t border-line pt-5">
+            <legend className="mb-2.5 text-xs font-semibold text-sub">
+              設備・特徴
+            </legend>
+            {FEATURES.map((f) => (
+              <label
+                key={f.key}
+                className="flex cursor-pointer items-center gap-2.5 text-sm"
+              >
+                <input
+                  type="checkbox"
+                  checked={features.has(f.key)}
+                  onChange={() => toggleFeature(f.key)}
+                  className={checkbox}
+                />
+                {f.label}
+              </label>
+            ))}
+          </fieldset>
+        </div>
       </aside>
 
       <section

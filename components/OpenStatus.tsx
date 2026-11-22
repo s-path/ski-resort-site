@@ -36,7 +36,7 @@ export function OpenStatus({ resorts }: { resorts: Resort[] }) {
       <div
         role="tablist"
         aria-label="オープン状況の県"
-        className="flex flex-wrap gap-1 self-start rounded-full border border-line bg-mist p-1"
+        className="no-scrollbar -mx-4 flex max-w-[calc(100%+2rem)] gap-1 self-start overflow-x-auto px-4 sm:mx-0 sm:max-w-full sm:flex-wrap sm:rounded-full sm:border sm:border-line sm:bg-mist sm:p-1"
       >
         {TABS.map((t) => {
           const on = t.key === tab;
@@ -48,10 +48,10 @@ export function OpenStatus({ resorts }: { resorts: Resort[] }) {
               role="tab"
               aria-selected={on}
               onClick={() => setTab(t.key)}
-              className={`chip inline-flex min-h-10 items-center gap-2 rounded-full border px-4 text-sm font-semibold ${
+              className={`chip inline-flex min-h-10 shrink-0 items-center gap-2 rounded-full border px-4 text-sm font-semibold ${
                 on
                   ? "border-navy-950 bg-navy-950 text-white"
-                  : "border-transparent text-[#3A4456]"
+                  : "border-line bg-white text-[#3A4456] sm:border-transparent sm:bg-transparent"
               }`}
             >
               {t.label}
@@ -72,7 +72,55 @@ export function OpenStatus({ resorts }: { resorts: Resort[] }) {
         role="tabpanel"
         className="overflow-hidden rounded-xl border border-line"
       >
-        <table className="w-full border-collapse text-sm">
+        <ul className="divide-y divide-line md:hidden">
+          {rows.map((r, n) => (
+            <li
+              key={r.id}
+              className="reveal flex items-center justify-between gap-3 px-4 py-3.5"
+              style={{
+                animationDelay: `${n * 0.04}s`,
+                animationDuration: "0.45s",
+              }}
+            >
+              <div className="flex min-w-0 flex-col gap-1">
+                {r.url ? (
+                  <a
+                    href={r.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="tlink inline-flex items-center gap-1.5 text-[15px] font-semibold text-ink"
+                  >
+                    {r.name}
+                    <ExternalIcon color="#556070" />
+                    <span className="sr-only">（公式サイト・新しいタブ）</span>
+                  </a>
+                ) : (
+                  <span className="text-[15px] font-semibold">{r.name}</span>
+                )}
+                <span className="inline-flex items-center gap-2 text-xs">
+                  <PrefChip prefecture={r.prefecture} />
+                  <span className="text-sub">{r.areaLabel}</span>
+                </span>
+              </div>
+              <div className="flex shrink-0 flex-col items-end gap-1">
+                <OpenBadge status={r.status} />
+                <span className="text-xs tabular-nums text-sub">
+                  {r.openingDate
+                    ? formatShortDate(r.openingDate)
+                    : (r.openingLabel ?? "—")}
+                  {r.status === "planned" && " 予定"}
+                  {r.status === "open" && " から"}
+                </span>
+              </div>
+            </li>
+          ))}
+          {rows.length === 0 && (
+            <li className="px-4 py-10 text-center text-sub">
+              この県のスキー場はまだ登録されていません。
+            </li>
+          )}
+        </ul>
+        <table className="hidden w-full border-collapse text-sm md:table">
           <thead>
             <tr className="bg-mist text-left text-xs text-sub">
               <th scope="col" className="px-5 py-3.5 font-semibold">
@@ -127,21 +175,7 @@ export function OpenStatus({ resorts }: { resorts: Resort[] }) {
                   </span>
                 </td>
                 <td className="px-5 py-4">
-                  {r.status === "open" ? (
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-navy-100 px-2.5 py-1 text-xs font-semibold text-navy-700">
-                      <span className="pulse h-1.5 w-1.5 rounded-full bg-navy-700" />
-                      営業中
-                    </span>
-                  ) : r.status === "planned" ? (
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EEF0F3] px-2.5 py-1 text-xs font-semibold text-sub">
-                      <span className="h-1.5 w-1.5 rounded-full bg-muted" />
-                      オープン予定
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-field px-2.5 py-1 text-xs font-semibold text-muted">
-                      確認中
-                    </span>
-                  )}
+                  <OpenBadge status={r.status} />
                 </td>
                 <td className="px-5 py-4 text-sub">
                   {r.openingDate
@@ -165,5 +199,23 @@ export function OpenStatus({ resorts }: { resorts: Resort[] }) {
         </table>
       </div>
     </>
+  );
+}
+
+function OpenBadge({ status }: { status: Resort["status"] }) {
+  return status === "open" ? (
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-navy-100 px-2.5 py-1 text-xs font-semibold text-navy-700">
+      <span className="pulse h-1.5 w-1.5 rounded-full bg-navy-700" />
+      営業中
+    </span>
+  ) : status === "planned" ? (
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EEF0F3] px-2.5 py-1 text-xs font-semibold text-sub">
+      <span className="h-1.5 w-1.5 rounded-full bg-muted" />
+      オープン予定
+    </span>
+  ) : (
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-field px-2.5 py-1 text-xs font-semibold text-muted">
+      確認中
+    </span>
   );
 }
