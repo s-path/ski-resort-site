@@ -157,7 +157,7 @@ export default function Home() {
             </h2>
           </div>
           <p className="text-[13px] text-sub">
-            公式発表をもとに掲載。最新情報は各スキー場でご確認ください
+            オープン日は公式発表をもとに掲載。「確認中」は今季の発表を確認できていないスキー場です
           </p>
         </div>
         <OpenStatus resorts={resorts} />
