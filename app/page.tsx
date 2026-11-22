@@ -54,9 +54,9 @@ export default function Home() {
             </div>
             <span
               aria-hidden="true"
-              className="snowmark flex flex-col font-script leading-none text-white"
+              className="snowmark flex flex-row font-script leading-none text-white sm:flex-col"
               style={{
-                fontSize: "clamp(76px, 14vw, 210px)",
+                fontSize: "clamp(56px, 14vw, 210px)",
                 textShadow:
                   "0 2px 18px rgba(10,31,68,0.35), 0 1px 2px rgba(10,31,68,0.25)",
                 padding: "0.1em 0.25em",
@@ -69,11 +69,9 @@ export default function Home() {
                 snow
               </span>
               <span
-                className="write block whitespace-nowrap"
+                className="snowmark-line write block whitespace-nowrap"
                 style={{
                   padding: "0.08em 0.2em 0.16em 0.1em",
-                  marginTop: "-0.3em",
-                  marginLeft: "0.6em",
                   animationDelay: "3.6s",
                 }}
               >

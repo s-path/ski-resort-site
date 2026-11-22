@@ -270,3 +270,14 @@ tbody tr:hover {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/* snowline の2行目。PCは少し右下にずらし、スマホは1行に並べて縦幅を抑える */
+.snowmark-line {
+  margin-left: -0.15em;
+}
+@media (min-width: 640px) {
+  .snowmark-line {
+    margin-top: -0.3em;
+    margin-left: 0.6em;
+  }
+}
