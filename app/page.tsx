@@ -160,10 +160,10 @@ export default function Home() {
         </div>
         <OpenStatus resorts={resorts} />
         <Link
-          href="/resorts"
+          href="/resorts?sort=opening"
           className="tlink self-start text-sm font-semibold text-navy-700"
         >
-          すべてのスキー場を見る →
+          オープンが早い順にスキー場を見る →
         </Link>
       </section>
 
