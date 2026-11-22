@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { type FeatureKey, ResortExplorer } from "@/components/ResortExplorer";
+import {
+  type FeatureKey,
+  ResortExplorer,
+  type SortKey,
+} from "@/components/ResortExplorer";
 import { AREA_GROUPS, type AreaKey, resorts } from "@/lib/resorts";
 
 export const metadata: Metadata = {
@@ -34,6 +38,11 @@ export default async function ResortsPage({ searchParams }: Props) {
   const f = first(sp.f);
   // トップページの「東京駅から新幹線＋バス」は、新幹線で行けるスキー場に絞る
   const time = first(sp.time);
+  const sort = first(sp.sort);
+  const initialSort: SortKey | undefined =
+    sort === "opening" || sort === "name" || sort === "prefecture"
+      ? sort
+      : undefined;
   const features: FeatureKey[] = [];
   if (f && FEATURE_KEYS.has(f)) features.push(f as FeatureKey);
   if (time === "shinkansen" && !features.includes("shinkansen"))
@@ -57,6 +66,7 @@ export default async function ResortsPage({ searchParams }: Props) {
         }
         initialQuery={q}
         initialFeatures={features}
+        initialSort={initialSort}
       />
     </div>
   );

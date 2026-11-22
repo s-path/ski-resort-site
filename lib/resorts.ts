@@ -489,6 +489,27 @@ export function formatShortDate(iso: string): string {
   return shortDate.format(new Date(`${iso}T00:00:00+09:00`));
 }
 
+const LABEL_DAY: Record<string, string> = {
+  上旬: "05",
+  中旬: "15",
+  下旬: "25",
+};
+
+/**
+ * オープンが早い順に並べるためのキー。
+ * 日付があればその日、「12月中旬」のような目安なら月の中ほどの日、どちらもなければ最後。
+ */
+export function openingSortKey(r: Resort): string {
+  if (r.openingDate) return r.openingDate;
+  const m = r.openingLabel?.match(/(\d{1,2})月(上旬|中旬|下旬)/);
+  if (m) {
+    const month = Number(m[1]);
+    const year = month >= 7 ? 2026 : 2027;
+    return `${year}-${String(month).padStart(2, "0")}-${LABEL_DAY[m[2]]}`;
+  }
+  return "9999-12-31";
+}
+
 export function statusLabel(r: Resort): string {
   if (r.status === "open") return "営業中";
   if (r.status === "planned" && r.openingDate)
