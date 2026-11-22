@@ -1,0 +1,159 @@
+"use client";
+
+import { useState } from "react";
+import type { Resort } from "@/lib/resorts";
+import { formatShortDate } from "@/lib/resorts";
+import { ExternalIcon, PrefChip } from "./Badges";
+
+const TABS: { key: string; label: string; prefs: string[] | null }[] = [
+  { key: "all", label: "すべて", prefs: null },
+  { key: "gunma", label: "群馬", prefs: ["群馬"] },
+  { key: "tochigi", label: "栃木", prefs: ["栃木"] },
+  { key: "niigata", label: "新潟", prefs: ["新潟"] },
+  { key: "nagano", label: "長野", prefs: ["長野"] },
+  { key: "yamanashi", label: "山梨", prefs: ["山梨"] },
+  { key: "other", label: "埼玉・静岡", prefs: ["埼玉", "静岡"] },
+];
+
+/** オープン状況の表。県ごとにタブで切り替える */
+export function OpenStatus({ resorts }: { resorts: Resort[] }) {
+  const [tab, setTab] = useState("all");
+  const withDates = resorts
+    .filter((r) => r.openingDate)
+    .sort((a, b) => (a.openingDate ?? "").localeCompare(b.openingDate ?? ""));
+
+  const rowsFor = (prefs: string[] | null) =>
+    withDates.filter((r) => !prefs || prefs.includes(r.prefecture));
+  const active = TABS.find((t) => t.key === tab) ?? TABS[0];
+  const rows = rowsFor(active.prefs);
+
+  return (
+    <>
+      <div
+        role="tablist"
+        aria-label="オープン状況の県"
+        className="flex flex-wrap gap-1 self-start rounded-full border border-line bg-mist p-1"
+      >
+        {TABS.map((t) => {
+          const on = t.key === tab;
+          const count = rowsFor(t.prefs).length;
+          return (
+            <button
+              key={t.key}
+              type="button"
+              role="tab"
+              aria-selected={on}
+              onClick={() => setTab(t.key)}
+              className={`chip inline-flex min-h-10 items-center gap-2 rounded-full border px-4 text-sm font-semibold ${
+                on
+                  ? "border-navy-950 bg-navy-950 text-white"
+                  : "border-transparent text-[#3A4456]"
+              }`}
+            >
+              {t.label}
+              <span
+                className={`inline-flex h-5 min-w-5 items-center justify-center rounded-[10px] px-1.5 text-[11px] font-bold ${
+                  on ? "bg-white/20 text-white" : "bg-line text-sub"
+                }`}
+              >
+                {count}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      <div
+        key={tab}
+        role="tabpanel"
+        className="overflow-hidden rounded-xl border border-line"
+      >
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-mist text-left text-xs text-sub">
+              <th scope="col" className="px-5 py-3.5 font-semibold">
+                スキー場
+              </th>
+              <th scope="col" className="px-5 py-3.5 font-semibold">
+                エリア
+              </th>
+              <th scope="col" className="px-5 py-3.5 font-semibold">
+                状況
+              </th>
+              <th scope="col" className="px-5 py-3.5 font-semibold">
+                営業開始
+              </th>
+              <th scope="col" className="px-5 py-3.5 text-right font-semibold">
+                積雪
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r, n) => (
+              <tr
+                key={r.id}
+                className="reveal border-t border-line"
+                style={{
+                  animationDelay: `${n * 0.05}s`,
+                  animationDuration: "0.45s",
+                }}
+              >
+                <td className="px-5 py-4 font-semibold">
+                  {r.url ? (
+                    <a
+                      href={r.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="tlink inline-flex items-center gap-1.5 text-ink"
+                    >
+                      {r.name}
+                      <ExternalIcon color="#556070" />
+                      <span className="sr-only">
+                        （公式サイト・新しいタブ）
+                      </span>
+                    </a>
+                  ) : (
+                    r.name
+                  )}
+                </td>
+                <td className="px-5 py-4">
+                  <span className="inline-flex flex-wrap items-center gap-2">
+                    <PrefChip prefecture={r.prefecture} />
+                    <span className="text-sub">{r.areaLabel}</span>
+                  </span>
+                </td>
+                <td className="px-5 py-4">
+                  {r.status === "open" ? (
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-navy-100 px-2.5 py-1 text-xs font-semibold text-navy-700">
+                      <span className="pulse h-1.5 w-1.5 rounded-full bg-navy-700" />
+                      営業中
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EEF0F3] px-2.5 py-1 text-xs font-semibold text-sub">
+                      <span className="h-1.5 w-1.5 rounded-full bg-muted" />
+                      オープン予定
+                    </span>
+                  )}
+                </td>
+                <td className="px-5 py-4 text-sub">
+                  {r.openingDate && formatShortDate(r.openingDate)}
+                  {r.status === "planned" && " 予定"}
+                </td>
+                <td className="px-5 py-4 text-right tabular-nums text-sub">
+                  {r.stats[0]?.value}
+                </td>
+              </tr>
+            ))}
+            {rows.length === 0 && (
+              <tr className="reveal border-t border-line">
+                <td colSpan={5} className="px-5 py-10 text-center text-sub">
+                  この県のスキー場は、まだ今シーズンのオープン日が発表されていません。
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </>
+  );
+}

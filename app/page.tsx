@@ -1,121 +1,224 @@
-import { CountUp } from "@/components/CountUp";
-import { ResortExplorer } from "@/components/ResortExplorer";
-import { Reveal } from "@/components/Reveal";
+import Link from "next/link";
+import { AreaTabs } from "@/components/AreaTabs";
+import { OpenStatus } from "@/components/OpenStatus";
+import { RotatingPlace } from "@/components/RotatingPlace";
 import { Snowfall } from "@/components/Snowfall";
-import { formatUpdatedAt, IS_SAMPLE_DATA, resorts } from "@/lib/resorts";
+import { SNOW_AREAS } from "@/lib/areas";
+import { AREA_GROUPS, resorts } from "@/lib/resorts";
+
+const QUICK = [
+  { key: "open", label: "営業中" },
+  { key: "night", label: "ナイターあり" },
+  { key: "spring", label: "春スキー" },
+  { key: "shinkansen", label: "新幹線で行ける" },
+  { key: "kids", label: "キッズパーク" },
+];
+
+const field =
+  "h-11 rounded-lg border border-field bg-white px-3 text-[15px] text-ink";
 
 export default function Home() {
-  const openCount = resorts.filter((r) => r.status !== "preparing").length;
-  const maxSnow = Math.max(...resorts.map((r) => r.snowTop));
-  const totalNewSnow = resorts.reduce((sum, r) => sum + r.newSnow24h, 0);
-  const updatedAt = resorts[0]?.updatedAt;
-
   return (
     <>
-      <section className="relative overflow-hidden bg-navy-950 pt-16 text-white">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(31,85,196,0.45),transparent_60%)]" />
+      <section className="hero-bg relative overflow-hidden border-b border-line">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(90deg, rgba(246,247,249,0.94) 0%, rgba(246,247,249,0.82) 44%, rgba(246,247,249,0.1) 62%, rgba(246,247,249,0) 100%)",
+          }}
+        />
         <Snowfall />
 
-        <svg
-          aria-hidden
-          className="absolute bottom-0 left-0 w-full text-white"
-          viewBox="0 0 1440 160"
-          preserveAspectRatio="none"
-        >
-          <path
-            fill="currentColor"
-            fillOpacity="0.06"
-            d="M0 160 L0 90 L180 40 L320 100 L520 20 L700 95 L880 35 L1060 105 L1240 50 L1440 110 L1440 160 Z"
-          />
-          <path
-            fill="currentColor"
-            d="M0 160 L0 130 L240 95 L420 135 L640 85 L860 140 L1080 100 L1280 135 L1440 115 L1440 160 Z"
-          />
-        </svg>
-
-        <div className="relative mx-auto max-w-6xl px-6 pb-40 pt-24 md:pt-32">
-          {IS_SAMPLE_DATA && (
-            <p className="inline-block animate-fade-up rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs text-white/70">
-              β版：表示中の数値はサンプルデータです
-            </p>
-          )}
-          <h1
-            className="mt-6 animate-fade-up text-4xl font-semibold leading-tight tracking-tight md:text-6xl"
-            style={{ animationDelay: "100ms" }}
-          >
-            今日、どこが滑れる？
-            <br />
-            <span className="bg-gradient-to-r from-white to-navy-100/60 bg-clip-text text-transparent">
-              関東周辺の雪山を、ひと目で。
+        <div className="reveal relative mx-auto flex max-w-[1200px] flex-col gap-8 px-6 pb-[72px] pt-[88px]">
+          <div className="relative flex flex-wrap items-center gap-x-14 gap-y-6">
+            <div className="flex max-w-[760px] flex-col gap-4">
+              <p className="text-[13px] font-semibold tracking-[0.08em] text-navy-700">
+                2026–27 SEASON
+                <span className="mx-2 text-muted">/</span>
+                <RotatingPlace />
+              </p>
+              <h1
+                className="font-mincho font-bold leading-[1.4] tracking-[0.04em] text-navy-900"
+                style={{ fontSize: "clamp(24px, 4vw, 52px)" }}
+              >
+                <span className="block whitespace-nowrap">
+                  関東から行けるスキー場の、
+                </span>
+                <span className="block whitespace-nowrap">いまがわかる。</span>
+              </h1>
+              <p className="text-[17px] leading-[1.8] text-sub">
+                群馬・栃木・長野・山梨から越後湯沢まで。営業状況、積雪、アクセス時間をひとつの画面で比べられます。
+              </p>
+            </div>
+            <span
+              aria-hidden="true"
+              className="snowmark flex flex-col font-script leading-none text-white"
+              style={{
+                fontSize: "clamp(120px, 14vw, 210px)",
+                textShadow:
+                  "0 2px 18px rgba(10,31,68,0.35), 0 1px 2px rgba(10,31,68,0.25)",
+                padding: "0.1em 0.25em",
+              }}
+            >
+              <span
+                className="write block whitespace-nowrap"
+                style={{ padding: "0.08em 0.2em 0.12em 0.1em" }}
+              >
+                snow
+              </span>
+              <span
+                className="write block whitespace-nowrap"
+                style={{
+                  padding: "0.08em 0.2em 0.16em 0.1em",
+                  marginTop: "-0.3em",
+                  marginLeft: "0.6em",
+                  animationDelay: "3.6s",
+                }}
+              >
+                line
+              </span>
             </span>
-          </h1>
-          <p
-            className="mt-6 max-w-xl animate-fade-up text-white/70"
-            style={{ animationDelay: "200ms" }}
-          >
-            群馬・栃木・長野・山梨のスキー場の積雪と営業状況をまとめて確認できます。
-          </p>
+          </div>
 
-          <dl
-            className="mt-14 grid max-w-2xl animate-fade-up grid-cols-3 gap-6 border-t border-white/10 pt-8"
-            style={{ animationDelay: "300ms" }}
+          <form
+            action="/resorts"
+            method="get"
+            className="grid grid-cols-1 items-end gap-4 rounded-xl border border-line bg-white p-5 shadow-[0_1px_2px_rgba(10,31,68,0.04)] md:grid-cols-4"
           >
-            <Stat
-              label="営業中"
-              value={openCount}
-              unit={`/ ${resorts.length}`}
-            />
-            <Stat label="最大積雪" value={maxSnow} unit="cm" />
-            <Stat label="24h新雪 合計" value={totalNewSnow} unit="cm" />
-          </dl>
+            <label className="flex flex-col gap-1.5 text-xs font-semibold text-sub">
+              キーワード
+              <input
+                type="text"
+                name="q"
+                placeholder="スキー場名・地名"
+                className={field}
+              />
+            </label>
+            <label className="flex flex-col gap-1.5 text-xs font-semibold text-sub">
+              エリア
+              <select name="area" className={field} defaultValue="">
+                <option value="">すべてのエリア</option>
+                {AREA_GROUPS.map((g) => (
+                  <optgroup key={g.label} label={g.label}>
+                    {g.areas.map((a) => (
+                      <option key={a.key} value={a.key}>
+                        {a.label}
+                      </option>
+                    ))}
+                  </optgroup>
+                ))}
+              </select>
+            </label>
+            <label className="flex flex-col gap-1.5 text-xs font-semibold text-sub">
+              出発地からの時間
+              <select name="time" className={field} defaultValue="">
+                <option value="">練馬ICから・指定なし</option>
+                <option value="120">練馬ICから2時間以内</option>
+                <option value="shinkansen">東京駅から新幹線＋バス</option>
+              </select>
+            </label>
+            <button
+              type="submit"
+              className="btn h-11 cursor-pointer rounded-lg bg-navy-700 text-[15px] font-semibold text-white"
+            >
+              検索する
+            </button>
+          </form>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="mr-1 text-[13px] text-sub">よく使う条件</span>
+            {QUICK.map((q) => (
+              <Link
+                key={q.key}
+                href={`/resorts?f=${q.key}`}
+                className="chip rounded-full border border-field bg-white px-3.5 py-2 text-[13px] text-ink"
+              >
+                {q.label}
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
-      <section id="resorts" className="scroll-mt-20 bg-white">
-        <div className="mx-auto max-w-6xl px-6 py-20">
-          <Reveal>
-            <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
-              <div>
-                <p className="text-sm font-medium tracking-[0.2em] text-navy-600">
-                  RESORTS
-                </p>
-                <h2 className="mt-2 text-3xl font-semibold text-navy-950">
-                  スキー場一覧
-                </h2>
-              </div>
-              {updatedAt && (
-                <p className="text-sm text-slate-500">
-                  更新：{formatUpdatedAt(updatedAt)}
-                </p>
-              )}
-            </div>
-          </Reveal>
+      <section
+        id="open"
+        className="reveal mx-auto flex max-w-[1200px] scroll-mt-4 flex-col gap-6 px-6 pb-6 pt-[72px]"
+        style={{ animationDelay: "0.2s" }}
+      >
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div className="flex flex-col gap-1.5">
+            <p className="text-xs font-semibold tracking-[0.08em] text-navy-700">
+              OPEN STATUS
+            </p>
+            <h2 className="text-[28px] font-bold text-navy-950">
+              オープン状況
+            </h2>
+          </div>
+          <p className="text-[13px] text-sub">
+            公式発表をもとに掲載。最新情報は各スキー場でご確認ください
+          </p>
+        </div>
+        <OpenStatus resorts={resorts} />
+        <Link
+          href="/resorts"
+          className="tlink self-start text-sm font-semibold text-navy-700"
+        >
+          すべてのスキー場を見る →
+        </Link>
+      </section>
 
-          <Reveal delay={100} className="mt-10">
-            <ResortExplorer resorts={resorts} />
-          </Reveal>
+      <section
+        id="area"
+        className="reveal mx-auto flex max-w-[1200px] scroll-mt-4 flex-col gap-6 px-6 pb-6 pt-14"
+        style={{ animationDelay: "0.3s" }}
+      >
+        <AreaTabs />
+      </section>
+
+      <section
+        id="snow"
+        className="reveal mx-auto flex max-w-[1200px] scroll-mt-4 flex-col gap-6 px-6 pb-[88px] pt-14"
+        style={{ animationDelay: "0.4s" }}
+      >
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div className="flex flex-col gap-1.5">
+            <p className="text-xs font-semibold tracking-[0.08em] text-navy-700">
+              SNOW
+            </p>
+            <h2 className="text-[28px] font-bold text-navy-950">
+              エリアの積雪と降雪予報
+            </h2>
+          </div>
+          <p className="text-[13px] text-sub">
+            積雪は近隣のアメダス観測点の値を表示します（準備中）
+          </p>
+        </div>
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-4">
+          {SNOW_AREAS.map((name) => (
+            <div
+              key={name}
+              className="lift flex flex-col gap-4 rounded-xl border border-line p-6"
+            >
+              <div className="flex items-baseline justify-between">
+                <span className="text-[15px] font-bold">{name}</span>
+                <span className="text-xs text-sub">観測点 準備中</span>
+              </div>
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-[40px] font-bold tabular-nums text-navy-950">
+                  —
+                </span>
+                <span className="text-sm text-sub">cm</span>
+              </div>
+              <div className="flex justify-between border-t border-line pt-3 text-[13px] text-sub">
+                <span>24時間降雪 — cm</span>
+                <span>今後3日 — cm</span>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
     </>
-  );
-}
-
-function Stat({
-  label,
-  value,
-  unit,
-}: {
-  label: string;
-  value: number;
-  unit: string;
-}) {
-  return (
-    <div>
-      <dt className="text-xs text-white/50">{label}</dt>
-      <dd className="mt-2 text-3xl font-semibold tabular-nums md:text-4xl">
-        <CountUp value={value} />
-        <span className="ml-1 text-sm font-normal text-white/50">{unit}</span>
-      </dd>
-    </div>
   );
 }

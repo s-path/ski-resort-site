@@ -1,36 +1,31 @@
 // ヒーロー背景の雪。サーバーで描画しても値が揃うように、乱数ではなく決まった式で配置する。
-const FLAKES = Array.from({ length: 48 }, (_, i) => {
-  const left = (i * 37) % 100;
-  const size = 2 + ((i * 7) % 4);
-  const duration = 9 + ((i * 13) % 10);
-  const delay = -((i * 11) % 18);
-  const drift = ((i % 5) - 2) * 18;
-  const opacity = 0.35 + ((i * 3) % 6) / 10;
-  return { left, size, duration, delay, drift, opacity };
+const FLAKES = Array.from({ length: 36 }, (_, k) => {
+  const size = 2 + ((k * 7) % 5);
+  return {
+    left: `${(k * 37) % 100}%`,
+    size: `${size}px`,
+    duration: `${9 + ((k * 13) % 10)}s`,
+    delay: `${-((k * 11) % 17)}s`,
+    opacity: 0.35 + ((k * 3) % 6) / 10,
+  };
 });
 
 export function Snowfall() {
   return (
-    <div
-      aria-hidden
-      className="pointer-events-none absolute inset-0 overflow-hidden"
-    >
+    <div aria-hidden className="pointer-events-none absolute inset-0">
       {FLAKES.map((f, i) => (
         <span
           // biome-ignore lint/suspicious/noArrayIndexKey: 固定の装飾要素
           key={i}
-          className="snowflake"
-          style={
-            {
-              left: `${f.left}%`,
-              width: `${f.size}px`,
-              height: `${f.size}px`,
-              opacity: f.opacity,
-              animationDuration: `${f.duration}s`,
-              animationDelay: `${f.delay}s`,
-              "--drift": `${f.drift}px`,
-            } as React.CSSProperties
-          }
+          className="flake"
+          style={{
+            left: f.left,
+            width: f.size,
+            height: f.size,
+            opacity: f.opacity,
+            animationDuration: f.duration,
+            animationDelay: f.delay,
+          }}
         />
       ))}
     </div>

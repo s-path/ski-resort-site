@@ -1,166 +1,338 @@
 "use client";
 
-import Link from "next/link";
 import { useMemo, useState } from "react";
-import {
-  formatDate,
-  PREFECTURES,
-  type Prefecture,
-  type Resort,
-} from "@/lib/resorts";
-import { StatusBadge } from "./StatusBadge";
+import { prefColor } from "@/lib/prefectures";
+import { AREA_GROUPS, type AreaKey, type Resort } from "@/lib/resorts";
+import { ResortCard } from "./ResortCard";
 
-type SortKey = "snow" | "newSnow" | "name";
+export type FeatureKey =
+  | "open"
+  | "night"
+  | "gondola"
+  | "kids"
+  | "spring"
+  | "shinkansen";
 
-const SORT_LABEL: Record<SortKey, string> = {
-  snow: "積雪が多い順",
-  newSnow: "新雪が多い順",
-  name: "名前順",
-};
+const FEATURES: {
+  key: FeatureKey;
+  label: string;
+  test: (r: Resort) => boolean;
+}[] = [
+  { key: "open", label: "営業中のみ", test: (r) => r.status === "open" },
+  {
+    key: "night",
+    label: "ナイター",
+    test: (r) => r.tags.some((t) => t.includes("ナイター")),
+  },
+  {
+    key: "gondola",
+    label: "ゴンドラ・ロープウェイ",
+    test: (r) => r.tags.some((t) => t === "ゴンドラ" || t === "ロープウェイ"),
+  },
+  {
+    key: "kids",
+    label: "キッズパーク",
+    test: (r) => r.tags.includes("キッズパーク"),
+  },
+  {
+    key: "spring",
+    label: "春スキー",
+    test: (r) => r.tags.includes("春スキー"),
+  },
+  {
+    key: "shinkansen",
+    label: "新幹線で行ける",
+    test: (r) => r.tags.includes("新幹線で行ける"),
+  },
+];
 
-const MAX_SNOW = 150;
+const ALL_KEYS = AREA_GROUPS.flatMap((g) => g.areas.map((a) => a.key));
 
-export function ResortExplorer({ resorts }: { resorts: Resort[] }) {
-  const [pref, setPref] = useState<Prefecture | "all">("all");
-  const [openOnly, setOpenOnly] = useState(false);
-  const [sort, setSort] = useState<SortKey>("snow");
+type SortKey = "recommended" | "name" | "prefecture";
+const PREF_ORDER = AREA_GROUPS.map((g) => g.label);
+
+const checkbox = "h-[18px] w-[18px] accent-navy-700";
+
+export function ResortExplorer({
+  resorts,
+  initialArea,
+  initialQuery,
+  initialFeatures,
+}: {
+  resorts: Resort[];
+  initialArea?: AreaKey;
+  initialQuery?: string;
+  initialFeatures?: FeatureKey[];
+}) {
+  const [selected, setSelected] = useState<Set<AreaKey>>(
+    () => new Set(initialArea ? [initialArea] : ALL_KEYS),
+  );
+  const [features, setFeatures] = useState<Set<FeatureKey>>(
+    () => new Set(initialFeatures ?? []),
+  );
+  const [query, setQuery] = useState(initialQuery ?? "");
+  const [minutes, setMinutes] = useState(150);
+  const [sort, setSort] = useState<SortKey>("recommended");
+
+  const countBy = useMemo(() => {
+    const m = new Map<AreaKey, number>();
+    for (const r of resorts) m.set(r.areaKey, (m.get(r.areaKey) ?? 0) + 1);
+    return m;
+  }, [resorts]);
 
   const list = useMemo(() => {
+    const q = query.trim();
     const filtered = resorts.filter(
       (r) =>
-        (pref === "all" || r.prefecture === pref) &&
-        (!openOnly || r.status !== "preparing"),
+        selected.has(r.areaKey) &&
+        FEATURES.every((f) => !features.has(f.key) || f.test(r)) &&
+        (!q ||
+          r.name.includes(q) ||
+          r.areaLabel.includes(q) ||
+          r.prefecture.includes(q)),
     );
-    return [...filtered].sort((a, b) => {
-      if (sort === "snow") return b.snowTop - a.snowTop;
-      if (sort === "newSnow") return b.newSnow24h - a.newSnow24h;
-      return a.name.localeCompare(b.name, "ja");
+    if (sort === "name")
+      return [...filtered].sort((a, b) => a.name.localeCompare(b.name, "ja"));
+    if (sort === "prefecture")
+      return [...filtered].sort(
+        (a, b) =>
+          PREF_ORDER.indexOf(a.prefecture) - PREF_ORDER.indexOf(b.prefecture),
+      );
+    return filtered;
+  }, [resorts, selected, features, query, sort]);
+
+  const toggleArea = (key: AreaKey) =>
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
     });
-  }, [resorts, pref, openOnly, sort]);
+
+  const toggleGroup = (keys: AreaKey[]) =>
+    setSelected((prev) => {
+      const next = new Set(prev);
+      const allOn = keys.every((k) => prev.has(k));
+      for (const k of keys) {
+        if (allOn) next.delete(k);
+        else next.add(k);
+      }
+      return next;
+    });
+
+  const toggleFeature = (key: FeatureKey) =>
+    setFeatures((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+
+  const two = list.length >= 5;
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  const filterKey = `${[...selected].join()}|${[...features].join()}|${query}|${sort}`;
 
   return (
-    <div>
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div className="flex flex-wrap gap-2">
-          {(["all", ...PREFECTURES] as const).map((p) => (
+    <div className="flex flex-wrap items-start gap-8">
+      <aside
+        aria-label="絞り込み"
+        className="reveal flex max-w-[300px] flex-[1_1_260px] flex-col gap-6 rounded-xl border border-line p-6"
+        style={{ animationDelay: "0.1s" }}
+      >
+        <div className="flex items-center justify-between">
+          <span className="text-[15px] font-bold">絞り込み</span>
+          <div className="flex gap-3">
             <button
-              key={p}
               type="button"
-              onClick={() => setPref(p)}
-              className={`rounded-full border px-4 py-1.5 text-sm transition ${
-                pref === p
-                  ? "border-navy-900 bg-navy-900 text-white"
-                  : "border-slate-200 bg-white text-slate-600 hover:border-navy-700 hover:text-navy-800"
-              }`}
+              onClick={() => setSelected(new Set(ALL_KEYS))}
+              className="cursor-pointer py-2 text-[13px] text-navy-700"
             >
-              {p === "all" ? "すべて" : p}
+              すべて
             </button>
+            <button
+              type="button"
+              onClick={() => {
+                setSelected(new Set());
+                setFeatures(new Set());
+                setQuery("");
+              }}
+              className="cursor-pointer py-2 text-[13px] text-sub"
+            >
+              クリア
+            </button>
+          </div>
+        </div>
+
+        <label className="flex flex-col gap-1.5 text-xs font-semibold text-sub">
+          キーワード
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="スキー場名・地名"
+            className="h-10 rounded-lg border border-field px-3 text-sm font-normal text-ink"
+          />
+        </label>
+
+        <fieldset className="flex flex-col gap-3.5 border-t border-line pt-5">
+          <legend className="mb-2.5 text-xs font-semibold text-sub">
+            エリア
+          </legend>
+          {AREA_GROUPS.map((g) => {
+            const keys = g.areas.map((a) => a.key);
+            const n = keys.filter((k) => selected.has(k)).length;
+            const state =
+              n === 0
+                ? ""
+                : n === keys.length
+                  ? "すべて"
+                  : `${n}/${keys.length}`;
+            const dot = prefColor(g.label).dot;
+            return (
+              <div key={g.label} className="flex flex-col gap-2">
+                <label className="flex cursor-pointer items-center gap-2.5 text-sm font-bold text-navy-950">
+                  <input
+                    type="checkbox"
+                    checked={n === keys.length}
+                    onChange={() => toggleGroup(keys)}
+                    aria-label={`${g.label}のエリアをすべて選択`}
+                    className={checkbox}
+                  />
+                  <span
+                    aria-hidden
+                    className="h-2 w-2 rounded-full"
+                    style={{ background: dot }}
+                  />
+                  {g.label}
+                  <span className="ml-auto text-xs font-medium text-muted">
+                    {state}
+                  </span>
+                </label>
+                {g.areas.map((a) => (
+                  <label
+                    key={a.key}
+                    className="flex cursor-pointer items-center gap-2.5 pl-7 text-sm"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selected.has(a.key)}
+                      onChange={() => toggleArea(a.key)}
+                      className={checkbox}
+                    />
+                    {a.label}
+                    <span className="ml-auto text-xs tabular-nums text-muted">
+                      {countBy.get(a.key) ?? 0}
+                    </span>
+                  </label>
+                ))}
+              </div>
+            );
+          })}
+        </fieldset>
+
+        <fieldset className="flex flex-col gap-2.5 border-t border-line pt-5">
+          <legend className="mb-2.5 text-xs font-semibold text-sub">
+            練馬ICからの時間
+          </legend>
+          <input
+            type="range"
+            min={60}
+            max={240}
+            step={30}
+            value={minutes}
+            onChange={(e) => setMinutes(Number(e.target.value))}
+            aria-label="練馬ICからの最大時間"
+            className="accent-navy-700"
+          />
+          <div className="flex justify-between text-xs text-sub">
+            <span>1時間</span>
+            <span className="font-semibold text-ink">
+              {m ? `${h}時間${m}分` : `${h}時間`}以内
+            </span>
+            <span>4時間</span>
+          </div>
+          <p className="text-[11px] text-muted">所要時間のデータは準備中です</p>
+        </fieldset>
+
+        <fieldset className="flex flex-col gap-2.5 border-t border-line pt-5">
+          <legend className="mb-2.5 text-xs font-semibold text-sub">
+            設備・特徴
+          </legend>
+          {FEATURES.map((f) => (
+            <label
+              key={f.key}
+              className="flex cursor-pointer items-center gap-2.5 text-sm"
+            >
+              <input
+                type="checkbox"
+                checked={features.has(f.key)}
+                onChange={() => toggleFeature(f.key)}
+                className={checkbox}
+              />
+              {f.label}
+            </label>
+          ))}
+        </fieldset>
+      </aside>
+
+      <section
+        aria-label="検索結果"
+        className="flex min-w-0 flex-[999_1_560px] flex-col gap-4"
+      >
+        <div
+          className="reveal flex flex-wrap items-center justify-between gap-3"
+          style={{ animationDelay: "0.15s" }}
+        >
+          <p className="text-sm text-sub" aria-live="polite">
+            <span className="text-xl font-bold tabular-nums text-ink">
+              {list.length}
+            </span>{" "}
+            件のスキー場
+          </p>
+          <label className="flex items-center gap-2 text-[13px] text-sub">
+            並び替え
+            <select
+              value={sort}
+              onChange={(e) => setSort(e.target.value as SortKey)}
+              className="h-10 rounded-lg border border-field bg-white px-3 text-sm text-ink"
+            >
+              <option value="recommended">おすすめ順</option>
+              <option value="prefecture">県ごと</option>
+              <option value="name">名前順</option>
+            </select>
+          </label>
+        </div>
+
+        <div
+          className={`grid gap-4 ${
+            two
+              ? "grid-cols-[repeat(auto-fill,minmax(340px,1fr))]"
+              : "grid-cols-1"
+          }`}
+        >
+          {list.map((r, i) => (
+            <div
+              key={`${r.id}-${filterKey}`}
+              className="reveal flex"
+              style={{ animationDelay: `${0.05 + i * 0.04}s` }}
+            >
+              <ResortCard resort={r} compact={two} />
+            </div>
           ))}
         </div>
 
-        <div className="flex items-center gap-4 text-sm">
-          <label className="flex cursor-pointer items-center gap-2 text-slate-600">
-            <input
-              type="checkbox"
-              checked={openOnly}
-              onChange={(e) => setOpenOnly(e.target.checked)}
-              className="h-4 w-4 accent-navy-800"
-            />
-            営業中のみ
-          </label>
-          <select
-            value={sort}
-            onChange={(e) => setSort(e.target.value as SortKey)}
-            className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-slate-700"
-            aria-label="並び替え"
-          >
-            {(Object.keys(SORT_LABEL) as SortKey[]).map((k) => (
-              <option key={k} value={k}>
-                {SORT_LABEL[k]}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      <p className="mt-6 text-sm text-slate-500">{list.length}件</p>
-
-      <ul className="mt-3 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {list.map((r, i) => (
-          <li
-            key={`${r.id}-${pref}-${openOnly}-${sort}`}
-            className="animate-fade-up"
-            style={{ animationDelay: `${i * 60}ms` }}
-          >
-            <ResortCard resort={r} />
-          </li>
-        ))}
-      </ul>
-
-      {list.length === 0 && (
-        <p className="mt-10 text-center text-slate-500">
-          条件に合うスキー場がありません。
-        </p>
-      )}
-    </div>
-  );
-}
-
-function ResortCard({ resort: r }: { resort: Resort }) {
-  const ratio = Math.min(r.snowTop / MAX_SNOW, 1);
-  return (
-    <Link
-      href={`/resorts/${r.id}`}
-      className="group block h-full rounded-2xl border border-slate-200 bg-white p-6 transition duration-300 hover:-translate-y-1 hover:border-navy-700/40 hover:shadow-[0_20px_40px_-20px_rgba(10,37,82,0.35)]"
-    >
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="text-xs text-slate-500">
-            {r.prefecture}・{r.area}
-          </p>
-          <h3 className="mt-1 font-semibold text-navy-950 group-hover:text-navy-700">
-            {r.name}
-          </h3>
-        </div>
-        <StatusBadge status={r.status} />
-      </div>
-
-      <div className="mt-6 flex items-end gap-6">
-        <div>
-          <p className="text-xs text-slate-500">山頂積雪</p>
-          <p className="mt-1 text-3xl font-semibold tabular-nums text-navy-900">
-            {r.snowTop}
-            <span className="ml-1 text-sm font-normal text-slate-500">cm</span>
-          </p>
-        </div>
-        <div>
-          <p className="text-xs text-slate-500">24h新雪</p>
-          <p className="mt-1 text-lg font-semibold tabular-nums text-navy-700">
-            +{r.newSnow24h}
-            <span className="ml-0.5 text-xs font-normal text-slate-500">
-              cm
+        {list.length === 0 && (
+          <div className="reveal flex flex-col items-center gap-2 rounded-xl border border-dashed border-field px-6 py-12 text-center">
+            <span className="text-[15px] font-bold">
+              条件に合うスキー場がありません
             </span>
-          </p>
-        </div>
-      </div>
-
-      <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-slate-100">
-        <div
-          className="h-full origin-left animate-grow-x rounded-full bg-gradient-to-r from-navy-700 to-navy-600"
-          style={{ width: `${ratio * 100}%` }}
-        />
-      </div>
-
-      <div className="mt-5 flex justify-between border-t border-slate-100 pt-4 text-xs text-slate-500">
-        <span>
-          リフト {r.liftsOpen}/{r.liftsTotal}
-        </span>
-        <span>
-          {r.status === "preparing"
-            ? `${formatDate(r.openingDate)} オープン予定`
-            : `${formatDate(r.openingDate)} から営業`}
-        </span>
-      </div>
-    </Link>
+            <span className="text-[13px] text-sub">
+              エリアや条件を変えてみてください。
+            </span>
+          </div>
+        )}
+      </section>
+    </div>
   );
 }
