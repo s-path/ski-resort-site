@@ -262,3 +262,11 @@ tbody tr:hover {
     display: none;
   }
 }
+
+/* 横スクロールするナビ・タブのスクロールバーを隠す */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

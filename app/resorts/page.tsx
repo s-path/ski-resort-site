@@ -40,7 +40,7 @@ export default async function ResortsPage({ searchParams }: Props) {
     features.push("shinkansen");
 
   return (
-    <div className="mx-auto flex max-w-[1200px] flex-col gap-7 px-6 pb-[88px] pt-10">
+    <div className="mx-auto flex max-w-[1200px] flex-col gap-6 px-4 pb-16 pt-6 sm:gap-7 sm:px-6 sm:pb-[88px] sm:pt-10">
       <div className="reveal flex flex-col gap-2">
         <p className="text-[13px] text-sub">
           <Link href="/" className="tlink text-sub">
