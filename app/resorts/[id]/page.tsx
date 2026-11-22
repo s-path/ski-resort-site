@@ -3,9 +3,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ExternalIcon, PrefChip, StatusBadge } from "@/components/Badges";
 import { FavoriteButton } from "@/components/FavoriteButton";
+import { TicketSection } from "@/components/TicketSection";
 import { getResort, NO_VALUE, resorts } from "@/lib/resorts";
+import { getTickets } from "@/lib/tickets";
 
 type Props = { params: Promise<{ id: string }> };
+
+// お得情報の締め切りを過ぎたら消えるよう、1日1回作り直す
+export const revalidate = 86400;
 
 export function generateStaticParams() {
   return resorts.map((r) => ({ id: r.id }));
@@ -217,25 +222,7 @@ export default async function ResortPage({ params }: Props) {
             </section>
           )}
 
-          <section className="flex flex-col gap-4">
-            <h2 className="text-xl font-bold text-navy-950">リフト券料金</h2>
-            <p className={`${card} p-5 text-sm text-sub`}>
-              料金は準備中です。最新の料金は
-              {r.url ? (
-                <a
-                  href={r.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="tlink mx-1 text-navy-700"
-                >
-                  公式サイト
-                </a>
-              ) : (
-                "公式サイト"
-              )}
-              でご確認ください。
-            </p>
-          </section>
+          <TicketSection tickets={getTickets(r.id)} officialUrl={r.url} />
         </div>
 
         <aside
