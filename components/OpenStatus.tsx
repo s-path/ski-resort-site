@@ -18,9 +18,13 @@ const TABS: { key: string; label: string; prefs: string[] | null }[] = [
 /** オープン状況の表。県ごとにタブで切り替える */
 export function OpenStatus({ resorts }: { resorts: Resort[] }) {
   const [tab, setTab] = useState("all");
-  const withDates = resorts
-    .filter((r) => r.openingDate)
-    .sort((a, b) => (a.openingDate ?? "").localeCompare(b.openingDate ?? ""));
+  // 営業中 → オープン予定（日付順） → 確認中 の順に並べる
+  const ORDER = { open: 0, planned: 1, unknown: 2 } as const;
+  const withDates = [...resorts].sort(
+    (a, b) =>
+      ORDER[a.status] - ORDER[b.status] ||
+      (a.openingDate ?? "").localeCompare(b.openingDate ?? ""),
+  );
 
   const rowsFor = (prefs: string[] | null) =>
     withDates.filter((r) => !prefs || prefs.includes(r.prefecture));
@@ -128,15 +132,19 @@ export function OpenStatus({ resorts }: { resorts: Resort[] }) {
                       <span className="pulse h-1.5 w-1.5 rounded-full bg-navy-700" />
                       営業中
                     </span>
-                  ) : (
+                  ) : r.status === "planned" ? (
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EEF0F3] px-2.5 py-1 text-xs font-semibold text-sub">
                       <span className="h-1.5 w-1.5 rounded-full bg-muted" />
                       オープン予定
                     </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-field px-2.5 py-1 text-xs font-semibold text-muted">
+                      確認中
+                    </span>
                   )}
                 </td>
                 <td className="px-5 py-4 text-sub">
-                  {r.openingDate && formatShortDate(r.openingDate)}
+                  {r.openingDate ? formatShortDate(r.openingDate) : "—"}
                   {r.status === "planned" && " 予定"}
                 </td>
                 <td className="px-5 py-4 text-right tabular-nums text-sub">
@@ -147,7 +155,7 @@ export function OpenStatus({ resorts }: { resorts: Resort[] }) {
             {rows.length === 0 && (
               <tr className="reveal border-t border-line">
                 <td colSpan={5} className="px-5 py-10 text-center text-sub">
-                  この県のスキー場は、まだ今シーズンのオープン日が発表されていません。
+                  この県のスキー場はまだ登録されていません。
                 </td>
               </tr>
             )}
