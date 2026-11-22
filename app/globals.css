@@ -281,3 +281,18 @@ tbody tr:hover {
     margin-left: 0.6em;
   }
 }
+
+/* オープン状況の自動切り替えの残り時間メーター */
+@keyframes meter {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.meter {
+  animation-name: meter;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
