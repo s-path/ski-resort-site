@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { Resort } from "@/lib/resorts";
-import { formatShortDate } from "@/lib/resorts";
+import { formatShortDate, openingSortKey } from "@/lib/resorts";
 import { ExternalIcon, PrefChip } from "./Badges";
 
 const TABS: { key: string; label: string; prefs: string[] | null }[] = [
@@ -23,7 +23,7 @@ export function OpenStatus({ resorts }: { resorts: Resort[] }) {
   const withDates = [...resorts].sort(
     (a, b) =>
       ORDER[a.status] - ORDER[b.status] ||
-      (a.openingDate ?? "9999").localeCompare(b.openingDate ?? "9999"),
+      openingSortKey(a).localeCompare(openingSortKey(b)),
   );
 
   const rowsFor = (prefs: string[] | null) =>

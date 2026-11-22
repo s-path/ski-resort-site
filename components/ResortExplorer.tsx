@@ -2,7 +2,12 @@
 
 import { useMemo, useState } from "react";
 import { prefColor } from "@/lib/prefectures";
-import { AREA_GROUPS, type AreaKey, type Resort } from "@/lib/resorts";
+import {
+  AREA_GROUPS,
+  type AreaKey,
+  openingSortKey,
+  type Resort,
+} from "@/lib/resorts";
 import { ResortCard } from "./ResortCard";
 
 export type FeatureKey =
@@ -48,7 +53,7 @@ const FEATURES: {
 
 const ALL_KEYS = AREA_GROUPS.flatMap((g) => g.areas.map((a) => a.key));
 
-type SortKey = "recommended" | "name" | "prefecture";
+export type SortKey = "recommended" | "opening" | "name" | "prefecture";
 const PREF_ORDER = AREA_GROUPS.map((g) => g.label);
 
 const checkbox = "h-[18px] w-[18px] accent-navy-700";
@@ -58,11 +63,13 @@ export function ResortExplorer({
   initialArea,
   initialQuery,
   initialFeatures,
+  initialSort,
 }: {
   resorts: Resort[];
   initialArea?: AreaKey;
   initialQuery?: string;
   initialFeatures?: FeatureKey[];
+  initialSort?: SortKey;
 }) {
   const [selected, setSelected] = useState<Set<AreaKey>>(
     () => new Set(initialArea ? [initialArea] : ALL_KEYS),
@@ -72,7 +79,7 @@ export function ResortExplorer({
   );
   const [query, setQuery] = useState(initialQuery ?? "");
   const [minutes, setMinutes] = useState(150);
-  const [sort, setSort] = useState<SortKey>("recommended");
+  const [sort, setSort] = useState<SortKey>(initialSort ?? "recommended");
   const [panelOpen, setPanelOpen] = useState(false);
 
   const countBy = useMemo(() => {
@@ -92,6 +99,10 @@ export function ResortExplorer({
           r.areaLabel.includes(q) ||
           r.prefecture.includes(q)),
     );
+    if (sort === "opening")
+      return [...filtered].sort((a, b) =>
+        openingSortKey(a).localeCompare(openingSortKey(b)),
+      );
     if (sort === "name")
       return [...filtered].sort((a, b) => a.name.localeCompare(b.name, "ja"));
     if (sort === "prefecture")
@@ -325,6 +336,7 @@ export function ResortExplorer({
               className="h-10 rounded-lg border border-field bg-white px-3 text-sm text-ink"
             >
               <option value="recommended">おすすめ順</option>
+              <option value="opening">オープンが早い順</option>
               <option value="prefecture">県ごと</option>
               <option value="name">名前順</option>
             </select>
