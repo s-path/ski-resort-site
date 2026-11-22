@@ -48,6 +48,8 @@ export type Resort = {
   status: ResortStatus;
   /** 今シーズンの営業開始（予定）日 */
   openingDate?: string;
+  /** 日付が出ていないときの目安（例：「12月中旬」） */
+  openingLabel?: string;
   /** カードに出す4つの数字（積雪を含む） */
   stats: Stat[];
   tags: string[];
@@ -150,7 +152,8 @@ export const resorts: Resort[] = [
     prefecture: "群馬",
     areaKey: "minakami",
     areaLabel: "尾瀬",
-    status: "unknown",
+    status: "planned",
+    openingDate: "2026-12-12",
     stats: [
       SNOW,
       { label: "コース数", value: NO_VALUE },
@@ -166,7 +169,8 @@ export const resorts: Resort[] = [
     prefecture: "群馬",
     areaKey: "minakami",
     areaLabel: "尾瀬",
-    status: "unknown",
+    status: "planned",
+    openingDate: "2026-12-24",
     stats: [
       SNOW,
       { label: "コース数", value: "11" },
@@ -181,7 +185,8 @@ export const resorts: Resort[] = [
     prefecture: "群馬",
     areaKey: "minakami",
     areaLabel: "水上",
-    status: "unknown",
+    status: "planned",
+    openingDate: "2026-12-12",
     stats: [
       SNOW,
       { label: "コース数", value: NO_VALUE },
@@ -213,7 +218,8 @@ export const resorts: Resort[] = [
     prefecture: "群馬",
     areaKey: "kusatsu",
     areaLabel: "草津",
-    status: "unknown",
+    status: "planned",
+    openingDate: "2026-12-18",
     stats: [
       SNOW,
       { label: "ロングラン", value: "4 km" },
@@ -246,7 +252,8 @@ export const resorts: Resort[] = [
     prefecture: "群馬",
     areaKey: "kusatsu",
     areaLabel: "嬬恋",
-    status: "unknown",
+    status: "open",
+    openingDate: "2026-11-21",
     stats: [
       SNOW,
       { label: "コース数", value: "10" },
@@ -262,7 +269,8 @@ export const resorts: Resort[] = [
     prefecture: "群馬",
     areaKey: "kusatsu",
     areaLabel: "北軽井沢",
-    status: "unknown",
+    status: "planned",
+    openingDate: "2026-12-12",
     stats: [
       SNOW,
       { label: "標高", value: "1,300 m" },
@@ -277,7 +285,8 @@ export const resorts: Resort[] = [
     prefecture: "新潟",
     areaKey: "yuzawa",
     areaLabel: "越後湯沢",
-    status: "unknown",
+    status: "planned",
+    openingDate: "2026-12-18",
     stats: [
       SNOW,
       { label: "標高", value: "370–1,170 m" },
@@ -338,7 +347,8 @@ export const resorts: Resort[] = [
     prefecture: "長野",
     areaKey: "hakuba",
     areaLabel: "白馬",
-    status: "unknown",
+    status: "planned",
+    openingDate: "2026-12-01",
     stats: [
       SNOW,
       { label: "コース数", value: "16" },
@@ -354,7 +364,8 @@ export const resorts: Resort[] = [
     prefecture: "山梨",
     areaKey: "kiyosato",
     areaLabel: "清里",
-    status: "unknown",
+    status: "planned",
+    openingDate: "2026-12-12",
     stats: [
       SNOW,
       { label: "山頂標高", value: "1,900 m" },
@@ -370,7 +381,8 @@ export const resorts: Resort[] = [
     prefecture: "山梨",
     areaKey: "fuji",
     areaLabel: "富士山麓",
-    status: "unknown",
+    status: "planned",
+    openingLabel: "12月中旬",
     stats: [
       SNOW,
       { label: "標高", value: "1,285–1,485 m" },
@@ -447,5 +459,7 @@ export function statusLabel(r: Resort): string {
   if (r.status === "open") return "営業中";
   if (r.status === "planned" && r.openingDate)
     return `${formatShortDate(r.openingDate)} オープン予定`;
+  if (r.status === "planned" && r.openingLabel)
+    return `${r.openingLabel} オープン予定`;
   return "営業状況 確認中";
 }

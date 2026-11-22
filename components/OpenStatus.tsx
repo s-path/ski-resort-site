@@ -23,7 +23,7 @@ export function OpenStatus({ resorts }: { resorts: Resort[] }) {
   const withDates = [...resorts].sort(
     (a, b) =>
       ORDER[a.status] - ORDER[b.status] ||
-      (a.openingDate ?? "").localeCompare(b.openingDate ?? ""),
+      (a.openingDate ?? "9999").localeCompare(b.openingDate ?? "9999"),
   );
 
   const rowsFor = (prefs: string[] | null) =>
@@ -144,7 +144,9 @@ export function OpenStatus({ resorts }: { resorts: Resort[] }) {
                   )}
                 </td>
                 <td className="px-5 py-4 text-sub">
-                  {r.openingDate ? formatShortDate(r.openingDate) : "—"}
+                  {r.openingDate
+                    ? formatShortDate(r.openingDate)
+                    : (r.openingLabel ?? "—")}
                   {r.status === "planned" && " 予定"}
                 </td>
                 <td className="px-5 py-4 text-right tabular-nums text-sub">
