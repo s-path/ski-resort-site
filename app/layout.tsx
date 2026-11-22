@@ -1,46 +1,49 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { SiteHeader } from "@/components/SiteHeader";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "SNOWLINE | 関東周辺のスキー場 積雪・営業状況",
+  title: "SNOWLINE 関東 | 関東から行けるスキー場の積雪・営業状況",
   description:
-    "関東周辺（群馬・栃木・長野・山梨）のスキー場の積雪と営業状況をまとめて確認できるサイト。",
+    "群馬・栃木・長野・山梨から越後湯沢まで。関東から行けるスキー場の営業状況、積雪、アクセス時間をひとつの画面で比べられます。",
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ja" className="h-full">
-      <body className="flex min-h-full flex-col bg-white text-slate-900">
-        <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-navy-950/70 backdrop-blur-md">
-          <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-            <Link
-              href="/"
-              className="flex items-center gap-2 font-semibold tracking-[0.2em] text-white"
-            >
-              <span className="inline-block h-2.5 w-2.5 rotate-45 bg-white" />
-              SNOWLINE
-            </Link>
-            <nav className="flex items-center gap-6 text-sm text-white/80">
-              <Link href="/#resorts" className="transition hover:text-white">
-                スキー場一覧
-              </Link>
-            </nav>
-          </div>
-        </header>
-
+    <html lang="ja">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@600;700&family=Allura&display=swap"
+        />
+      </head>
+      <body className="flex min-h-screen flex-col bg-white font-sans text-ink">
+        <SiteHeader />
         <main className="flex-1">{children}</main>
-
-        <footer className="border-t border-slate-200 bg-slate-50">
-          <div className="mx-auto max-w-6xl px-6 py-10 text-sm text-slate-500">
-            <p className="font-semibold tracking-[0.2em] text-navy-900">
-              SNOWLINE
-            </p>
-            <p className="mt-3">
-              掲載している積雪・営業状況は画面確認用のサンプルデータです。実際の情報は各スキー場の公式サイトで確認してください。
-            </p>
+        <footer className="bg-navy-950 text-[#C9D2E3]">
+          <div className="mx-auto flex max-w-[1200px] flex-wrap justify-between gap-8 px-6 py-12 text-[13px] leading-[1.9]">
+            <div className="flex flex-col gap-2">
+              <span className="text-base font-bold text-white">
+                SNOWLINE 関東
+              </span>
+              <span>
+                営業状況・料金は必ず各スキー場の公式サイトでご確認ください。
+              </span>
+            </div>
+            <div className="flex flex-col gap-0.5">
+              <span className="font-semibold text-white">データ出典</span>
+              <span>積雪：気象庁ホームページのデータを加工して作成</span>
+              <span>予報：Open-Meteo（CC BY 4.0）</span>
+              <span>地図：© OpenStreetMap contributors</span>
+            </div>
           </div>
         </footer>
       </body>
