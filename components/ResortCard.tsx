@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { prefColor } from "@/lib/prefectures";
 import type { Resort } from "@/lib/resorts";
+import { adultPriceLabel, getTickets } from "@/lib/tickets";
 import { ExternalIcon, PrefChip, StatusBadge } from "./Badges";
 
 /** スキー場一覧のカード。右上に県の色ラベル、下に詳細と公式サイトへのリンク */
@@ -13,6 +14,7 @@ export function ResortCard({
   compact: boolean;
 }) {
   const c = prefColor(r.prefecture);
+  const t = getTickets(r.id);
   return (
     <div className="lift relative flex min-w-0 flex-1 flex-col gap-4 overflow-hidden rounded-xl border border-line bg-white px-6 pb-6 pt-10">
       <span
@@ -53,6 +55,22 @@ export function ResortCard({
           </div>
         ))}
       </dl>
+
+      <p className="flex flex-wrap items-baseline gap-x-2 text-sm">
+        <span className="text-xs text-sub">大人1日券</span>
+        {t ? (
+          <>
+            <span className="font-bold tabular-nums text-navy-950">
+              {adultPriceLabel(t)}
+            </span>
+            {t.season === "previous" && (
+              <span className="text-xs text-sub">（昨季）</span>
+            )}
+          </>
+        ) : (
+          <span className="text-xs text-muted">確認中</span>
+        )}
+      </p>
 
       {r.tags.length > 0 && (
         <div className="flex flex-wrap gap-2">
