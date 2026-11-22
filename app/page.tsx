@@ -31,8 +31,8 @@ export default function Home() {
         />
         <Snowfall />
 
-        <div className="reveal relative mx-auto flex max-w-[1200px] flex-col gap-8 px-6 pb-[72px] pt-[88px]">
-          <div className="relative flex flex-wrap items-center gap-x-14 gap-y-6">
+        <div className="reveal relative mx-auto flex max-w-[1200px] flex-col gap-6 px-4 pb-12 pt-10 sm:gap-8 sm:px-6 sm:pb-[72px] sm:pt-[88px]">
+          <div className="relative flex flex-wrap items-center gap-x-14 gap-y-2 sm:gap-y-6">
             <div className="flex max-w-[760px] flex-col gap-4">
               <p className="text-[13px] font-semibold tracking-[0.08em] text-navy-700">
                 2026–27 SEASON
@@ -48,15 +48,15 @@ export default function Home() {
                 </span>
                 <span className="block whitespace-nowrap">いまがわかる。</span>
               </h1>
-              <p className="text-[17px] leading-[1.8] text-sub">
+              <p className="text-[15px] leading-[1.8] text-sub sm:text-[17px]">
                 群馬・栃木・長野・山梨から越後湯沢まで。営業状況、積雪、アクセス時間をひとつの画面で比べられます。
               </p>
             </div>
             <span
               aria-hidden="true"
-              className="snowmark flex flex-col font-script leading-none text-white"
+              className="snowmark flex flex-row font-script leading-none text-white sm:flex-col"
               style={{
-                fontSize: "clamp(120px, 14vw, 210px)",
+                fontSize: "clamp(56px, 14vw, 210px)",
                 textShadow:
                   "0 2px 18px rgba(10,31,68,0.35), 0 1px 2px rgba(10,31,68,0.25)",
                 padding: "0.1em 0.25em",
@@ -69,11 +69,9 @@ export default function Home() {
                 snow
               </span>
               <span
-                className="write block whitespace-nowrap"
+                className="snowmark-line write block whitespace-nowrap"
                 style={{
                   padding: "0.08em 0.2em 0.16em 0.1em",
-                  marginTop: "-0.3em",
-                  marginLeft: "0.6em",
                   animationDelay: "3.6s",
                 }}
               >
@@ -85,7 +83,7 @@ export default function Home() {
           <form
             action="/resorts"
             method="get"
-            className="grid grid-cols-1 items-end gap-4 rounded-xl border border-line bg-white p-5 shadow-[0_1px_2px_rgba(10,31,68,0.04)] md:grid-cols-4"
+            className="grid grid-cols-1 items-end gap-4 rounded-xl border border-line bg-white p-5 shadow-[0_1px_2px_rgba(10,31,68,0.04)] sm:grid-cols-2 lg:grid-cols-4"
           >
             <label className="flex flex-col gap-1.5 text-xs font-semibold text-sub">
               キーワード
@@ -144,7 +142,7 @@ export default function Home() {
 
       <section
         id="open"
-        className="reveal mx-auto flex max-w-[1200px] scroll-mt-4 flex-col gap-6 px-6 pb-6 pt-[72px]"
+        className="reveal mx-auto flex max-w-[1200px] scroll-mt-4 flex-col gap-6 px-4 sm:px-6 pb-6 pt-12 sm:pt-[72px]"
         style={{ animationDelay: "0.2s" }}
       >
         <div className="flex flex-wrap items-end justify-between gap-4">
@@ -152,7 +150,7 @@ export default function Home() {
             <p className="text-xs font-semibold tracking-[0.08em] text-navy-700">
               OPEN STATUS
             </p>
-            <h2 className="text-[28px] font-bold text-navy-950">
+            <h2 className="text-2xl font-bold text-navy-950 sm:text-[28px]">
               オープン状況
             </h2>
           </div>
@@ -171,7 +169,7 @@ export default function Home() {
 
       <section
         id="area"
-        className="reveal mx-auto flex max-w-[1200px] scroll-mt-4 flex-col gap-6 px-6 pb-6 pt-14"
+        className="reveal mx-auto flex max-w-[1200px] scroll-mt-4 flex-col gap-6 px-4 sm:px-6 pb-6 pt-14"
         style={{ animationDelay: "0.3s" }}
       >
         <AreaTabs />
@@ -179,7 +177,7 @@ export default function Home() {
 
       <section
         id="snow"
-        className="reveal mx-auto flex max-w-[1200px] scroll-mt-4 flex-col gap-6 px-6 pb-[88px] pt-14"
+        className="reveal mx-auto flex max-w-[1200px] scroll-mt-4 flex-col gap-6 px-4 sm:px-6 pb-[88px] pt-14"
         style={{ animationDelay: "0.4s" }}
       >
         <div className="flex flex-wrap items-end justify-between gap-4">
@@ -187,7 +185,7 @@ export default function Home() {
             <p className="text-xs font-semibold tracking-[0.08em] text-navy-700">
               SNOW
             </p>
-            <h2 className="text-[28px] font-bold text-navy-950">
+            <h2 className="text-2xl font-bold text-navy-950 sm:text-[28px]">
               エリアの積雪と降雪予報
             </h2>
           </div>

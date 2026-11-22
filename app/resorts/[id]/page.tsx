@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 // 予報グラフはデータ取得前のレイアウト確認用（高さは仮）
 const FORECAST_BARS = [24, 40, 64, 52, 30, 18, 36];
-const DAYS = ["今日", "明日", "3日目", "4日目", "5日目", "6日目", "7日目"];
+const DAYS = ["今日", "明日", "3日", "4日", "5日", "6日", "7日"];
 
 const card = "rounded-xl border border-line";
 
@@ -39,7 +39,7 @@ export default async function ResortPage({ params }: Props) {
   return (
     <>
       <section className="border-b border-line bg-mist">
-        <div className="reveal mx-auto flex max-w-[1200px] flex-col gap-5 px-6 pb-10 pt-8">
+        <div className="reveal mx-auto flex max-w-[1200px] flex-col gap-5 px-4 pb-8 pt-6 sm:px-6 sm:pb-10 sm:pt-8">
           <p className="text-[13px] text-sub">
             <Link href="/" className="tlink text-sub">
               トップ
@@ -57,7 +57,9 @@ export default async function ResortPage({ params }: Props) {
                 <span className="text-[13px] text-sub">{r.areaLabel}</span>
                 <StatusBadge resort={r} />
               </div>
-              <h1 className="text-[40px] font-bold text-navy-950">{r.name}</h1>
+              <h1 className="text-[28px] font-bold leading-tight text-navy-950 sm:text-[40px]">
+                {r.name}
+              </h1>
               {d?.description && (
                 <p className="max-w-[640px] text-[15px] leading-[1.8] text-sub">
                   {d.description}
@@ -83,7 +85,7 @@ export default async function ResortPage({ params }: Props) {
         </div>
       </section>
 
-      <div className="mx-auto flex max-w-[1200px] flex-wrap items-start gap-8 px-6 pb-[88px] pt-10">
+      <div className="mx-auto flex max-w-[1200px] flex-wrap items-start gap-8 px-4 pb-16 pt-8 sm:px-6 sm:pb-[88px] sm:pt-10">
         <div
           className="reveal flex min-w-0 flex-[999_1_560px] flex-col gap-8"
           style={{ animationDelay: "0.15s" }}
@@ -95,7 +97,7 @@ export default async function ResortPage({ params }: Props) {
               </h2>
               <span className="text-xs text-sub">データ取得の準備中</span>
             </div>
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-3">
+            <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
               {[
                 { label: "積雪（近隣観測点）", unit: "cm", note: "アメダス" },
                 { label: "24時間降雪", unit: "cm", note: "観測値" },
@@ -110,10 +112,10 @@ export default async function ResortPage({ params }: Props) {
               ].map((c) => (
                 <div
                   key={c.label}
-                  className={`lift ${card} flex flex-col gap-1.5 p-5`}
+                  className={`lift ${card} flex flex-col gap-1.5 p-4 sm:p-5`}
                 >
                   <span className="text-xs text-sub">{c.label}</span>
-                  <span className="text-[32px] font-bold tabular-nums text-navy-950">
+                  <span className="text-2xl sm:text-[32px] font-bold tabular-nums text-navy-950">
                     {NO_VALUE}{" "}
                     <span className="text-sm font-medium text-sub">
                       {c.unit}
@@ -131,7 +133,7 @@ export default async function ResortPage({ params }: Props) {
               <div
                 role="img"
                 aria-label="7日間の日別降雪量のグラフ（データ取得前）"
-                className="grid h-40 grid-cols-7 items-end gap-4 border-b border-line"
+                className="grid h-40 grid-cols-7 items-end gap-2 border-b border-line sm:gap-4"
               >
                 {FORECAST_BARS.map((h, i) => (
                   <div
@@ -144,7 +146,7 @@ export default async function ResortPage({ params }: Props) {
                   />
                 ))}
               </div>
-              <div className="grid grid-cols-7 gap-4 text-center text-xs text-sub">
+              <div className="grid grid-cols-7 gap-2 text-center text-xs text-sub sm:gap-4">
                 {DAYS.map((day) => (
                   <span key={day}>{day}</span>
                 ))}
@@ -226,7 +228,7 @@ export default async function ResortPage({ params }: Props) {
         </div>
 
         <aside
-          className="reveal flex max-w-[340px] flex-[1_1_280px] flex-col gap-4"
+          className="reveal flex w-full flex-col gap-4 lg:max-w-[340px] lg:flex-[1_1_280px]"
           style={{ animationDelay: "0.3s" }}
         >
           {d?.lifts && (

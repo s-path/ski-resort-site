@@ -16,7 +16,7 @@ export function ResortCard({
   const c = prefColor(r.prefecture);
   const t = getTickets(r.id);
   return (
-    <div className="lift relative flex min-w-0 flex-1 flex-col gap-4 overflow-hidden rounded-xl border border-line bg-white px-6 pb-6 pt-10">
+    <div className="lift relative flex min-w-0 flex-1 flex-col gap-4 overflow-hidden rounded-xl border border-line bg-white px-5 pb-5 pt-10 sm:px-6 sm:pb-6">
       <span
         className="absolute right-0 top-0 inline-flex h-7 items-center px-4 text-xs font-bold tracking-[0.08em] text-white"
         style={{ background: c.fg, borderRadius: "0 11px 0 10px" }}
