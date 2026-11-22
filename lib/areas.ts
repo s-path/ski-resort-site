@@ -35,8 +35,8 @@ export const AREA_TABS: {
     label: "新潟",
     areas: [
       {
-        name: "越後湯沢",
-        resorts: "苗場、かぐら、神立、湯沢高原、湯沢中里 など",
+        name: "湯沢・南魚沼",
+        resorts: "苗場、かぐら、GALA湯沢、神立、湯沢高原、石打丸山、舞子 など",
       },
     ],
   },
@@ -49,7 +49,7 @@ export const AREA_TABS: {
         name: "八ヶ岳・諏訪",
         resorts: "富士見パノラマ、富士見高原、車山高原 など",
       },
-      { name: "白馬", resorts: "白馬八方尾根、白馬五竜、栂池 など" },
+      { name: "白馬", resorts: "白馬八方尾根、白馬五竜＆Hakuba47、栂池" },
       { name: "志賀・野沢", resorts: "志賀高原、野沢温泉 など" },
     ],
   },
