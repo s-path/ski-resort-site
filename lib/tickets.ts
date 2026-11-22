@@ -531,6 +531,292 @@ export const tickets: Record<string, TicketInfo> = {
       url: "https://surfsnow.jp/guide/htm/r0325gc2.htm",
     },
   },
+  kagura: {
+    season: "current",
+    adultMin: 8500,
+    adultMax: 8500,
+    ageNote: "大人＝中学生以上、小学生以下は無料",
+    rows: [
+      { label: "かぐら1日券", adult: "8,500円", child: "無料" },
+      {
+        label: "Mt.Naeba共通1日券（苗場・ドラゴンドラ込み）",
+        adult: "11,800円",
+        child: "無料",
+      },
+    ],
+    notes: ["初滑り期間（〜12/18）は正規1日券に場内利用券1,000円分付き"],
+    deals: [],
+    source: {
+      label: "にいがた観光ナビ",
+      url: "https://niigata-kankou.or.jp/ski/10682",
+    },
+  },
+  naeba: {
+    season: "unverified",
+    adultMin: 9800,
+    adultMax: 11800,
+    ageNote: "大人＝中学生以上、小学生以下は無料",
+    rows: [
+      { label: "苗場1日券", adult: "9,800円", child: "無料" },
+      {
+        label: "Mt.Naeba共通1日券（かぐら・ドラゴンドラ込み）",
+        adult: "11,800円",
+        child: "無料",
+      },
+    ],
+    notes: ["苗場1日券は早割セット券の定価から算出した値です"],
+    deals: [],
+    source: {
+      label: "スノーナビ",
+      url: "https://lift-ticket.jp/shopdetail/000000000217",
+    },
+  },
+  kandatsu: {
+    season: "current",
+    adultMin: 5800,
+    adultMax: 6800,
+    ageNote: "こども＝小学生、未就学児は無料",
+    rows: [
+      { label: "平日・日祝・正月", adult: "5,800円", child: "3,500円" },
+      { label: "土曜・特定日", adult: "6,800円", child: "4,000円" },
+      {
+        label: "40周年料金（1/12〜15・3/23〜26）",
+        adult: "4,400円",
+        child: "3,000円",
+      },
+    ],
+    notes: ["金・土・祝前日は翌2時までナイター（12/18〜3/27）"],
+    deals: [
+      {
+        title: "早割1日券",
+        detail: "大人4,500円・全日OK（公式サイトのみ）",
+        until: "2026-12-10",
+        url: "https://www.kandatsu.com/earlybird-ticket/",
+      },
+      {
+        title: "スキーこどもの日",
+        detail: "12/20・1/17・2/21・3/21は小学生のリフト券が無料",
+      },
+    ],
+    buy: {
+      label: "公式Web購入",
+      url: "https://www.kandatsu.com/earlybird-ticket/",
+    },
+    source: {
+      label: "スノーナビ",
+      url: "https://www.snownavi.com/topics/news_26111903",
+    },
+  },
+  ishiuchi: {
+    season: "current",
+    adultMin: 8500,
+    adultMax: 9400,
+    ageNote: "小・中学生は別料金、シニア＝60歳以上",
+    rows: [
+      {
+        label: "フレックス1日券（8.5時間）",
+        adult: "8,500円",
+        child: "4,200円",
+      },
+      {
+        label: "オールデイ1日券（8:30〜20:00）",
+        adult: "9,400円",
+        child: "4,700円",
+      },
+    ],
+    deals: [
+      {
+        title: "早割リフト1日券",
+        detail: "大人・シニア5,800円・全日OK（ICカードで直接リフトへ）",
+        until: "2026-11-30",
+        url: "https://www.lift-ticket.jp/view/item/000000000222",
+      },
+    ],
+    source: {
+      label: "にいがた観光ナビ",
+      url: "https://niigata-kankou.or.jp/spot/detail_10693.html",
+    },
+  },
+  gala: {
+    season: "current",
+    adultMin: 8000,
+    adultMax: 8000,
+    ageNote: "未就学児は大人1人につき2人まで無料",
+    rows: [
+      {
+        label: "ゴンドラ＆リフト1日券",
+        adult: "8,000円（Web 7,500円）",
+        child: "4,000円",
+      },
+      { label: "4時間券", adult: "7,500円（Web 7,000円）", child: "3,500円" },
+    ],
+    notes: ["12/12〜18は観光営業のみで滑走不可", "今季は南エリアが休止"],
+    deals: [
+      {
+        title: "早割リフト1日券",
+        detail: "4,800円・12/19〜3/31の全日OK",
+        until: "2026-11-30",
+        url: "https://www.lift-ticket.jp/view/item/000000000307",
+      },
+    ],
+    source: {
+      label: "タビリス",
+      url: "https://tabiris.com/archives/gala-ticket2027/",
+    },
+  },
+  maiko: {
+    season: "current",
+    adultMin: 7300,
+    adultMax: 7300,
+    ageNote: "中高生6,300円、未就学児は保護者1人につき2人まで無料",
+    rows: [
+      { label: "1dayパス", adult: "7,300円", child: "3,600円" },
+      { label: "5時間券", adult: "6,800円", child: "3,400円" },
+    ],
+    deals: [
+      {
+        title: "早割1dayパス（セブンチケット）",
+        detail: "大人4,600円・小学生2,800円",
+        until: "2026-12-18",
+      },
+    ],
+    source: {
+      label: "にいがた観光ナビ",
+      url: "https://niigata-kankou.or.jp/ski/10694",
+    },
+  },
+  goryu: {
+    season: "current",
+    adultMin: 10000,
+    adultMax: 10000,
+    ageNote: "ICカード保証金500円込み（返却で返金）",
+    rows: [
+      { label: "1日券（窓口）", adult: "10,000円" },
+      { label: "1日券（オンライン新規）", adult: "9,500円" },
+      {
+        label: "1日券（手持ちICにオンラインチャージ）",
+        adult: "8,200円",
+        child: "3,600円",
+      },
+    ],
+    deals: [
+      {
+        title: "早割リフト1日券",
+        detail: "大人7,000円・小学生3,300円（別途保証金500円）",
+        until: "2026-12-15",
+      },
+    ],
+    buy: {
+      label: "公式オンライン",
+      url: "https://www.hakuba47.co.jp/winter/ticket/lift_ticket/entry-487.html",
+    },
+    source: {
+      label: "公式サイト",
+      url: "https://www.hakuba47.co.jp/winter/ticket/lift_ticket/entry-487.html",
+    },
+  },
+  tsugaike: {
+    season: "current",
+    adultMin: 9800,
+    adultMax: 9800,
+    rows: [{ label: "1日券", adult: "9,800円" }],
+    notes: ["初滑り（〜12/11）と春（3/23〜）は割引1日券あり"],
+    deals: [],
+    source: {
+      label: "DMK SNOWBOARD",
+      url: "https://dmksnowboard.com/hakuba-lift-ticket-2026-2027/",
+    },
+  },
+  shiga: {
+    season: "current",
+    adultMin: 7500,
+    adultMax: 9500,
+    ageNote: "全18スキー場共通。こども＝小学生、中高生6,500円",
+    rows: [
+      { label: "共通1日券（窓口）", adult: "9,500円", child: "4,000円" },
+      { label: "共通1日券（オンライン）", adult: "8,500円", child: "3,500円" },
+      { label: "初すべり・春スキー", adult: "7,500円", child: "3,000円" },
+    ],
+    deals: [
+      {
+        title: "オンライン購入",
+        detail: "窓口より1日1,000円安い",
+        url: "https://shigakogen-ski.or.jp/winter/ticket/online.html",
+      },
+    ],
+    buy: {
+      label: "公式オンライン",
+      url: "https://shigakogen-ski.or.jp/winter/ticket/online.html",
+    },
+    source: {
+      label: "公式サイト",
+      url: "https://shigakogen-ski.or.jp/ticket/",
+    },
+  },
+  nozawa: {
+    season: "current",
+    adultMin: 5600,
+    adultMax: 7800,
+    ageNote: "こども＝中学生以下、未就学児は大人1人につき1人無料",
+    rows: [
+      { label: "初滑り（〜12/18）", adult: "5,600円", child: "3,400円" },
+      { label: "通常（12/19〜3/28）", adult: "7,800円", child: "4,700円" },
+      { label: "春山（3/29〜）", adult: "6,100円", child: "3,600円" },
+    ],
+    notes: ["ICカード保証金500円"],
+    deals: [
+      {
+        title: "春休みファミリーパック",
+        detail: "大人1枚＋小中学生1枚で10,000円（3/1〜28）",
+        url: "https://nozawaski.com/winter/lift_price/specialseason/",
+      },
+    ],
+    source: {
+      label: "公式サイト",
+      url: "https://nozawaski.com/winter/lift_price/",
+    },
+  },
+  "fujimi-panorama": {
+    season: "current",
+    adultMin: 6000,
+    adultMax: 6000,
+    ageNote: "中高生4,000円（今季新設）、シニア5,700円",
+    rows: [
+      { label: "ゴンドラ・リフト1日券", adult: "6,000円", child: "2,000円" },
+    ],
+    deals: [],
+    source: {
+      label: "公式サイト",
+      url: "https://www.fujimipanorama.com/snow/2026-2027%E3%82%B7%E3%83%BC%E3%82%BA%E3%83%B3%E3%80%81%E3%83%AA%E3%83%95%E3%83%88%E5%88%B8%E4%BE%A1%E6%A0%BC%E3%81%AE%E3%81%8A%E7%9F%A5%E3%82%89%E3%81%9B/",
+    },
+  },
+  kurumayama: {
+    season: "current",
+    adultMin: 5500,
+    adultMax: 5500,
+    ageNote: "大人＝中学生以上、シニア（60歳以上）4,500円",
+    rows: [
+      { label: "1日券", adult: "5,500円", child: "3,500円" },
+      { label: "半日券", adult: "4,500円", child: "2,500円" },
+    ],
+    notes: ["19〜22歳は「雪マジ」で1日券無料"],
+    deals: [
+      {
+        title: "公式Web早割",
+        detail: "1日券 大人4,600円・小学生2,900円",
+        until: "2026-12-11",
+        url: "https://winter.kurumayama-skypark.com/ticket",
+      },
+    ],
+    buy: {
+      label: "公式Web購入",
+      url: "https://winter.kurumayama-skypark.com/ticket",
+    },
+    source: {
+      label: "公式サイト",
+      url: "https://winter.kurumayama-skypark.com/ticket",
+    },
+  },
 };
 
 export function getTickets(id: string): TicketInfo | undefined {
