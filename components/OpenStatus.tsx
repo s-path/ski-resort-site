@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Resort } from "@/lib/resorts";
 import { formatShortDate, openingSortKey } from "@/lib/resorts";
 import { ExternalIcon, PrefChip } from "./Badges";
@@ -15,9 +15,66 @@ const TABS: { key: string; label: string; prefs: string[] | null }[] = [
   { key: "other", label: "埼玉・静岡", prefs: ["埼玉", "静岡"] },
 ];
 
-/** オープン状況の表。県ごとにタブで切り替える */
+/** 自動で切り替える間隔（ミリ秒） */
+const INTERVAL = 10_000;
+/** 自動切り替えで回すタブ（「すべて」は長いので外す） */
+const ROTATION = TABS.filter((t) => t.prefs).map((t) => t.key);
+
+/**
+ * オープン状況の表。県ごとにタブで切り替える。
+ * 群馬から始めて10秒ごとに次の県へ。タブを押すと自動切り替えは止まる。
+ */
 export function OpenStatus({ resorts }: { resorts: Resort[] }) {
-  const [tab, setTab] = useState("all");
+  const [tab, setTab] = useState("gunma");
+  const [auto, setAuto] = useState(true);
+  // 表にマウスが乗っている間・画面外にある間は一時停止
+  const [hovered, setHovered] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+
+  // 動きを減らす設定の人には自動切り替えをしない
+  const reducedRef = useRef(false);
+  useEffect(() => {
+    reducedRef.current = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (reducedRef.current) setAuto(false);
+  }, []);
+
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el) return;
+    // 止めていても、画面外に出たら自動切り替えを再開する
+    const io = new IntersectionObserver(
+      ([e]) => {
+        setVisible(e.isIntersecting);
+        if (!e.isIntersecting && !reducedRef.current) setAuto(true);
+      },
+      {
+        threshold: 0.2,
+      },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  // スマホでタブが横にはみ出すとき、選ばれたタブが見えるように横だけスクロール
+  useEffect(() => {
+    const list = listRef.current;
+    const btn = list?.querySelector<HTMLElement>(`[data-tab="${tab}"]`);
+    if (!list || !btn || list.scrollWidth <= list.clientWidth) return;
+    list.scrollTo({
+      left: btn.offsetLeft - (list.clientWidth - btn.offsetWidth) / 2,
+      behavior: "smooth",
+    });
+  }, [tab]);
+
+  const next = () => {
+    const i = ROTATION.indexOf(tab);
+    setTab(ROTATION[(i + 1) % ROTATION.length]);
+  };
+  const running = auto && visible && !hovered;
   // 営業中 → オープン予定（日付順） → 確認中 の順に並べる
   const ORDER = { open: 0, planned: 1, unknown: 2 } as const;
   const withDates = [...resorts].sort(
@@ -32,39 +89,73 @@ export function OpenStatus({ resorts }: { resorts: Resort[] }) {
   const rows = rowsFor(active.prefs);
 
   return (
-    <>
-      <div
-        role="tablist"
-        aria-label="オープン状況の県"
-        className="no-scrollbar -mx-4 flex max-w-[calc(100%+2rem)] gap-1 self-start overflow-x-auto px-4 sm:mx-0 sm:max-w-full sm:flex-wrap sm:rounded-full sm:border sm:border-line sm:bg-mist sm:p-1"
-      >
-        {TABS.map((t) => {
-          const on = t.key === tab;
-          const count = rowsFor(t.prefs).length;
-          return (
-            <button
-              key={t.key}
-              type="button"
-              role="tab"
-              aria-selected={on}
-              onClick={() => setTab(t.key)}
-              className={`chip inline-flex min-h-10 shrink-0 items-center gap-2 rounded-full border px-4 text-sm font-semibold ${
-                on
-                  ? "border-navy-950 bg-navy-950 text-white"
-                  : "border-line bg-white text-[#3A4456] sm:border-transparent sm:bg-transparent"
-              }`}
-            >
-              {t.label}
-              <span
-                className={`inline-flex h-5 min-w-5 items-center justify-center rounded-[10px] px-1.5 text-[11px] font-bold ${
-                  on ? "bg-white/20 text-white" : "bg-line text-sub"
+    // biome-ignore lint/a11y/noStaticElementInteractions: マウスが乗っている間だけ自動切り替えを一時停止する補助で、操作は「自動切り替えを停止」ボタンでもできる
+    <div
+      ref={rootRef}
+      className="flex flex-col gap-4"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div
+          ref={listRef}
+          role="tablist"
+          aria-label="オープン状況の県"
+          className="no-scrollbar -mx-4 flex max-w-[calc(100%+2rem)] gap-1 self-start overflow-x-auto px-4 sm:mx-0 sm:max-w-full sm:flex-wrap sm:rounded-full sm:border sm:border-line sm:bg-mist sm:p-1"
+        >
+          {TABS.map((t) => {
+            const on = t.key === tab;
+            const count = rowsFor(t.prefs).length;
+            return (
+              <button
+                key={t.key}
+                type="button"
+                role="tab"
+                aria-selected={on}
+                data-tab={t.key}
+                onClick={() => {
+                  setTab(t.key);
+                  setAuto(false);
+                }}
+                className={`chip relative inline-flex min-h-10 shrink-0 items-center gap-2 overflow-hidden rounded-full border px-4 text-sm font-semibold ${
+                  on
+                    ? "border-navy-950 bg-navy-950 text-white"
+                    : "border-line bg-white text-[#3A4456] sm:border-transparent sm:bg-transparent"
                 }`}
               >
-                {count}
-              </span>
-            </button>
-          );
-        })}
+                {t.label}
+                <span
+                  className={`inline-flex h-5 min-w-5 items-center justify-center rounded-[10px] px-1.5 text-[11px] font-bold ${
+                    on ? "bg-white/20 text-white" : "bg-line text-sub"
+                  }`}
+                >
+                  {count}
+                </span>
+                {on && auto && (
+                  <span
+                    key={tab}
+                    aria-hidden="true"
+                    className="meter absolute inset-x-0 bottom-0 h-[3px] origin-left bg-sky-300"
+                    style={{
+                      animationDuration: `${INTERVAL}ms`,
+                      animationPlayState: running ? "running" : "paused",
+                    }}
+                    onAnimationEnd={next}
+                  />
+                )}
+              </button>
+            );
+          })}
+        </div>
+        <button
+          type="button"
+          onClick={() => setAuto((v) => !v)}
+          aria-pressed={auto}
+          className="tlink inline-flex items-center gap-1.5 text-xs font-semibold text-sub"
+        >
+          <span aria-hidden="true">{auto ? "❚❚" : "▶"}</span>
+          {auto ? "自動切り替えを停止" : "自動切り替えを再開"}
+        </button>
       </div>
 
       <div
@@ -198,7 +289,7 @@ export function OpenStatus({ resorts }: { resorts: Resort[] }) {
           </tbody>
         </table>
       </div>
-    </>
+    </div>
   );
 }
 
