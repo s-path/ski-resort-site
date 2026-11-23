@@ -185,12 +185,26 @@ export default function Home() {
           </p>
         </div>
         <OpenStatus resorts={resorts} />
-        <Link
-          href="/resorts?sort=opening"
-          className="tlink self-start text-sm font-semibold text-navy-700"
-        >
-          オープンが早い順にスキー場を見る →
-        </Link>
+        <div className="flex flex-wrap gap-x-6 gap-y-2">
+          <Link
+            href="/opening"
+            className="tlink text-sm font-semibold text-navy-700"
+          >
+            オープン日一覧を見る →
+          </Link>
+          <Link
+            href="/early-bird"
+            className="tlink text-sm font-semibold text-navy-700"
+          >
+            早割リフト券まとめ →
+          </Link>
+          <Link
+            href="/kids-free"
+            className="tlink text-sm font-semibold text-navy-700"
+          >
+            小学生リフト無料のスキー場 →
+          </Link>
+        </div>
       </section>
 
       <section

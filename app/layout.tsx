@@ -1,6 +1,8 @@
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata, Viewport } from "next";
+import Link from "next/link";
+import { GUIDE_LINKS } from "@/components/GuidePage";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 // フォントは自前で配信（Google Fonts への外部リクエストをなくして表示を速くする）
@@ -59,6 +61,14 @@ export default function RootLayout({
                 営業状況・料金は必ず各スキー場の公式サイトでご確認ください。
               </span>
             </div>
+            <nav aria-label="特集" className="flex flex-col gap-0.5">
+              <span className="font-semibold text-white">特集</span>
+              {GUIDE_LINKS.map((g) => (
+                <Link key={g.href} href={g.href} className="tlink w-fit">
+                  {g.label}
+                </Link>
+              ))}
+            </nav>
             <div className="flex flex-col gap-0.5">
               <span className="font-semibold text-white">データ出典</span>
               <span>積雪：気象庁ホームページのデータを加工して作成</span>
