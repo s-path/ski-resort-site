@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { AreaTabs } from "@/components/AreaTabs";
 import { OpenStatus } from "@/components/OpenStatus";
@@ -5,6 +6,26 @@ import { RotatingPlace } from "@/components/RotatingPlace";
 import { Snowfall } from "@/components/Snowfall";
 import { SNOW_AREAS } from "@/lib/areas";
 import { AREA_GROUPS, resorts } from "@/lib/resorts";
+import { jsonLdString } from "@/lib/seo";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
+
+const WEBSITE_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: SITE_NAME,
+  url: SITE_URL,
+  description: SITE_DESCRIPTION,
+  inLanguage: "ja",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: `${SITE_URL}/resorts?q={search_term_string}`,
+    "query-input": "required name=search_term_string",
+  },
+};
 
 const QUICK = [
   { key: "open", label: "営業中" },
@@ -20,6 +41,11 @@ const field =
 export default function Home() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: 自前の定数をエスケープして埋め込む構造化データ
+        dangerouslySetInnerHTML={{ __html: jsonLdString(WEBSITE_JSON_LD) }}
+      />
       <section className="hero-bg relative overflow-hidden border-b border-line">
         <div
           aria-hidden

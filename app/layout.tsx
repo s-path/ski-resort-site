@@ -1,11 +1,44 @@
-import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import type { Metadata, Viewport } from "next";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
+// フォントは自前で配信（Google Fonts への外部リクエストをなくして表示を速くする）
+import "@fontsource/inter/400.css";
+import "@fontsource/inter/500.css";
+import "@fontsource/inter/600.css";
+import "@fontsource/inter/700.css";
+import "@fontsource/noto-sans-jp/400.css";
+import "@fontsource/noto-sans-jp/500.css";
+import "@fontsource/noto-sans-jp/700.css";
+import "@fontsource/shippori-mincho/600.css";
+import "@fontsource/shippori-mincho/700.css";
+import "@fontsource/allura/400.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "SNOWLINE 関東 | 関東から行けるスキー場の積雪・営業状況",
-  description:
-    "群馬・栃木・長野・山梨から越後湯沢まで。関東から行けるスキー場の営業状況、積雪、アクセス時間をひとつの画面で比べられます。",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: `${SITE_NAME} | 関東から行けるスキー場のオープン日・リフト券料金`,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  openGraph: {
+    type: "website",
+    locale: "ja_JP",
+    siteName: SITE_NAME,
+    url: "/",
+  },
+  twitter: { card: "summary_large_image" },
+  // Search Console の所有確認。Vercel の環境変数に入れると出る
+  verification: process.env.GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+    : undefined,
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0a1f44",
 };
 
 export default function RootLayout({
@@ -13,18 +46,6 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ja">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@600;700&family=Allura&display=swap"
-        />
-      </head>
       <body className="flex min-h-screen flex-col bg-white font-sans text-ink">
         <SiteHeader />
         <main className="flex-1">{children}</main>
@@ -46,6 +67,8 @@ export default function RootLayout({
             </div>
           </div>
         </footer>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
