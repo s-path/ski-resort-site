@@ -8,7 +8,12 @@ import {
 import { AREA_GROUPS, type AreaKey, resorts } from "@/lib/resorts";
 
 export const metadata: Metadata = {
-  title: "スキー場を探す | SNOWLINE 関東",
+  title: "関東から行けるスキー場を探す｜エリア・オープン日・設備で絞り込み",
+  description:
+    "群馬・栃木・新潟・長野・山梨など関東から行けるスキー場35か所を、エリア・ナイター・ゴンドラ・新幹線アクセスなどで絞り込み。オープンが早い順にも並べられます。",
+  // 絞り込み・並び替えのURLは一覧ページにまとめる
+  alternates: { canonical: "/resorts" },
+  openGraph: { url: "/resorts" },
 };
 
 const AREA_KEYS = new Set<string>(
