@@ -47,7 +47,7 @@ export const AREA_TABS: {
       { name: "軽井沢", resorts: "軽井沢プリンスホテル" },
       {
         name: "八ヶ岳・諏訪",
-        resorts: "富士見パノラマ、富士見高原、車山高原 など",
+        resorts: "富士見パノラマ、車山高原、シャトレーゼ野辺山・小海 など",
       },
       { name: "白馬", resorts: "白馬八方尾根、白馬五竜＆Hakuba47、栂池" },
       { name: "志賀・野沢", resorts: "志賀高原、野沢温泉 など" },
