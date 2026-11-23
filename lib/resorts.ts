@@ -644,6 +644,40 @@ export const resorts: Resort[] = [
     tags: ["キッズパーク"],
     url: "https://winter.kurumayama-skypark.com/",
   },
+  {
+    id: "chateraise-nobeyama",
+    name: "シャトレーゼスキーバレー野辺山",
+    prefecture: "長野",
+    areaKey: "yatsu",
+    areaLabel: "野辺山",
+    status: "planned",
+    openingDate: "2026-12-19",
+    stats: [
+      SNOW,
+      { label: "コース数", value: "5" },
+      { label: "リフト", value: "3基" },
+      { label: "長坂ICから", value: "約25分" },
+    ],
+    tags: ["ナイター", "キッズパーク"],
+    url: "https://nobeyama.chateraiseski.jp/",
+  },
+  {
+    id: "chateraise-koumi",
+    name: "シャトレーゼスキーバレー小海",
+    prefecture: "長野",
+    areaKey: "yatsu",
+    areaLabel: "小海",
+    status: "planned",
+    openingDate: "2026-12-15",
+    stats: [
+      SNOW,
+      { label: "最長滑走", value: "2,500 m" },
+      { label: "営業", value: "12/15〜3/25" },
+      { label: "長坂ICから", value: "約50分" },
+    ],
+    tags: ["キッズパーク"],
+    url: "https://koumi.chateraiseski.jp/",
+  },
 ];
 
 export function getResort(id: string): Resort | undefined {

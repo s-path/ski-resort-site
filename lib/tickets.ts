@@ -817,6 +817,58 @@ export const tickets: Record<string, TicketInfo> = {
       url: "https://winter.kurumayama-skypark.com/ticket",
     },
   },
+  "chateraise-nobeyama": {
+    season: "current",
+    adultMin: 5300,
+    adultMax: 5300,
+    ageNote: "大人＝高校生〜59歳、こども＝小中学生、シニア（60歳以上）4,300円",
+    rows: [{ label: "1日券", adult: "5,300円", child: "3,800円" }],
+    deals: [
+      {
+        title: "早割リフト1日券（野辺山・小海共通）",
+        detail: "3,500円・どちらのスキー場でも使える（webket）",
+        until: "2026-12-14",
+        url: "https://webket.jp/pc/ticket/index?fc=80110&ac=9000",
+      },
+    ],
+    buy: {
+      label: "webket",
+      url: "https://webket.jp/pc/ticket/index?fc=80110&ac=9000",
+    },
+    source: {
+      label: "公式サイト",
+      url: "https://nobeyama.chateraiseski.jp/news/2851.html",
+    },
+  },
+  "chateraise-koumi": {
+    season: "current",
+    adultMin: 3300,
+    adultMax: 5300,
+    ageNote: "大人＝高校生〜59歳、こども＝小中学生、シニア（60歳以上）4,300円",
+    rows: [
+      { label: "初滑り（〜12/25）", adult: "3,300円", child: "2,300円" },
+      { label: "1日券", adult: "5,300円（Web 5,200円）", child: "3,800円" },
+    ],
+    notes: [
+      "平日は住んでいる都県ごとの曜日に500円引き（東京・千葉は水曜、神奈川・埼玉は火曜）",
+    ],
+    deals: [
+      {
+        title: "早割リフト1日券（野辺山・小海共通）",
+        detail: "3,500円・どちらのスキー場でも使える（webket）",
+        until: "2026-12-14",
+        url: "https://webket.jp/pc/ticket/index?fc=80110&ac=9000",
+      },
+    ],
+    buy: {
+      label: "webket",
+      url: "https://webket.jp/pc/ticket/index?fc=80110&ac=9000",
+    },
+    source: {
+      label: "公式サイト",
+      url: "https://koumi.chateraiseski.jp/fee/lift/",
+    },
+  },
 };
 
 export function getTickets(id: string): TicketInfo | undefined {
