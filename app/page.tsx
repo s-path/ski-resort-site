@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { AreaTabs } from "@/components/AreaTabs";
 import { OpenStatus } from "@/components/OpenStatus";
@@ -5,6 +6,26 @@ import { RotatingPlace } from "@/components/RotatingPlace";
 import { Snowfall } from "@/components/Snowfall";
 import { SNOW_AREAS } from "@/lib/areas";
 import { AREA_GROUPS, resorts } from "@/lib/resorts";
+import { jsonLdString } from "@/lib/seo";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
+
+const WEBSITE_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: SITE_NAME,
+  url: SITE_URL,
+  description: SITE_DESCRIPTION,
+  inLanguage: "ja",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: `${SITE_URL}/resorts?q={search_term_string}`,
+    "query-input": "required name=search_term_string",
+  },
+};
 
 const QUICK = [
   { key: "open", label: "営業中" },
@@ -20,6 +41,11 @@ const field =
 export default function Home() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: 自前の定数をエスケープして埋め込む構造化データ
+        dangerouslySetInnerHTML={{ __html: jsonLdString(WEBSITE_JSON_LD) }}
+      />
       <section className="hero-bg relative overflow-hidden border-b border-line">
         <div
           aria-hidden
@@ -159,12 +185,26 @@ export default function Home() {
           </p>
         </div>
         <OpenStatus resorts={resorts} />
-        <Link
-          href="/resorts?sort=opening"
-          className="tlink self-start text-sm font-semibold text-navy-700"
-        >
-          オープンが早い順にスキー場を見る →
-        </Link>
+        <div className="flex flex-wrap gap-x-6 gap-y-2">
+          <Link
+            href="/opening"
+            className="tlink text-sm font-semibold text-navy-700"
+          >
+            オープン日一覧を見る →
+          </Link>
+          <Link
+            href="/early-bird"
+            className="tlink text-sm font-semibold text-navy-700"
+          >
+            早割リフト券まとめ →
+          </Link>
+          <Link
+            href="/kids-free"
+            className="tlink text-sm font-semibold text-navy-700"
+          >
+            小学生リフト無料のスキー場 →
+          </Link>
+        </div>
       </section>
 
       <section

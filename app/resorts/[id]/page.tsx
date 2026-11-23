@@ -5,7 +5,15 @@ import { ExternalIcon, PrefChip, StatusBadge } from "@/components/Badges";
 import { FavoriteButton } from "@/components/FavoriteButton";
 import { TicketSection } from "@/components/TicketSection";
 import { getResort, NO_VALUE, resorts } from "@/lib/resorts";
-import { getTickets } from "@/lib/tickets";
+import {
+  jsonLdString,
+  openingSentence,
+  resortDescription,
+  resortJsonLd,
+  resortTitle,
+} from "@/lib/seo";
+import { DATA_UPDATED_AT, formatJaDate, todayInTokyo } from "@/lib/site";
+import { adultPriceLabel, getTickets } from "@/lib/tickets";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -20,12 +28,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const r = getResort(id);
   if (!r) return {};
-  return { title: `${r.name}の積雪・営業状況 | SNOWLINE 関東` };
+  const title = resortTitle(r);
+  const description = resortDescription(r, getTickets(r.id), todayInTokyo());
+  const path = `/resorts/${r.id}`;
+  return {
+    title,
+    description,
+    alternates: { canonical: path },
+    openGraph: { type: "article", url: path, title, description },
+    twitter: { title, description },
+  };
 }
 
+// 積雪・天気の実データを取り込んだら true にして「今日のコンディション」と予報を出す
+const LIVE_DATA = false;
 // 予報グラフはデータ取得前のレイアウト確認用（高さは仮）
 const FORECAST_BARS = [24, 40, 64, 52, 30, 18, 36];
 const DAYS = ["今日", "明日", "3日", "4日", "5日", "6日", "7日"];
+
+/** 値が「—」だけの項目は出さない */
+const hasValue = (v: string) => !v.startsWith(NO_VALUE);
 
 const card = "rounded-xl border border-line";
 
@@ -34,13 +56,21 @@ export default async function ResortPage({ params }: Props) {
   const r = getResort(id);
   if (!r) notFound();
   const d = r.detail;
-  const specs = d?.specs ?? r.stats.filter((s) => s.label !== "積雪");
+  const specs = (d?.specs ?? r.stats.filter((s) => s.label !== "積雪")).filter(
+    (s) => hasValue(s.value),
+  );
+  const t = getTickets(r.id);
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: 自前のデータをエスケープして埋め込む構造化データ
+        dangerouslySetInnerHTML={{ __html: jsonLdString(resortJsonLd(r, t)) }}
+      />
       <section className="border-b border-line bg-mist">
         <div className="reveal mx-auto flex max-w-[1200px] flex-col gap-5 px-4 pb-8 pt-6 sm:px-6 sm:pb-10 sm:pt-8">
-          <p className="text-[13px] text-sub">
+          <nav aria-label="パンくずリスト" className="text-[13px] text-sub">
             <Link href="/" className="tlink text-sub">
               トップ
             </Link>{" "}
@@ -48,8 +78,8 @@ export default async function ResortPage({ params }: Props) {
             <Link href="/resorts" className="tlink text-sub">
               スキー場を探す
             </Link>{" "}
-            / {r.name}
-          </p>
+            / <span aria-current="page">{r.name}</span>
+          </nav>
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div className="flex flex-col gap-2.5">
               <div className="flex flex-wrap items-center gap-2">
@@ -60,11 +90,15 @@ export default async function ResortPage({ params }: Props) {
               <h1 className="text-[28px] font-bold leading-tight text-navy-950 sm:text-[40px]">
                 {r.name}
               </h1>
-              {d?.description && (
-                <p className="max-w-[640px] text-[15px] leading-[1.8] text-sub">
-                  {d.description}
-                </p>
-              )}
+              <p className="max-w-[640px] text-[15px] leading-[1.8] text-sub">
+                {d?.description ?? resortDescription(r, t, todayInTokyo())}
+              </p>
+              <p className="text-xs text-sub">
+                <time dateTime={DATA_UPDATED_AT}>
+                  {formatJaDate(DATA_UPDATED_AT)}
+                </time>
+                更新
+              </p>
             </div>
             <div className="flex flex-wrap gap-3">
               <FavoriteButton />
@@ -91,71 +125,118 @@ export default async function ResortPage({ params }: Props) {
           style={{ animationDelay: "0.15s" }}
         >
           <section className="flex flex-col gap-4">
-            <div className="flex flex-wrap items-baseline justify-between gap-3">
-              <h2 className="text-xl font-bold text-navy-950">
-                今日のコンディション
-              </h2>
-              <span className="text-xs text-sub">データ取得の準備中</span>
-            </div>
-            <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-              {[
-                { label: "積雪（近隣観測点）", unit: "cm", note: "アメダス" },
-                { label: "24時間降雪", unit: "cm", note: "観測値" },
-                { label: "山頂の気温", unit: "°C", note: "予報モデル" },
-                {
-                  label: "リフト稼働",
-                  unit: d?.lifts
-                    ? `/ ${d.lifts.reduce((s, l) => s + l.count, 0)}`
-                    : "",
-                  note: "公式サイトより",
-                },
-              ].map((c) => (
-                <div
-                  key={c.label}
-                  className={`lift ${card} flex flex-col gap-1.5 p-4 sm:p-5`}
-                >
-                  <span className="text-xs text-sub">{c.label}</span>
-                  <span className="text-2xl sm:text-[32px] font-bold tabular-nums text-navy-950">
-                    {NO_VALUE}{" "}
-                    <span className="text-sm font-medium text-sub">
-                      {c.unit}
-                    </span>
-                  </span>
-                  <span className="text-xs text-sub">{c.note}</span>
-                </div>
-              ))}
-            </div>
+            <h2 className="text-xl font-bold text-navy-950">
+              2026-27シーズンの営業
+            </h2>
+            <dl
+              className={`${card} grid grid-cols-1 overflow-hidden sm:grid-cols-3`}
+            >
+              <div className="-mb-px border-b border-line p-5 sm:border-r sm:border-b-0">
+                <dt className="text-xs text-sub">営業状況</dt>
+                <dd className="mt-1.5 text-lg font-bold">
+                  <StatusBadge resort={r} />
+                </dd>
+              </div>
+              <div className="-mb-px border-b border-line p-5 sm:border-r sm:border-b-0">
+                <dt className="text-xs text-sub">
+                  {r.status === "open" ? "営業開始" : "オープン予定"}
+                </dt>
+                <dd className="mt-1.5 text-lg font-bold tabular-nums text-navy-950">
+                  {r.openingDate
+                    ? formatJaDate(r.openingDate).replace(/^\d+年/, "")
+                    : (r.openingLabel ?? "確認中")}
+                </dd>
+              </div>
+              <div className="p-5">
+                <dt className="text-xs text-sub">大人1日券</dt>
+                <dd className="mt-1.5 text-lg font-bold tabular-nums text-navy-950">
+                  {t ? adultPriceLabel(t) : "確認中"}
+                </dd>
+              </div>
+            </dl>
+            <p className="text-sm leading-[1.8] text-[#3A4456]">
+              {r.name}は{r.prefecture}・{r.areaLabel}のスキー場です。
+              {openingSentence(r)}
+              オープン日は積雪によって変わることがあるので、出かける前に公式サイトで最新の情報を確認してください。
+            </p>
           </section>
 
-          <section className="flex flex-col gap-4">
-            <h2 className="text-xl font-bold text-navy-950">7日間の降雪予報</h2>
-            <div className={`${card} flex flex-col gap-3 p-6`}>
-              <div
-                role="img"
-                aria-label="7日間の日別降雪量のグラフ（データ取得前）"
-                className="grid h-40 grid-cols-7 items-end gap-2 border-b border-line sm:gap-4"
-              >
-                {FORECAST_BARS.map((h, i) => (
+          {LIVE_DATA && (
+            <>
+              <section className="flex flex-col gap-4">
+                <div className="flex flex-wrap items-baseline justify-between gap-3">
+                  <h2 className="text-xl font-bold text-navy-950">
+                    今日のコンディション
+                  </h2>
+                  <span className="text-xs text-sub">データ取得の準備中</span>
+                </div>
+                <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+                  {[
+                    {
+                      label: "積雪（近隣観測点）",
+                      unit: "cm",
+                      note: "アメダス",
+                    },
+                    { label: "24時間降雪", unit: "cm", note: "観測値" },
+                    { label: "山頂の気温", unit: "°C", note: "予報モデル" },
+                    {
+                      label: "リフト稼働",
+                      unit: d?.lifts
+                        ? `/ ${d.lifts.reduce((s, l) => s + l.count, 0)}`
+                        : "",
+                      note: "公式サイトより",
+                    },
+                  ].map((c) => (
+                    <div
+                      key={c.label}
+                      className={`lift ${card} flex flex-col gap-1.5 p-4 sm:p-5`}
+                    >
+                      <span className="text-xs text-sub">{c.label}</span>
+                      <span className="text-2xl sm:text-[32px] font-bold tabular-nums text-navy-950">
+                        {NO_VALUE}{" "}
+                        <span className="text-sm font-medium text-sub">
+                          {c.unit}
+                        </span>
+                      </span>
+                      <span className="text-xs text-sub">{c.note}</span>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              <section className="flex flex-col gap-4">
+                <h2 className="text-xl font-bold text-navy-950">
+                  7日間の降雪予報
+                </h2>
+                <div className={`${card} flex flex-col gap-3 p-6`}>
                   <div
-                    key={DAYS[i]}
-                    className="grow rounded-t bg-[#D3DDEE]"
-                    style={{
-                      height: `${h}%`,
-                      animationDelay: `${0.3 + i * 0.08}s`,
-                    }}
-                  />
-                ))}
-              </div>
-              <div className="grid grid-cols-7 gap-2 text-center text-xs text-sub sm:gap-4">
-                {DAYS.map((day) => (
-                  <span key={day}>{day}</span>
-                ))}
-              </div>
-              <p className="text-xs text-sub">
-                グラフはレイアウト確認用の仮表示です。実データは予報APIから表示します。
-              </p>
-            </div>
-          </section>
+                    role="img"
+                    aria-label="7日間の日別降雪量のグラフ（データ取得前）"
+                    className="grid h-40 grid-cols-7 items-end gap-2 border-b border-line sm:gap-4"
+                  >
+                    {FORECAST_BARS.map((h, i) => (
+                      <div
+                        key={DAYS[i]}
+                        className="grow rounded-t bg-[#D3DDEE]"
+                        style={{
+                          height: `${h}%`,
+                          animationDelay: `${0.3 + i * 0.08}s`,
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <div className="grid grid-cols-7 gap-2 text-center text-xs text-sub sm:gap-4">
+                    {DAYS.map((day) => (
+                      <span key={day}>{day}</span>
+                    ))}
+                  </div>
+                  <p className="text-xs text-sub">
+                    グラフはレイアウト確認用の仮表示です。実データは予報APIから表示します。
+                  </p>
+                </div>
+              </section>
+            </>
+          )}
 
           {specs.length > 0 && (
             <section className="flex flex-col gap-4">

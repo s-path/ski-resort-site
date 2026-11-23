@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { prefColor } from "@/lib/prefectures";
-import type { Resort } from "@/lib/resorts";
+import { NO_VALUE, type Resort } from "@/lib/resorts";
 import { adultPriceLabel, getTickets } from "@/lib/tickets";
 import { ExternalIcon, PrefChip, StatusBadge } from "./Badges";
 
@@ -44,16 +44,18 @@ export function ResortCard({
           compact ? "grid-cols-2 gap-x-4 gap-y-3" : "grid-cols-4 gap-4"
         }`}
       >
-        {r.stats.map((s) => (
-          <div key={s.label} className="flex flex-col gap-1">
-            <dt className="text-xs text-sub">{s.label}</dt>
-            <dd
-              className={`font-bold tabular-nums ${compact ? "text-base" : "text-lg"}`}
-            >
-              {s.value}
-            </dd>
-          </div>
-        ))}
+        {r.stats
+          .filter((s) => !s.value.startsWith(NO_VALUE))
+          .map((s) => (
+            <div key={s.label} className="flex flex-col gap-1">
+              <dt className="text-xs text-sub">{s.label}</dt>
+              <dd
+                className={`font-bold tabular-nums ${compact ? "text-base" : "text-lg"}`}
+              >
+                {s.value}
+              </dd>
+            </div>
+          ))}
       </dl>
 
       <p className="flex flex-wrap items-baseline gap-x-2 text-sm">
