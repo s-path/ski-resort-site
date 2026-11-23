@@ -60,6 +60,9 @@ export default function RootLayout({
               <span>
                 営業状況・料金は必ず各スキー場の公式サイトでご確認ください。
               </span>
+              <span>
+                当サイトはアフィリエイト広告（楽天アフィリエイトなど）を利用しています。
+              </span>
             </div>
             <nav aria-label="特集" className="flex flex-col gap-0.5">
               <span className="font-semibold text-white">特集</span>

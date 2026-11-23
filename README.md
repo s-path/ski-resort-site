@@ -16,3 +16,16 @@ pnpm dev
 ## Vercelへの公開
 
 GitHubにpushし、VercelでこのリポジトリをImportする。設定はすべてデフォルト（Framework: Next.js）でよい。環境変数は不要。
+
+## 楽天トラベル（近くの宿）
+
+詳細ページの「周辺の宿」は楽天トラベルのキーワード検索APIから取得します。Vercel の環境変数に次を設定すると表示されます（未設定なら非表示）。
+
+| 変数 | 内容 |
+|---|---|
+| `RAKUTEN_APP_ID` | 楽天ウェブサービスのアプリID |
+| `RAKUTEN_ACCESS_KEY` | アクセスキー（`pk_` で始まる） |
+| `RAKUTEN_AFFILIATE_ID` | 楽天アフィリエイトID（リンクがアフィリエイトURLになる） |
+| `RAKUTEN_ORIGIN` | アプリに登録したサイトURL（省略時は `NEXT_PUBLIC_SITE_URL`） |
+
+アプリは「Webアプリケーション」で登録し、サイトURLに本番のURLを入れてください。スキー場ごとの検索キーワードは `lib/hotels.ts` の `HOTEL_KEYWORD` です。
