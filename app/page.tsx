@@ -262,7 +262,15 @@ export default function Home() {
         className="reveal mx-auto flex max-w-[1200px] scroll-mt-4 flex-col gap-6 px-4 sm:px-6 pb-6 pt-14"
         style={{ animationDelay: "0.3s" }}
       >
-        <AreaTabs />
+        <AreaTabs
+          resorts={resorts.map(({ id, name, areaKey, group, prefecture }) => ({
+            id,
+            name,
+            areaKey,
+            group,
+            prefecture,
+          }))}
+        />
       </section>
 
       <section
