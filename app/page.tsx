@@ -119,50 +119,84 @@ export default function Home() {
             </span>
           </div>
 
-          <form
-            action="/resorts"
-            method="get"
-            className="grid grid-cols-1 items-end gap-4 rounded-xl border border-line bg-white p-5 shadow-[0_1px_2px_rgba(10,31,68,0.04)] sm:grid-cols-2 lg:grid-cols-4"
-          >
-            <label className="flex flex-col gap-1.5 text-xs font-semibold text-sub">
-              キーワード
-              <input
-                type="text"
-                name="q"
-                placeholder="スキー場名・地名"
-                className={field}
-              />
-            </label>
-            <label className="flex flex-col gap-1.5 text-xs font-semibold text-sub">
-              エリア
-              <select name="area" className={field} defaultValue="">
-                <option value="">すべてのエリア</option>
-                {AREA_GROUPS.map((g) => (
-                  <optgroup key={g.label} label={g.label}>
-                    {g.areas.map((a) => (
-                      <option key={a.key} value={a.key}>
-                        {a.label}
-                      </option>
-                    ))}
-                  </optgroup>
-                ))}
-              </select>
-            </label>
-            <label className="flex flex-col gap-1.5 text-xs font-semibold text-sub">
-              出発地からの時間
-              <select name="time" className={field} defaultValue="">
-                <option value="">練馬ICから・指定なし</option>
-                <option value="120">練馬ICから2時間以内</option>
-                <option value="shinkansen">東京駅から新幹線＋バス</option>
-              </select>
-            </label>
-            <button
-              type="submit"
-              className="btn h-11 cursor-pointer rounded-lg bg-navy-700 text-[15px] font-semibold text-white"
+          {/* 検索フォームは初期は閉じておき、ボタンで開く（JSなしでも動く details を使う） */}
+          <details className="search-toggle group">
+            <summary className="btn inline-flex h-11 w-fit cursor-pointer list-none items-center gap-2 rounded-lg border border-field bg-white px-[18px] text-sm font-semibold text-navy-950 shadow-[0_1px_2px_rgba(10,31,68,0.04)] [&::-webkit-details-marker]:hidden">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                aria-hidden="true"
+              >
+                <circle cx="11" cy="11" r="7" />
+                <path d="M20 20l-3.5-3.5" />
+              </svg>
+              <span className="group-open:hidden">条件でスキー場を検索</span>
+              <span className="hidden group-open:inline">検索を閉じる</span>
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 12 12"
+                aria-hidden="true"
+                className="transition-transform duration-200 group-open:rotate-180 motion-reduce:transition-none"
+              >
+                <path
+                  d="M2 4l4 4 4-4"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                />
+              </svg>
+            </summary>
+            <form
+              action="/resorts"
+              method="get"
+              className="search-panel mt-3 grid grid-cols-1 items-end gap-4 rounded-xl border border-line bg-white p-5 shadow-[0_1px_2px_rgba(10,31,68,0.04)] sm:grid-cols-2 lg:grid-cols-4"
             >
-              検索する
-            </button>
-          </form>
+              <label className="flex flex-col gap-1.5 text-xs font-semibold text-sub">
+                キーワード
+                <input
+                  type="text"
+                  name="q"
+                  placeholder="スキー場名・地名"
+                  className={field}
+                />
+              </label>
+              <label className="flex flex-col gap-1.5 text-xs font-semibold text-sub">
+                エリア
+                <select name="area" className={field} defaultValue="">
+                  <option value="">すべてのエリア</option>
+                  {AREA_GROUPS.map((g) => (
+                    <optgroup key={g.label} label={g.label}>
+                      {g.areas.map((a) => (
+                        <option key={a.key} value={a.key}>
+                          {a.label}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
+              </label>
+              <label className="flex flex-col gap-1.5 text-xs font-semibold text-sub">
+                出発地からの時間
+                <select name="time" className={field} defaultValue="">
+                  <option value="">練馬ICから・指定なし</option>
+                  <option value="120">練馬ICから2時間以内</option>
+                  <option value="shinkansen">東京駅から新幹線＋バス</option>
+                </select>
+              </label>
+              <button
+                type="submit"
+                className="btn h-11 cursor-pointer rounded-lg bg-navy-700 text-[15px] font-semibold text-white"
+              >
+                検索する
+              </button>
+            </form>
+          </details>
 
           <div className="flex flex-wrap items-center gap-2">
             <span className="mr-1 text-[13px] text-sub">よく使う条件</span>
