@@ -1,6 +1,7 @@
 import { type Hotel, nearbyHotels } from "@/lib/hotels";
 import type { Resort } from "@/lib/resorts";
 import { ExternalIcon } from "./Badges";
+import { IconTile } from "./Icons";
 
 const yen = (n: number) => n.toLocaleString("ja-JP");
 
@@ -12,7 +13,11 @@ export async function NearbyHotels({ resort }: { resort: Resort }) {
   return (
     <section className="flex flex-col gap-4" aria-labelledby="hotels-heading">
       <div className="flex flex-wrap items-baseline justify-between gap-3">
-        <h2 id="hotels-heading" className="text-xl font-bold text-navy-950">
+        <h2
+          id="hotels-heading"
+          className="flex items-center gap-2.5 text-xl font-bold text-navy-950"
+        >
+          <IconTile name="hotel" />
           {resort.name}周辺の宿
         </h2>
         <span className="rounded border border-line px-1.5 py-0.5 text-[11px] font-semibold text-sub">

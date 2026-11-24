@@ -6,18 +6,24 @@ import { jsonLdString } from "@/lib/seo";
 import { absoluteUrl, DATA_UPDATED_AT, formatJaDate } from "@/lib/site";
 import { adultPriceLabel, getTickets } from "@/lib/tickets";
 import { PrefChip, StatusBadge } from "./Badges";
+import { Icon, type IconName, IconTile } from "./Icons";
 
 /** 特集ページ（一覧ページ）の一覧。フッターや関連リンクで使う */
-export const GUIDE_LINKS = [
-  { href: "/opening", label: "オープン日一覧（2026-27）" },
-  { href: "/tickets", label: "リフト券の料金比較" },
-  { href: "/early-bird", label: "早割リフト券まとめ" },
-  { href: "/night", label: "ナイター営業のスキー場" },
-  { href: "/kids", label: "子連れ・ファミリー向け" },
-  { href: "/kids-free", label: "小学生のリフト券が無料のスキー場" },
+export const GUIDE_LINKS: { href: string; label: string; icon: IconName }[] = [
+  { href: "/opening", label: "オープン日一覧（2026-27）", icon: "calendar" },
+  { href: "/tickets", label: "リフト券の料金比較", icon: "ticket" },
+  { href: "/early-bird", label: "早割リフト券まとめ", icon: "deal" },
+  { href: "/night", label: "ナイター営業のスキー場", icon: "moon" },
+  { href: "/kids", label: "子連れ・ファミリー向け", icon: "kids" },
+  {
+    href: "/kids-free",
+    label: "小学生のリフト券が無料のスキー場",
+    icon: "gift",
+  },
   ...PREF_PAGES.map((p) => ({
     href: `/area/${p.slug}`,
     label: `${p.label}のスキー場`,
+    icon: "pin" as const,
   })),
 ];
 
@@ -80,9 +86,17 @@ export function GuidePage({ path, title, lead, items, children }: Props) {
         / <span aria-current="page">{title}</span>
       </nav>
       <header className="reveal flex flex-col gap-3">
-        <h1 className="text-[26px] font-bold leading-tight text-navy-950 sm:text-[34px]">
-          {title}
-        </h1>
+        <div className="flex items-start gap-3">
+          <span className="mt-0.5 sm:mt-1">
+            <IconTile
+              name={GUIDE_LINKS.find((g) => g.href === path)?.icon ?? "sparkle"}
+              size="lg"
+            />
+          </span>
+          <h1 className="text-[26px] font-bold leading-tight text-navy-950 sm:text-[34px]">
+            {title}
+          </h1>
+        </div>
         <p className="text-[15px] leading-[1.8] text-[#3A4456]">{lead}</p>
         <p className="text-xs text-sub">
           <time dateTime={DATA_UPDATED_AT}>
@@ -98,14 +112,18 @@ export function GuidePage({ path, title, lead, items, children }: Props) {
         aria-label="ほかの特集"
         className="flex flex-col gap-3 border-t border-line pt-8"
       >
-        <h2 className="text-base font-bold text-navy-950">ほかの特集</h2>
+        <h2 className="flex items-center gap-2 text-base font-bold text-navy-950">
+          <IconTile name="sparkle" size="sm" />
+          ほかの特集
+        </h2>
         <ul className="flex flex-wrap gap-2">
           {GUIDE_LINKS.filter((g) => g.href !== path).map((g) => (
             <li key={g.href}>
               <Link
                 href={g.href}
-                className="chip inline-flex min-h-10 items-center rounded-full border border-line px-4 text-sm font-semibold text-[#3A4456]"
+                className="chip inline-flex min-h-10 items-center gap-1.5 rounded-full border border-line px-4 text-sm font-semibold text-[#3A4456]"
               >
+                <Icon name={g.icon} size={15} className="text-navy-700" />
                 {g.label}
               </Link>
             </li>
@@ -113,8 +131,9 @@ export function GuidePage({ path, title, lead, items, children }: Props) {
           <li>
             <Link
               href="/resorts"
-              className="chip inline-flex min-h-10 items-center rounded-full border border-line px-4 text-sm font-semibold text-[#3A4456]"
+              className="chip inline-flex min-h-10 items-center gap-1.5 rounded-full border border-line px-4 text-sm font-semibold text-[#3A4456]"
             >
+              <Icon name="filter" size={15} className="text-navy-700" />
               条件で絞り込んで探す
             </Link>
           </li>
