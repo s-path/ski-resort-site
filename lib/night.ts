@@ -87,6 +87,19 @@ export const NIGHT: NightInfo[] = [
     },
   },
   {
+    id: "joetsu-kokusai",
+    days: "毎日",
+    period: "12/19〜3/22",
+    hours: "〜21:00",
+    closesAt: 21,
+    note: "JR上越国際スキー場前駅の目の前。ナイター後も東京行きの最終新幹線に間に合う",
+    season: "unverified",
+    source: {
+      label: "watabi",
+      url: "https://watabi.org/articles/joetsu-kokusai-ski-guide",
+    },
+  },
+  {
     id: "goryu",
     days: "毎日",
     period: "12/19〜3/28",

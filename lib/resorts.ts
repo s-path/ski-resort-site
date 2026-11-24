@@ -494,7 +494,7 @@ const MORE_YUZAWA: Resort[] = [
     areaLabel: "南魚沼",
     status: "planned",
     openingDate: "2026-12-12",
-    tags: ["キッズパーク", "ナイター"],
+    tags: ["キッズパーク", "ナイター", "駅直結"],
   }),
   more({
     id: "chateau-shiozawa",
@@ -557,7 +557,7 @@ const MORE_MYOKO: Resort[] = [
     areaKey: "myoko",
     areaLabel: "妙高",
     status: "planned",
-    openingDate: "2026-12-12",
+    openingDate: "2026-12-19",
     tags: ["非圧雪パウダー", "ゴンドラ", "春スキー"],
   }),
   more({
@@ -599,7 +599,8 @@ const MORE_MYOKO: Resort[] = [
     status: "planned",
     openingDate: "2026-12-19",
     stats: [{ label: "最長滑走", value: "8.5 km" }],
-    tags: ["ゴンドラ"],
+    tags: ["ゴンドラ", "小学生リフト無料"],
+    url: "https://www.princehotels.co.jp/ski/myoko/winter/",
   }),
   more({
     id: "charmant-hiuchi",
