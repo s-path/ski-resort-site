@@ -435,6 +435,111 @@ const MORE_GUNMA_TOCHIGI: Resort[] = [
   }),
 ];
 
+/** 新潟・湯沢と魚沼（2026-11 追加） */
+const MORE_YUZAWA: Resort[] = [
+  more({
+    id: "iwappara",
+    name: "岩原スキー場",
+    prefecture: "新潟",
+    areaKey: "yuzawa",
+    areaLabel: "湯沢",
+    status: "planned",
+    openingDate: "2026-12-19",
+    tags: ["キッズパーク", "ナイター", "駅から無料バス"],
+  }),
+  more({
+    id: "yuzawa-nakazato",
+    name: "湯沢中里スノーリゾート",
+    prefecture: "新潟",
+    areaKey: "yuzawa",
+    areaLabel: "湯沢",
+    status: "planned",
+    openingDate: "2026-12-19",
+    tags: ["キッズパーク", "新幹線で行ける"],
+  }),
+  more({
+    id: "yuzawa-park",
+    name: "湯沢パークスキー場",
+    prefecture: "新潟",
+    areaKey: "yuzawa",
+    areaLabel: "湯沢",
+    status: "planned",
+    openingDate: "2026-12-19",
+    stats: [{ label: "コース数", value: "11" }],
+    tags: ["駅から無料バス"],
+  }),
+  more({
+    id: "naspa",
+    name: "NASPAスキーガーデン",
+    prefecture: "新潟",
+    areaKey: "yuzawa",
+    areaLabel: "湯沢",
+    status: "planned",
+    openingDate: "2026-12-24",
+    tags: ["初心者ゲレンデ", "ナイター"],
+  }),
+  more({
+    id: "joetsu-kokusai",
+    name: "上越国際スキー場",
+    prefecture: "新潟",
+    areaKey: "yuzawa",
+    areaLabel: "南魚沼",
+    status: "planned",
+    openingDate: "2026-12-12",
+    tags: ["キッズパーク", "ナイター"],
+  }),
+  more({
+    id: "chateau-shiozawa",
+    name: "シャトー塩沢スキー場",
+    prefecture: "新潟",
+    areaKey: "yuzawa",
+    areaLabel: "南魚沼",
+    status: "unknown",
+  }),
+  more({
+    id: "muika",
+    name: "ムイカスノーリゾート",
+    prefecture: "新潟",
+    areaKey: "yuzawa",
+    areaLabel: "南魚沼",
+    status: "planned",
+    openingDate: "2026-12-24",
+    tags: ["キッズ向け緩斜面"],
+  }),
+  more({
+    id: "muikamachi-hakkaisan",
+    name: "六日町八海山スキー場",
+    prefecture: "新潟",
+    areaKey: "yuzawa",
+    areaLabel: "南魚沼",
+    status: "planned",
+    openingDate: "2026-12-19",
+    stats: [{ label: "コース数", value: "11" }],
+    tags: ["ロープウェイ"],
+    url: "https://www.princehotels.co.jp/ski/hakkaisan/winter/",
+  }),
+  more({
+    id: "hakkaisan-sanroku",
+    name: "八海山麓スキー場",
+    prefecture: "新潟",
+    areaKey: "yuzawa",
+    areaLabel: "南魚沼",
+    status: "planned",
+    openingLabel: "1月上旬（例年）",
+    tags: ["ソリ専用ゲレンデ"],
+  }),
+  more({
+    id: "okutadami",
+    name: "奥只見丸山スキー場",
+    prefecture: "新潟",
+    areaKey: "yuzawa",
+    areaLabel: "奥只見",
+    status: "planned",
+    openingDate: "2026-11-28",
+    tags: ["春スキー"],
+  }),
+];
+
 export const resorts: Resort[] = [
   {
     id: "karuizawa-prince",
@@ -1053,6 +1158,7 @@ export const resorts: Resort[] = [
     url: "https://koumi.chateraiseski.jp/",
   },
   ...MORE_GUNMA_TOCHIGI,
+  ...MORE_YUZAWA,
 ];
 
 export function getResort(id: string): Resort | undefined {
@@ -1072,7 +1178,7 @@ export const AREA_GROUPS: {
     ],
   },
   { label: "栃木", areas: [{ key: "nasu", label: "那須塩原・日光" }] },
-  { label: "新潟", areas: [{ key: "yuzawa", label: "湯沢・南魚沼" }] },
+  { label: "新潟", areas: [{ key: "yuzawa", label: "湯沢・魚沼" }] },
   {
     label: "長野",
     areas: [
