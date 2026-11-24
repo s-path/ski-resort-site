@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { PREF_PAGES } from "@/lib/guides";
 import { AREA_GROUPS, type AreaKey, type Resort } from "@/lib/resorts";
+import { IconTile } from "./Icons";
 
 type Item = Pick<Resort, "id" | "name" | "areaKey" | "group" | "prefecture">;
 
@@ -34,7 +35,8 @@ export function AreaTabs({ resorts }: { resorts: Item[] }) {
           <p className="text-xs font-semibold tracking-[0.08em] text-navy-700">
             AREA
           </p>
-          <h2 className="text-[28px] font-bold text-navy-950">
+          <h2 className="flex items-center gap-2.5 text-2xl font-bold text-navy-950 sm:text-[28px]">
+            <IconTile name="map" />
             エリアから探す
           </h2>
         </div>

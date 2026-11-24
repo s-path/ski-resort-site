@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { GuidePage, ResortList } from "@/components/GuidePage";
+import { IconTile } from "@/components/Icons";
 import { kidsFreeResorts } from "@/lib/guides";
 
 const title = "小学生のリフト券が無料のスキー場【2026-27】関東から行ける";
@@ -24,11 +25,17 @@ export default function KidsFreePage() {
       items={[...always, ...partial.map((p) => p.resort)]}
     >
       <section className="flex flex-col gap-4">
-        <h2 className="text-xl font-bold text-navy-950">いつでも無料</h2>
+        <h2 className="flex items-center gap-2.5 text-xl font-bold text-navy-950">
+          <IconTile name="gift" />
+          いつでも無料
+        </h2>
         <ResortList items={always} />
       </section>
       <section className="flex flex-col gap-4">
-        <h2 className="text-xl font-bold text-navy-950">条件つきで無料</h2>
+        <h2 className="flex items-center gap-2.5 text-xl font-bold text-navy-950">
+          <IconTile name="calendar" />
+          条件つきで無料
+        </h2>
         <ResortList
           items={partial.map((p) => p.resort)}
           note={(r) => notes.get(r.id)}
