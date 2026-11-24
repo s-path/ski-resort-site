@@ -18,6 +18,7 @@ import "@fontsource/shippori-mincho/600.css";
 import "@fontsource/shippori-mincho/700.css";
 import "@fontsource/allura/400.css";
 import "./globals.css";
+import { Icon } from "@/components/Icons";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -68,15 +69,26 @@ export default function RootLayout({
               )}
             </div>
             <nav aria-label="特集" className="flex flex-col gap-0.5">
-              <span className="font-semibold text-white">特集</span>
+              <span className="mb-1 flex items-center gap-1.5 font-semibold text-white">
+                <Icon name="sparkle" size={15} />
+                特集
+              </span>
               {GUIDE_LINKS.map((g) => (
-                <Link key={g.href} href={g.href} className="tlink w-fit">
+                <Link
+                  key={g.href}
+                  href={g.href}
+                  className="tlink inline-flex w-fit items-center gap-1.5"
+                >
+                  <Icon name={g.icon} size={14} className="opacity-70" />
                   {g.label}
                 </Link>
               ))}
             </nav>
             <div className="flex flex-col gap-0.5">
-              <span className="font-semibold text-white">データ出典</span>
+              <span className="mb-1 flex items-center gap-1.5 font-semibold text-white">
+                <Icon name="data" size={15} />
+                データ出典
+              </span>
               <span>積雪：気象庁ホームページのデータを加工して作成</span>
               <span>予報：Open-Meteo（CC BY 4.0）</span>
               <span>地図：© OpenStreetMap contributors</span>

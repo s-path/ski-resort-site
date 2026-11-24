@@ -6,6 +6,7 @@ import {
   type TicketInfo,
 } from "@/lib/tickets";
 import { ExternalIcon } from "./Badges";
+import { Icon, IconTile } from "./Icons";
 
 const card = "rounded-xl border border-line";
 
@@ -27,7 +28,10 @@ export function TicketSection({
   if (!t) {
     return (
       <section className="flex flex-col gap-4">
-        <h2 className="text-xl font-bold text-navy-950">リフト券料金</h2>
+        <h2 className="flex items-center gap-2.5 text-xl font-bold text-navy-950">
+          <IconTile name="ticket" />
+          リフト券料金
+        </h2>
         <p className={`${card} p-5 text-sm text-sub`}>
           今季の料金を確認中です。最新の料金は
           {officialUrl ? (
@@ -55,7 +59,10 @@ export function TicketSection({
   return (
     <section className="flex flex-col gap-4">
       <div className="flex flex-wrap items-baseline justify-between gap-3">
-        <h2 className="text-xl font-bold text-navy-950">リフト券料金</h2>
+        <h2 className="flex items-center gap-2.5 text-xl font-bold text-navy-950">
+          <IconTile name="ticket" />
+          リフト券料金
+        </h2>
         <span className="text-xs text-sub">
           {seasonNote ?? "2026-27シーズン"}
         </span>
@@ -107,7 +114,10 @@ export function TicketSection({
 
       {deals.length > 0 && (
         <div className="flex flex-col gap-3">
-          <h3 className="text-[15px] font-bold text-navy-950">お得な買い方</h3>
+          <h3 className="flex items-center gap-2 text-[15px] font-bold text-navy-950">
+            <Icon name="deal" size={16} className="text-navy-700" />
+            お得な買い方
+          </h3>
           <ul className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-3">
             {deals.map((d) => (
               <li

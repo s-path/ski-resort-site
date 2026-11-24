@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { GuidePage, ResortList } from "@/components/GuidePage";
+import { IconTile } from "@/components/Icons";
 import { childMin, kidsFreeResorts, kidsParkResorts } from "@/lib/guides";
 import { getTickets } from "@/lib/tickets";
 
@@ -43,7 +44,8 @@ export default function KidsPage() {
     >
       <section className="flex flex-col gap-4">
         <div className="flex flex-wrap items-baseline justify-between gap-3">
-          <h2 className="text-xl font-bold text-navy-950">
+          <h2 className="flex items-center gap-2.5 text-xl font-bold text-navy-950">
+            <IconTile name="gift" />
             小学生のリフト券がいつでも無料
           </h2>
           <Link
@@ -57,7 +59,8 @@ export default function KidsPage() {
       </section>
 
       <section className="flex flex-col gap-4">
-        <h2 className="text-xl font-bold text-navy-950">
+        <h2 className="flex items-center gap-2.5 text-xl font-bold text-navy-950">
+          <IconTile name="kids" />
           キッズパーク・雪遊びエリアがあるスキー場
         </h2>
         <p className="text-sm leading-[1.8] text-[#3A4456]">
@@ -67,7 +70,8 @@ export default function KidsPage() {
       </section>
 
       <section className="flex flex-col gap-3 rounded-xl bg-mist p-5 sm:p-6">
-        <h2 className="text-lg font-bold text-navy-950">
+        <h2 className="flex items-center gap-2.5 text-lg font-bold text-navy-950">
+          <IconTile name="sparkle" />
           家族で行くときのコツ
         </h2>
         <ul className="flex list-disc flex-col gap-1.5 pl-5 text-sm leading-[1.8] text-[#3A4456]">

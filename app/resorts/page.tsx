@@ -65,6 +65,8 @@ export default async function ResortsPage({ searchParams }: Props) {
         <h1 className="text-[32px] font-bold text-navy-950">スキー場を探す</h1>
       </div>
       <ResortExplorer
+        // 同じページ内でURLの条件だけが変わったとき（ヘッダーの「スキー場を探す」など）も、条件を読み直す
+        key={JSON.stringify([area, q, f, time, sort])}
         resorts={resorts}
         initialArea={
           area && AREA_KEYS.has(area) ? (area as AreaKey) : undefined
@@ -72,6 +74,7 @@ export default async function ResortsPage({ searchParams }: Props) {
         initialQuery={q}
         initialFeatures={features}
         initialSort={initialSort}
+        initialMinutes={time && /^\d+$/.test(time) ? Number(time) : undefined}
       />
     </div>
   );

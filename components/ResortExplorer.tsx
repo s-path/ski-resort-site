@@ -64,12 +64,14 @@ export function ResortExplorer({
   initialQuery,
   initialFeatures,
   initialSort,
+  initialMinutes,
 }: {
   resorts: Resort[];
   initialArea?: AreaKey;
   initialQuery?: string;
   initialFeatures?: FeatureKey[];
   initialSort?: SortKey;
+  initialMinutes?: number;
 }) {
   const [selected, setSelected] = useState<Set<AreaKey>>(
     () => new Set(initialArea ? [initialArea] : ALL_KEYS),
@@ -78,7 +80,7 @@ export function ResortExplorer({
     () => new Set(initialFeatures ?? []),
   );
   const [query, setQuery] = useState(initialQuery ?? "");
-  const [minutes, setMinutes] = useState(150);
+  const [minutes, setMinutes] = useState(initialMinutes ?? 150);
   const [sort, setSort] = useState<SortKey>(initialSort ?? "recommended");
   const [panelOpen, setPanelOpen] = useState(false);
 

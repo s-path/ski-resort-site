@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AreaTabs } from "@/components/AreaTabs";
+import { Icon, type IconName, IconTile } from "@/components/Icons";
 import { OpenStatus } from "@/components/OpenStatus";
 import { RotatingPlace } from "@/components/RotatingPlace";
 import { Snowfall } from "@/components/Snowfall";
@@ -27,12 +28,12 @@ const WEBSITE_JSON_LD = {
   },
 };
 
-const QUICK = [
-  { key: "open", label: "営業中" },
-  { key: "night", label: "ナイターあり" },
-  { key: "spring", label: "春スキー" },
-  { key: "shinkansen", label: "新幹線で行ける" },
-  { key: "kids", label: "キッズパーク" },
+const QUICK: { key: string; label: string; icon: IconName }[] = [
+  { key: "open", label: "営業中", icon: "open" },
+  { key: "night", label: "ナイターあり", icon: "moon" },
+  { key: "spring", label: "春スキー", icon: "sun" },
+  { key: "shinkansen", label: "新幹線で行ける", icon: "train" },
+  { key: "kids", label: "キッズパーク", icon: "kids" },
 ];
 
 const field =
@@ -204,8 +205,9 @@ export default function Home() {
               <Link
                 key={q.key}
                 href={`/resorts?f=${q.key}`}
-                className="chip rounded-full border border-field bg-white px-3.5 py-2 text-[13px] text-ink"
+                className="chip inline-flex items-center gap-1.5 rounded-full border border-field bg-white px-3.5 py-2 text-[13px] text-ink"
               >
+                <Icon name={q.icon} size={14} className="text-navy-700" />
                 {q.label}
               </Link>
             ))}
@@ -223,7 +225,8 @@ export default function Home() {
             <p className="text-xs font-semibold tracking-[0.08em] text-navy-700">
               OPEN STATUS
             </p>
-            <h2 className="text-2xl font-bold text-navy-950 sm:text-[28px]">
+            <h2 className="flex items-center gap-2.5 text-2xl font-bold text-navy-950 sm:text-[28px]">
+              <IconTile name="calendar" />
               オープン状況
             </h2>
           </div>
@@ -259,7 +262,15 @@ export default function Home() {
         className="reveal mx-auto flex max-w-[1200px] scroll-mt-4 flex-col gap-6 px-4 sm:px-6 pb-6 pt-14"
         style={{ animationDelay: "0.3s" }}
       >
-        <AreaTabs />
+        <AreaTabs
+          resorts={resorts.map(({ id, name, areaKey, group, prefecture }) => ({
+            id,
+            name,
+            areaKey,
+            group,
+            prefecture,
+          }))}
+        />
       </section>
 
       <section
@@ -272,7 +283,8 @@ export default function Home() {
             <p className="text-xs font-semibold tracking-[0.08em] text-navy-700">
               SNOW
             </p>
-            <h2 className="text-2xl font-bold text-navy-950 sm:text-[28px]">
+            <h2 className="flex items-center gap-2.5 text-2xl font-bold text-navy-950 sm:text-[28px]">
+              <IconTile name="snow" />
               エリアの積雪と降雪予報
             </h2>
           </div>
