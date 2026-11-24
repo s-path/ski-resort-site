@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ExternalIcon, PrefChip } from "@/components/Badges";
 import { GuidePage } from "@/components/GuidePage";
+import { Icon, IconTile } from "@/components/Icons";
 import { nightsByClosing } from "@/lib/night";
 import { getResort, type Resort } from "@/lib/resorts";
 
@@ -43,7 +44,8 @@ export default function NightPage() {
       </ol>
 
       <section className="flex flex-col gap-3 rounded-xl bg-mist p-5 sm:p-6">
-        <h2 className="text-lg font-bold text-navy-950">
+        <h2 className="flex items-center gap-2.5 text-lg font-bold text-navy-950">
+          <IconTile name="sparkle" />
           ナイターを楽しむコツ
         </h2>
         <ul className="flex list-disc flex-col gap-1.5 pl-5 text-sm leading-[1.8] text-[#3A4456]">
@@ -85,7 +87,8 @@ function NightCard({
             {r.name}
           </Link>
         </span>
-        <span className="rounded-full bg-navy-950 px-3 py-1 text-sm font-bold tabular-nums text-white">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-navy-950 px-3 py-1 text-sm font-bold tabular-nums text-white">
+          <Icon name="moon" size={14} />
           {n.hours}
         </span>
       </div>

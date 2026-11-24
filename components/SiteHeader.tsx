@@ -4,15 +4,16 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 import { FavoriteCount } from "./FavoriteButton";
+import { Icon, type IconName, IconTile } from "./Icons";
 
-const NAV = [
-  { href: "/resorts", label: "スキー場を探す" },
-  { href: "/#open", label: "オープン状況" },
-  { href: "/#area", label: "エリア" },
-  { href: "/#snow", label: "積雪・天気" },
+const NAV: NavLink[] = [
+  { href: "/resorts", label: "スキー場を探す", icon: "search" },
+  { href: "/#open", label: "オープン状況", icon: "calendar" },
+  { href: "/#area", label: "エリア", icon: "map" },
+  { href: "/#snow", label: "積雪・天気", icon: "snow" },
 ];
 
-type NavLink = { href: string; label: string };
+type NavLink = { href: string; label: string; icon?: IconName };
 
 export function SiteHeader({ guides = [] }: { guides?: NavLink[] }) {
   const pathname = usePathname();
@@ -75,17 +76,21 @@ export function SiteHeader({ guides = [] }: { guides?: NavLink[] }) {
             <Link
               key={n.href}
               href={n.href}
-              className={`navlink ${isCurrent(n.href) ? "font-semibold text-navy-700" : "text-ink"}`}
+              className={`navlink inline-flex items-center gap-1.5 ${isCurrent(n.href) ? "font-semibold text-navy-700" : "text-ink"}`}
               aria-current={isCurrent(n.href) ? "page" : undefined}
             >
+              {n.icon && (
+                <Icon name={n.icon} size={15} className="text-navy-700" />
+              )}
               {n.label}
             </Link>
           ))}
           <Link
             href="/favorites"
-            className={`navlink inline-flex items-center ${isCurrent("/favorites") ? "font-semibold text-navy-700" : "text-ink"}`}
+            className={`navlink inline-flex items-center gap-1.5 ${isCurrent("/favorites") ? "font-semibold text-navy-700" : "text-ink"}`}
             aria-current={isCurrent("/favorites") ? "page" : undefined}
           >
+            <Icon name="star" size={15} className="text-navy-700" />
             お気に入り
             <FavoriteCount />
           </Link>
@@ -148,7 +153,14 @@ export function SiteHeader({ guides = [] }: { guides?: NavLink[] }) {
       >
         <nav aria-label="メニュー" className="flex flex-col px-4 pb-10 pt-2">
           <ul className="flex flex-col divide-y divide-line border-b border-line">
-            {[...NAV, { href: "/favorites", label: "お気に入り" }].map((n) => (
+            {[
+              ...NAV,
+              {
+                href: "/favorites",
+                label: "お気に入り",
+                icon: "star" as const,
+              },
+            ].map((n) => (
               <li key={n.href}>
                 <Link
                   href={n.href}
@@ -156,7 +168,10 @@ export function SiteHeader({ guides = [] }: { guides?: NavLink[] }) {
                   aria-current={isCurrent(n.href) ? "page" : undefined}
                   className={`flex h-14 items-center justify-between text-[15px] font-semibold ${isCurrent(n.href) ? "text-navy-700" : "text-navy-950"}`}
                 >
-                  {n.label}
+                  <span className="flex items-center gap-3">
+                    {n.icon && <IconTile name={n.icon} size="sm" />}
+                    {n.label}
+                  </span>
                   <span aria-hidden="true" className="text-sub">
                     →
                   </span>
@@ -176,8 +191,15 @@ export function SiteHeader({ guides = [] }: { guides?: NavLink[] }) {
                       href={g.href}
                       onClick={() => setOpen(false)}
                       aria-current={isCurrent(g.href) ? "page" : undefined}
-                      className={`flex min-h-11 items-center text-sm ${isCurrent(g.href) ? "font-semibold text-navy-700" : "text-[#3A4456]"}`}
+                      className={`flex min-h-11 items-center gap-2.5 text-sm ${isCurrent(g.href) ? "font-semibold text-navy-700" : "text-[#3A4456]"}`}
                     >
+                      {g.icon && (
+                        <Icon
+                          name={g.icon}
+                          size={16}
+                          className="text-navy-700"
+                        />
+                      )}
                       {g.label}
                     </Link>
                   </li>

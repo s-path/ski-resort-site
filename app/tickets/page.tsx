@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PrefChip } from "@/components/Badges";
 import { GuidePage } from "@/components/GuidePage";
+import { IconTile } from "@/components/Icons";
 import { childMin, earlyBirdDeals, resortsByAdultPrice } from "@/lib/guides";
 import { resorts } from "@/lib/resorts";
 import { todayInTokyo } from "@/lib/site";
@@ -133,7 +134,8 @@ export default function TicketsPage() {
       </div>
 
       <section className="flex flex-col gap-3 rounded-xl bg-mist p-5 sm:p-6">
-        <h2 className="text-lg font-bold text-navy-950">
+        <h2 className="flex items-center gap-2.5 text-lg font-bold text-navy-950">
+          <IconTile name="sparkle" />
           リフト券を安く買うコツ
         </h2>
         <ul className="flex list-disc flex-col gap-1.5 pl-5 text-sm leading-[1.8] text-[#3A4456]">

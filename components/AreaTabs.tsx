@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { AREA_TABS } from "@/lib/areas";
+import { IconTile } from "./Icons";
 
 /** トップページ「エリアから探す」。県のタブで切り替える */
 export function AreaTabs() {
@@ -16,7 +17,8 @@ export function AreaTabs() {
           <p className="text-xs font-semibold tracking-[0.08em] text-navy-700">
             AREA
           </p>
-          <h2 className="text-[28px] font-bold text-navy-950">
+          <h2 className="flex items-center gap-2.5 text-2xl font-bold text-navy-950 sm:text-[28px]">
+            <IconTile name="map" />
             エリアから探す
           </h2>
         </div>

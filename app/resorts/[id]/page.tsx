@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ExternalIcon, PrefChip, StatusBadge } from "@/components/Badges";
 import { FavoriteButton } from "@/components/FavoriteButton";
+import { IconTile } from "@/components/Icons";
 import { NearbyHotels } from "@/components/NearbyHotels";
 import { TicketSection } from "@/components/TicketSection";
 import { getResort, NO_VALUE, type Resort, resorts } from "@/lib/resorts";
@@ -139,7 +140,8 @@ export default async function ResortPage({ params }: Props) {
           style={{ animationDelay: "0.15s" }}
         >
           <section className="flex flex-col gap-4">
-            <h2 className="text-xl font-bold text-navy-950">
+            <h2 className="flex items-center gap-2.5 text-xl font-bold text-navy-950">
+              <IconTile name="calendar" />
               2026-27シーズンの営業
             </h2>
             <dl
@@ -179,7 +181,8 @@ export default async function ResortPage({ params }: Props) {
             <>
               <section className="flex flex-col gap-4">
                 <div className="flex flex-wrap items-baseline justify-between gap-3">
-                  <h2 className="text-xl font-bold text-navy-950">
+                  <h2 className="flex items-center gap-2.5 text-xl font-bold text-navy-950">
+                    <IconTile name="sun" />
                     今日のコンディション
                   </h2>
                   <span className="text-xs text-sub">データ取得の準備中</span>
@@ -219,7 +222,8 @@ export default async function ResortPage({ params }: Props) {
               </section>
 
               <section className="flex flex-col gap-4">
-                <h2 className="text-xl font-bold text-navy-950">
+                <h2 className="flex items-center gap-2.5 text-xl font-bold text-navy-950">
+                  <IconTile name="snow" />
                   7日間の降雪予報
                 </h2>
                 <div className={`${card} flex flex-col gap-3 p-6`}>
@@ -254,7 +258,10 @@ export default async function ResortPage({ params }: Props) {
 
           {specs.length > 0 && (
             <section className="flex flex-col gap-4">
-              <h2 className="text-xl font-bold text-navy-950">ゲレンデ情報</h2>
+              <h2 className="flex items-center gap-2.5 text-xl font-bold text-navy-950">
+                <IconTile name="mountain" />
+                ゲレンデ情報
+              </h2>
               <dl
                 className={`${card} grid grid-cols-2 overflow-hidden sm:grid-cols-3`}
               >
@@ -398,7 +405,11 @@ function GroupSection({ resort: r }: { resort: Resort }) {
   if (siblings.length === 0) return null;
   return (
     <section className="flex flex-col gap-4" aria-labelledby="group-heading">
-      <h2 id="group-heading" className="text-xl font-bold text-navy-950">
+      <h2
+        id="group-heading"
+        className="flex items-center gap-2.5 text-xl font-bold text-navy-950"
+      >
+        <IconTile name="layers" />
         {r.group}のほかのスキー場
       </h2>
       <p className="text-sm leading-[1.8] text-[#3A4456]">
