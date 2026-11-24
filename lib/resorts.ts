@@ -56,11 +56,242 @@ export type Resort = {
   tags: string[];
   /** 公式サイト。確認できたものだけ */
   url?: string;
+  /** 公式サイト以外の便利なリンク（ゲレンデマップ・リフト運行状況など） */
+  links?: { label: string; url: string }[];
+  /** 共通リフト券などでつながるスキー場のまとまり（例：「志賀高原」） */
+  group?: string;
   detail?: ResortDetail;
 };
 
 export const NO_VALUE = "—";
 const SNOW: Stat = { label: "積雪", value: `${NO_VALUE} cm` };
+
+const SHIGA_NAV = "https://skg.jcld.jp/app/shigakogen_navigator/#/ski/";
+const SHIGA_LIFT = "https://shigakogen-ski.or.jp/lift/";
+
+/** 志賀高原の各スキー場。全山共通リフト券で18スキー場を滑れる */
+function shiga(o: {
+  id: string;
+  name: string;
+  zone: string;
+  nav?: number;
+  lift?: string;
+  url?: string;
+  status: ResortStatus;
+  openingDate?: string;
+  openingLabel?: string;
+  top?: string;
+  tags?: string[];
+}): Resort {
+  const links = [
+    ...(o.nav
+      ? [{ label: "志賀高原NAVIGATOR", url: `${SHIGA_NAV}${o.nav}` }]
+      : []),
+    ...(o.lift
+      ? [{ label: "リフト運行状況", url: `${SHIGA_LIFT}${o.lift}/` }]
+      : []),
+  ];
+  return {
+    id: o.id,
+    name: o.name,
+    prefecture: "長野",
+    areaKey: "shiga",
+    areaLabel: `志賀高原・${o.zone}`,
+    status: o.status,
+    openingDate: o.openingDate,
+    openingLabel: o.openingLabel,
+    stats: [
+      SNOW,
+      { label: "エリア", value: o.zone },
+      { label: "共通リフト券", value: "18スキー場" },
+      { label: "最高地点", value: o.top ?? NO_VALUE },
+    ],
+    tags: [...(o.tags ?? []), "志賀高原全山共通券"],
+    url: o.url,
+    links: links.length > 0 ? links : undefined,
+    group: "志賀高原",
+  };
+}
+
+const CENTRAL_LATER = {
+  status: "planned",
+  openingLabel: "12月上旬以降",
+} as const;
+const SHIGA_URL = "https://shigakogen.co.jp/winter/snow-slope/";
+
+const SHIGA_RESORTS: Resort[] = [
+  shiga({
+    id: "shiga-yokoteyama",
+    name: "横手山スキー場",
+    zone: "横手山・渋峠",
+    nav: 17,
+    lift: "yokoteyama-shibutoge",
+    url: "https://yokoteyama2307.com/course/",
+    status: "open",
+    openingDate: "2026-11-21",
+    top: "2,307 m",
+    tags: ["春スキー"],
+  }),
+  shiga({
+    id: "shiga-shibutoge",
+    name: "渋峠スキー場",
+    zone: "横手山・渋峠",
+    nav: 18,
+    lift: "yokoteyama-shibutoge",
+    url: "https://yokoteyama2307.com/course/",
+    status: "unknown",
+    tags: ["スノーパーク", "春スキー"],
+  }),
+  shiga({
+    id: "shiga-kumanoyu",
+    name: "熊の湯スキー場",
+    zone: "熊の湯",
+    nav: 16,
+    lift: "kumanoyu",
+    url: "https://www.kumanoyu.co.jp/lift/",
+    status: "open",
+    openingDate: "2026-11-21",
+  }),
+  shiga({
+    id: "shiga-yakebitaiyama",
+    name: "焼額山スキー場",
+    zone: "焼額山",
+    nav: 14,
+    lift: "yakebitaiyama",
+    url: "https://www.princehotels.co.jp/ski/shiga/winter/",
+    status: "planned",
+    openingDate: "2026-12-04",
+    tags: ["ゴンドラ", "ナイター"],
+  }),
+  shiga({
+    id: "shiga-okushiga",
+    name: "奥志賀高原スキー場",
+    zone: "奥志賀高原",
+    nav: 15,
+    lift: "okushigakogen",
+    url: "https://okushigakogenresort.com/winter/ski/",
+    status: "planned",
+    openingDate: "2026-12-12",
+  }),
+  shiga({
+    id: "shiga-ichinose-family",
+    name: "一の瀬ファミリースキー場",
+    zone: "一の瀬",
+    nav: 11,
+    lift: "ichinosefamily",
+    url: `${SHIGA_URL}ichinose-family-ski/`,
+    status: "planned",
+    openingDate: "2026-12-05",
+    top: "1,940 m",
+  }),
+  shiga({
+    id: "shiga-takamagahara",
+    name: "高天ヶ原マンモススキー場",
+    zone: "中央",
+    nav: 9,
+    lift: "takamagahara",
+    url: `${SHIGA_URL}takamahara-ski/`,
+    status: "planned",
+    openingDate: "2026-12-05",
+  }),
+  shiga({
+    id: "shiga-sunvalley",
+    name: "サンバレースキー場",
+    zone: "中央",
+    nav: 1,
+    lift: "sunvalley",
+    url: `${SHIGA_URL}sunvalley-ski/`,
+    ...CENTRAL_LATER,
+  }),
+  shiga({
+    id: "shiga-maruike",
+    name: "丸池スキー場",
+    zone: "中央",
+    nav: 2,
+    lift: "maruike",
+    url: `${SHIGA_URL}maruike-ski/`,
+    ...CENTRAL_LATER,
+  }),
+  shiga({
+    id: "shiga-hasuike",
+    name: "蓮池スキー場",
+    zone: "中央",
+    nav: 3,
+    lift: "hasuike",
+    url: `${SHIGA_URL}hasuike-ski/`,
+    ...CENTRAL_LATER,
+  }),
+  shiga({
+    id: "shiga-giant",
+    name: "ジャイアントスキー場",
+    zone: "中央",
+    nav: 4,
+    lift: "giant",
+    url: `${SHIGA_URL}giant-ski/`,
+    ...CENTRAL_LATER,
+  }),
+  shiga({
+    id: "shiga-hoppo-bunadaira",
+    name: "発哺ブナ平スキー場",
+    zone: "中央",
+    nav: 5,
+    lift: "hoppobunadaira",
+    url: `${SHIGA_URL}happo-bunadaira-ski/`,
+    ...CENTRAL_LATER,
+  }),
+  shiga({
+    id: "shiga-higashitateyama",
+    name: "東館山スキー場",
+    zone: "中央",
+    nav: 7,
+    lift: "higashitateyama",
+    url: `${SHIGA_URL}higashitateyama-ski/`,
+    ...CENTRAL_LATER,
+    tags: ["ゴンドラ"],
+  }),
+  shiga({
+    id: "shiga-nishitateyama",
+    name: "西館山スキー場",
+    zone: "中央",
+    nav: 6,
+    lift: "nishitateyma",
+    url: `${SHIGA_URL}nishitateyama-ski/`,
+    ...CENTRAL_LATER,
+  }),
+  shiga({
+    id: "shiga-terakoya",
+    name: "寺小屋スキー場",
+    zone: "中央",
+    nav: 8,
+    lift: "terakoya",
+    url: `${SHIGA_URL}terakoya-ski/`,
+    ...CENTRAL_LATER,
+  }),
+  shiga({
+    id: "shiga-tanne",
+    name: "タンネの森オコジョスキー場",
+    zone: "一の瀬",
+    nav: 10,
+    lift: "tannenomoriokojo",
+    url: `${SHIGA_URL}tanne-ski/`,
+    ...CENTRAL_LATER,
+  }),
+  shiga({
+    id: "shiga-ichinose-diamond",
+    name: "一の瀬ダイヤモンドスキー場",
+    zone: "一の瀬",
+    nav: 12,
+    lift: "ichinosediamond",
+    url: `${SHIGA_URL}ichinose-diamond-ski/`,
+    ...CENTRAL_LATER,
+  }),
+  shiga({
+    id: "shiga-ichinose-yamanokami",
+    name: "一の瀬山の神スキー場",
+    zone: "一の瀬",
+    ...CENTRAL_LATER,
+  }),
+];
 
 export const resorts: Resort[] = [
   {
@@ -576,22 +807,23 @@ export const resorts: Resort[] = [
     tags: ["ゴンドラ", "ロープウェイ", "春スキー", "キッズパーク"],
     url: "https://www.tsugaike.gr.jp/",
   },
+  ...SHIGA_RESORTS,
   {
-    id: "shiga",
-    name: "志賀高原スキー場",
+    id: "ryuo",
+    name: "竜王スキーパーク",
     prefecture: "長野",
     areaKey: "shiga",
-    areaLabel: "志賀高原",
-    status: "open",
-    openingDate: "2026-11-21",
+    areaLabel: "北志賀",
+    status: "planned",
+    openingDate: "2026-12-05",
     stats: [
       SNOW,
-      { label: "スキー場", value: "18か所" },
-      { label: "リフト・ゴンドラ", value: "45基" },
-      { label: "最高地点", value: "2,307 m" },
+      { label: "ロープウェイ", value: "166人乗り" },
+      { label: "リフト", value: "7基" },
+      { label: "最高地点", value: "1,770 m" },
     ],
-    tags: ["ゴンドラ", "春スキー"],
-    url: "https://shigakogen-ski.or.jp/",
+    tags: ["ロープウェイ", "ナイター", "スノーパーク", "キッズパーク"],
+    url: "https://ryuoo.com/",
   },
   {
     id: "nozawa",

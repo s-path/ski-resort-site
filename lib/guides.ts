@@ -106,7 +106,15 @@ export function childMin(t: TicketInfo) {
 
 /** 大人1日券の料金表があるスキー場を、安い順に */
 export function resortsByAdultPrice() {
+  const seenGroups = new Set<string>();
   return resorts
+    .filter((r) => {
+      // 共通券のスキー場（志賀高原など）は1行にまとめる
+      if (!r.group) return true;
+      if (seenGroups.has(r.group)) return false;
+      seenGroups.add(r.group);
+      return true;
+    })
     .flatMap((r) => {
       const t = getTickets(r.id);
       return t ? [{ resort: r, tickets: t }] : [];

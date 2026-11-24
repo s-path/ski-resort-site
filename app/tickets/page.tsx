@@ -3,6 +3,7 @@ import Link from "next/link";
 import { PrefChip } from "@/components/Badges";
 import { GuidePage } from "@/components/GuidePage";
 import { childMin, earlyBirdDeals, resortsByAdultPrice } from "@/lib/guides";
+import { resorts } from "@/lib/resorts";
 import { todayInTokyo } from "@/lib/site";
 import { activeDeals, adultPriceLabel } from "@/lib/tickets";
 
@@ -19,6 +20,8 @@ export const metadata: Metadata = {
 
 // 早割の締め切りを過ぎたら表示が変わるよう、1日1回作り直す
 export const revalidate = 86400;
+
+const groupSize = (g: string) => resorts.filter((r) => r.group === g).length;
 
 const SEASON_NOTE = {
   current: null,
@@ -95,7 +98,9 @@ export default function TicketsPage() {
                         href={`/resorts/${r.id}`}
                         className="tlink w-fit font-bold text-navy-950"
                       >
-                        {r.name}
+                        {r.group
+                          ? `${r.group}（${groupSize(r.group)}スキー場共通）`
+                          : r.name}
                       </Link>
                       <span className="flex items-center gap-2 text-xs text-sub">
                         <PrefChip prefecture={r.prefecture} />
