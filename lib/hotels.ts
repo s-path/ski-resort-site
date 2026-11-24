@@ -112,6 +112,11 @@ export function hotelKeyword(r: Resort) {
   return HOTEL_KEYWORD[r.id] ?? null;
 }
 
+/** 楽天APIのキーが設定されているか（未設定なら宿の表示とアフィリエイト表記を出さない） */
+export function hotelsEnabled() {
+  return Boolean(process.env.RAKUTEN_APP_ID && process.env.RAKUTEN_ACCESS_KEY);
+}
+
 export async function nearbyHotels(r: Resort, hits = 6): Promise<Hotel[]> {
   const appId = process.env.RAKUTEN_APP_ID;
   const accessKey = process.env.RAKUTEN_ACCESS_KEY;
