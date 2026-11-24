@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ExternalIcon, PrefChip, StatusBadge } from "@/components/Badges";
 import { FavoriteButton } from "@/components/FavoriteButton";
+import { NearbyHotels } from "@/components/NearbyHotels";
 import { TicketSection } from "@/components/TicketSection";
 import { getResort, NO_VALUE, resorts } from "@/lib/resorts";
 import {
@@ -306,6 +307,8 @@ export default async function ResortPage({ params }: Props) {
           )}
 
           <TicketSection tickets={getTickets(r.id)} officialUrl={r.url} />
+
+          <NearbyHotels resort={r} />
         </div>
 
         <aside
