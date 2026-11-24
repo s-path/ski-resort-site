@@ -4,6 +4,7 @@ import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { GUIDE_LINKS } from "@/components/GuidePage";
 import { SiteHeader } from "@/components/SiteHeader";
+import { hotelsEnabled } from "@/lib/hotels";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 // フォントは自前で配信（Google Fonts への外部リクエストをなくして表示を速くする）
 import "@fontsource/inter/400.css";
@@ -60,6 +61,11 @@ export default function RootLayout({
               <span>
                 営業状況・料金は必ず各スキー場の公式サイトでご確認ください。
               </span>
+              {hotelsEnabled() && (
+                <span>
+                  当サイトはアフィリエイト広告（楽天アフィリエイトなど）を利用しています。
+                </span>
+              )}
             </div>
             <nav aria-label="特集" className="flex flex-col gap-0.5">
               <span className="font-semibold text-white">特集</span>
