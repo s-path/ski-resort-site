@@ -4,7 +4,7 @@ import {
   type Resort,
   resorts,
 } from "./resorts";
-import { activeDeals, type Deal, getTickets } from "./tickets";
+import { activeDeals, type Deal, getTickets, type TicketInfo } from "./tickets";
 
 /** 県別ページのURLと見出し */
 export const PREF_PAGES: {
@@ -77,4 +77,39 @@ export function kidsFreeResorts() {
     return r ? [{ resort: r, note: k.note as string }] : [];
   });
   return { always: byOpening(always), partial };
+}
+
+const KIDS_TAGS = ["キッズパーク", "雪遊びエリア", "キッズ向け緩斜面"];
+
+/** キッズパークや雪遊びエリアがあるスキー場 */
+export function kidsParkResorts() {
+  return byOpening(
+    resorts.filter((r) => r.tags.some((t) => KIDS_TAGS.includes(t))),
+  );
+}
+
+/** 料金表の文字列から一番安い金額を取り出す（「無料」は0） */
+export function minYen(values: (string | undefined)[]) {
+  const nums = values.flatMap((v) => {
+    if (!v) return [];
+    if (v.includes("無料")) return [0];
+    const m = v.match(/[\d,]+(?=円)/);
+    return m ? [Number(m[0].replace(/,/g, ""))] : [];
+  });
+  return nums.length > 0 ? Math.min(...nums) : undefined;
+}
+
+/** こども1日券の最安値（料金表から） */
+export function childMin(t: TicketInfo) {
+  return minYen(t.rows.map((r) => r.child));
+}
+
+/** 大人1日券の料金表があるスキー場を、安い順に */
+export function resortsByAdultPrice() {
+  return resorts
+    .flatMap((r) => {
+      const t = getTickets(r.id);
+      return t ? [{ resort: r, tickets: t }] : [];
+    })
+    .sort((a, b) => a.tickets.adultMin - b.tickets.adultMin);
 }

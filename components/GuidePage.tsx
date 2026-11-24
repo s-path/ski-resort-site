@@ -10,7 +10,10 @@ import { PrefChip, StatusBadge } from "./Badges";
 /** 特集ページ（一覧ページ）の一覧。フッターや関連リンクで使う */
 export const GUIDE_LINKS = [
   { href: "/opening", label: "オープン日一覧（2026-27）" },
+  { href: "/tickets", label: "リフト券の料金比較" },
   { href: "/early-bird", label: "早割リフト券まとめ" },
+  { href: "/night", label: "ナイター営業のスキー場" },
+  { href: "/kids", label: "子連れ・ファミリー向け" },
   { href: "/kids-free", label: "小学生のリフト券が無料のスキー場" },
   ...PREF_PAGES.map((p) => ({
     href: `/area/${p.slug}`,
