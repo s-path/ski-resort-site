@@ -59,6 +59,8 @@ const KIDS_FREE: { id: string; note?: string }[] = [
   { id: "okutone" },
   { id: "kagura" },
   { id: "naeba" },
+  { id: "suginohara" },
+  { id: "shiga-yakebitaiyama", note: "焼額山エリア券のみ（こども券は全日無料）" },
   { id: "hunter", note: "平日のみ無料" },
   { id: "tambara", note: "平日のみ無料（年末年始などの特定日を除く）" },
   { id: "kandatsu", note: "スキーこどもの日（12/20・1/17・2/21・3/21）は無料" },

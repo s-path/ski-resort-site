@@ -801,6 +801,37 @@ export const tickets: Record<string, TicketInfo> = {
       url: "https://l-tike.com/leisure/mevent/?mid=771379",
     },
   },
+  suginohara: {
+    season: "previous",
+    adultMin: 8000,
+    adultMax: 8000,
+    ageNote: "小学生まではリフト券無料",
+    rows: [
+      {
+        label: "リフト・ゴンドラ1日券",
+        adult: "8,000円",
+        child: "無料（小学生まで）",
+      },
+    ],
+    notes: ["シニア（55歳以上）・中高生は7,400円"],
+    deals: [],
+    source: {
+      label: "公式サイト",
+      url: "https://www.princehotels.co.jp/ski/myoko/winter/lift/",
+    },
+  },
+  "akakura-kanko": {
+    season: "previous",
+    adultMin: 7000,
+    adultMax: 7000,
+    rows: [{ label: "1日券", adult: "7,000円", child: "5,200円" }],
+    notes: ["中学生・シニアは6,000円"],
+    deals: [],
+    source: {
+      label: "にいがた観光ナビ",
+      url: "https://niigata-kankou.or.jp/experience/10677",
+    },
+  },
   "nikko-yumoto": {
     season: "previous",
     adultMin: 4000,
