@@ -765,6 +765,42 @@ export const tickets: Record<string, TicketInfo> = {
     },
   },
   ...shigaTickets(),
+  norn: {
+    season: "current",
+    adultMin: 6300,
+    adultMax: 6300,
+    rows: [{ label: "1日券", adult: "6,300円", child: "4,000円" }],
+    notes: ["食事券1,500円付きのパックあり（大人7,800円）"],
+    deals: [],
+    source: {
+      label: "タイムズクラブ（2026/10更新）",
+      url: "https://www.timesclub.jp/benefit/shop/sports/detail.jsp?shop=S000002498",
+    },
+  },
+  "minakami-kogen": {
+    season: "previous",
+    adultMin: 5500,
+    adultMax: 5500,
+    ageNote: "未就学児は無料",
+    rows: [{ label: "1日券", adult: "5,500円", child: "3,600円" }],
+    notes: ["オープン直後と最終週は1日券2,500円（昨季）"],
+    deals: [],
+    source: {
+      label: "ウォーカープラス",
+      url: "https://www.walkerplus.com/spot/ar0310s34661/price.html",
+    },
+  },
+  houdaigi: {
+    season: "previous",
+    adultMin: 6900,
+    adultMax: 6900,
+    rows: [{ label: "1日券", adult: "6,900円", child: "4,200円" }],
+    deals: [],
+    source: {
+      label: "ローチケ",
+      url: "https://l-tike.com/leisure/mevent/?mid=771379",
+    },
+  },
   "nikko-yumoto": {
     season: "previous",
     adultMin: 4000,
