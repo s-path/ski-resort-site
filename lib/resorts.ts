@@ -20,6 +20,8 @@ export type AreaKey =
   | "myoko"
   | "karuizawa"
   | "yatsu"
+  | "sugadaira"
+  | "saku"
   | "hakuba"
   | "shiga"
   | "madarao"
@@ -774,6 +776,113 @@ const MORE_HAKUBA_HOKUSHIN: Resort[] = [
   }),
 ];
 
+/** 長野・東信（2026-11 追加） */
+const MORE_TOSHIN: Resort[] = [
+  more({
+    id: "sugadaira",
+    name: "菅平高原スノーリゾート",
+    prefecture: "長野",
+    areaKey: "sugadaira",
+    areaLabel: "菅平",
+    status: "planned",
+    openingLabel: "11月下旬",
+    tags: ["ナイター", "キッズパーク"],
+  }),
+  more({
+    id: "minenohara",
+    name: "峰の原高原スキー場",
+    prefecture: "長野",
+    areaKey: "sugadaira",
+    areaLabel: "菅平",
+    status: "unknown",
+  }),
+  more({
+    id: "yunomaru",
+    name: "湯の丸スキー場",
+    prefecture: "長野",
+    areaKey: "sugadaira",
+    areaLabel: "東御",
+    status: "planned",
+    openingLabel: "11月下旬（例年）",
+  }),
+  more({
+    id: "takamine",
+    name: "高峰マウンテンパーク",
+    prefecture: "長野",
+    areaKey: "saku",
+    areaLabel: "小諸",
+    status: "unknown",
+  }),
+  more({
+    id: "parada",
+    name: "佐久スキーガーデン パラダ",
+    prefecture: "長野",
+    areaKey: "saku",
+    areaLabel: "佐久",
+    status: "unknown",
+  }),
+  more({
+    id: "yachiho",
+    name: "八千穂高原スキー場",
+    prefecture: "長野",
+    areaKey: "saku",
+    areaLabel: "佐久穂",
+    status: "planned",
+    openingDate: "2026-11-30",
+  }),
+  more({
+    id: "shirakaba-2in1",
+    name: "しらかば2in1スキー場",
+    prefecture: "長野",
+    areaKey: "yatsu",
+    areaLabel: "白樺湖",
+    status: "open",
+    openingDate: "2026-11-21",
+  }),
+  more({
+    id: "shirakaba-kokusai",
+    name: "白樺高原国際スキー場",
+    prefecture: "長野",
+    areaKey: "yatsu",
+    areaLabel: "白樺湖",
+    status: "planned",
+    openingDate: "2026-12-12",
+  }),
+  more({
+    id: "royal-hill",
+    name: "白樺湖ロイヤルヒルスキー場",
+    prefecture: "長野",
+    areaKey: "yatsu",
+    areaLabel: "白樺湖",
+    status: "planned",
+    openingLabel: "12月中旬（例年）",
+  }),
+  more({
+    id: "blanche",
+    name: "ブランシュたかやまスキーリゾート",
+    prefecture: "長野",
+    areaKey: "yatsu",
+    areaLabel: "長和",
+    status: "unknown",
+  }),
+  more({
+    id: "echo-valley",
+    name: "エコーバレースキー場",
+    prefecture: "長野",
+    areaKey: "yatsu",
+    areaLabel: "白樺湖",
+    status: "unknown",
+  }),
+  more({
+    id: "tateshina-tokyu",
+    name: "蓼科東急スキー場",
+    prefecture: "長野",
+    areaKey: "yatsu",
+    areaLabel: "蓼科",
+    status: "unknown",
+  }),
+];
+
 export const resorts: Resort[] = [
   {
     id: "karuizawa-prince",
@@ -1395,6 +1504,7 @@ export const resorts: Resort[] = [
   ...MORE_YUZAWA,
   ...MORE_MYOKO,
   ...MORE_HAKUBA_HOKUSHIN,
+  ...MORE_TOSHIN,
 ];
 
 export function getResort(id: string): Resort | undefined {
@@ -1425,7 +1535,9 @@ export const AREA_GROUPS: {
     label: "長野",
     areas: [
       { key: "karuizawa", label: "軽井沢" },
-      { key: "yatsu", label: "八ヶ岳・諏訪" },
+      { key: "sugadaira", label: "菅平・湯の丸" },
+      { key: "saku", label: "佐久・小諸" },
+      { key: "yatsu", label: "白樺湖・蓼科・八ヶ岳" },
       { key: "hakuba", label: "白馬" },
       { key: "shiga", label: "志賀・北志賀・野沢" },
       { key: "madarao", label: "斑尾・飯山" },
