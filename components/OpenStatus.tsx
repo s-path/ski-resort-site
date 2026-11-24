@@ -1,9 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import type { Resort } from "@/lib/resorts";
 import { formatShortDate, openingSortKey } from "@/lib/resorts";
-import { ExternalIcon, PrefChip } from "./Badges";
+import { PrefChip } from "./Badges";
 
 const TABS: { key: string; label: string; prefs: string[] | null }[] = [
   { key: "all", label: "すべて", prefs: null },
@@ -167,42 +168,41 @@ export function OpenStatus({ resorts }: { resorts: Resort[] }) {
           {rows.map((r, n) => (
             <li
               key={r.id}
-              className="reveal flex items-center justify-between gap-3 px-4 py-3.5"
+              className="reveal"
               style={{
                 animationDelay: `${n * 0.04}s`,
                 animationDuration: "0.45s",
               }}
             >
-              <div className="flex min-w-0 flex-col gap-1">
-                {r.url ? (
-                  <a
-                    href={r.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="tlink inline-flex items-center gap-1.5 text-[15px] font-semibold text-ink"
-                  >
+              <Link
+                href={`/resorts/${r.id}`}
+                className="flex items-center justify-between gap-3 px-4 py-3.5 active:bg-mist"
+              >
+                <span className="flex min-w-0 flex-col gap-1">
+                  <span className="text-[15px] font-semibold text-ink">
                     {r.name}
-                    <ExternalIcon color="#556070" />
-                    <span className="sr-only">（公式サイト・新しいタブ）</span>
-                  </a>
-                ) : (
-                  <span className="text-[15px] font-semibold">{r.name}</span>
-                )}
-                <span className="inline-flex items-center gap-2 text-xs">
-                  <PrefChip prefecture={r.prefecture} />
-                  <span className="text-sub">{r.areaLabel}</span>
+                  </span>
+                  <span className="inline-flex items-center gap-2 text-xs">
+                    <PrefChip prefecture={r.prefecture} />
+                    <span className="text-sub">{r.areaLabel}</span>
+                  </span>
                 </span>
-              </div>
-              <div className="flex shrink-0 flex-col items-end gap-1">
-                <OpenBadge status={r.status} />
-                <span className="text-xs tabular-nums text-sub">
-                  {r.openingDate
-                    ? formatShortDate(r.openingDate)
-                    : (r.openingLabel ?? "—")}
-                  {r.status === "planned" && " 予定"}
-                  {r.status === "open" && " から"}
+                <span className="flex shrink-0 items-center gap-2">
+                  <span className="flex flex-col items-end gap-1">
+                    <OpenBadge status={r.status} />
+                    <span className="text-xs tabular-nums text-sub">
+                      {r.openingDate
+                        ? formatShortDate(r.openingDate)
+                        : (r.openingLabel ?? "—")}
+                      {r.status === "planned" && " 予定"}
+                      {r.status === "open" && " から"}
+                    </span>
+                  </span>
+                  <span aria-hidden="true" className="text-sub">
+                    ›
+                  </span>
                 </span>
-              </div>
+              </Link>
             </li>
           ))}
           {rows.length === 0 && (
@@ -235,29 +235,19 @@ export function OpenStatus({ resorts }: { resorts: Resort[] }) {
             {rows.map((r, n) => (
               <tr
                 key={r.id}
-                className="reveal border-t border-line"
+                className="reveal relative border-t border-line transition-colors hover:bg-mist"
                 style={{
                   animationDelay: `${n * 0.05}s`,
                   animationDuration: "0.45s",
                 }}
               >
                 <td className="px-5 py-4 font-semibold">
-                  {r.url ? (
-                    <a
-                      href={r.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="tlink inline-flex items-center gap-1.5 text-ink"
-                    >
-                      {r.name}
-                      <ExternalIcon color="#556070" />
-                      <span className="sr-only">
-                        （公式サイト・新しいタブ）
-                      </span>
-                    </a>
-                  ) : (
-                    r.name
-                  )}
+                  <Link
+                    href={`/resorts/${r.id}`}
+                    className="tlink text-ink after:absolute after:inset-0 after:content-['']"
+                  >
+                    {r.name}
+                  </Link>
                 </td>
                 <td className="px-5 py-4">
                   <span className="inline-flex flex-wrap items-center gap-2">
@@ -280,7 +270,7 @@ export function OpenStatus({ resorts }: { resorts: Resort[] }) {
               </tr>
             ))}
             {rows.length === 0 && (
-              <tr className="reveal border-t border-line">
+              <tr className="reveal relative border-t border-line transition-colors hover:bg-mist">
                 <td colSpan={5} className="px-5 py-10 text-center text-sub">
                   この県のスキー場はまだ登録されていません。
                 </td>
