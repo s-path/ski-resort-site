@@ -50,7 +50,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className="flex min-h-screen flex-col bg-white font-sans text-ink">
-        <SiteHeader />
+        <SiteHeader guides={GUIDE_LINKS} />
         <main className="flex-1">{children}</main>
         <footer className="bg-navy-950 text-[#C9D2E3]">
           <div className="mx-auto flex max-w-[1200px] flex-wrap justify-between gap-8 px-6 py-12 text-[13px] leading-[1.9]">
