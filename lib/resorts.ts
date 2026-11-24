@@ -22,6 +22,8 @@ export type AreaKey =
   | "yatsu"
   | "hakuba"
   | "shiga"
+  | "madarao"
+  | "togakushi"
   | "kiyosato"
   | "fuji"
   | "sayama";
@@ -613,6 +615,162 @@ const MORE_MYOKO: Resort[] = [
     status: "planned",
     openingLabel: "12月下旬（例年）",
     tags: ["初心者ゲレンデ"],
+  }),
+];
+
+/** 長野・白馬と北信（2026-11 追加） */
+const MORE_HAKUBA_HOKUSHIN: Resort[] = [
+  more({
+    id: "cortina",
+    name: "白馬コルチナスキー場",
+    prefecture: "長野",
+    areaKey: "hakuba",
+    areaLabel: "小谷",
+    status: "planned",
+    openingDate: "2026-12-12",
+    tags: ["非圧雪パウダー", "ナイター", "キッズパーク"],
+  }),
+  more({
+    id: "sanosaka",
+    name: "White Resort 白馬さのさか",
+    prefecture: "長野",
+    areaKey: "hakuba",
+    areaLabel: "白馬",
+    status: "planned",
+    openingDate: "2026-12-18",
+    tags: ["ナイター"],
+    url: "https://sanosaka.jp/",
+  }),
+  more({
+    id: "iwatake",
+    name: "白馬岩岳スノーフィールド",
+    prefecture: "長野",
+    areaKey: "hakuba",
+    areaLabel: "白馬",
+    status: "planned",
+    openingDate: "2026-12-18",
+    stats: [{ label: "コース数", value: "26" }],
+    tags: ["ゴンドラ", "スノーパーク"],
+  }),
+  more({
+    id: "norikura-hakuba",
+    name: "白馬乗鞍温泉スキー場",
+    prefecture: "長野",
+    areaKey: "hakuba",
+    areaLabel: "小谷",
+    status: "unknown",
+    tags: ["温泉"],
+  }),
+  more({
+    id: "kashimayari",
+    name: "HAKUBA VALLEY 鹿島槍スキー場",
+    prefecture: "長野",
+    areaKey: "hakuba",
+    areaLabel: "大町",
+    status: "unknown",
+  }),
+  more({
+    id: "jigatake",
+    name: "爺ガ岳スキー場",
+    prefecture: "長野",
+    areaKey: "hakuba",
+    areaLabel: "大町",
+    status: "unknown",
+  }),
+  more({
+    id: "madarao",
+    name: "斑尾高原スキー場",
+    prefecture: "長野",
+    areaKey: "madarao",
+    areaLabel: "斑尾",
+    status: "planned",
+    openingDate: "2026-12-12",
+    stats: [{ label: "コース数", value: "32" }],
+    tags: ["非圧雪パウダー", "ナイター", "キッズパーク"],
+    url: "https://www.madarao.jp/",
+  }),
+  more({
+    id: "tangram",
+    name: "タングラムスキーサーカス",
+    prefecture: "長野",
+    areaKey: "madarao",
+    areaLabel: "斑尾",
+    status: "planned",
+    openingDate: "2026-12-19",
+    tags: ["キッズパーク"],
+  }),
+  more({
+    id: "romance",
+    name: "スノーリゾートロマンスの神様",
+    prefecture: "長野",
+    areaKey: "madarao",
+    areaLabel: "木島平",
+    status: "planned",
+    openingDate: "2026-12-12",
+  }),
+  more({
+    id: "togari",
+    name: "戸狩温泉スキー場",
+    prefecture: "長野",
+    areaKey: "madarao",
+    areaLabel: "飯山",
+    status: "planned",
+    openingLabel: "12月下旬（例年）",
+    tags: ["ナイター", "温泉"],
+  }),
+  more({
+    id: "x-jam",
+    name: "X-JAM高井富士",
+    prefecture: "長野",
+    areaKey: "shiga",
+    areaLabel: "北志賀",
+    status: "unknown",
+  }),
+  more({
+    id: "yomase",
+    name: "よませ温泉スキー場",
+    prefecture: "長野",
+    areaKey: "shiga",
+    areaLabel: "北志賀",
+    status: "unknown",
+    tags: ["温泉"],
+  }),
+  more({
+    id: "komaruyama",
+    name: "北志賀小丸山スキー場",
+    prefecture: "長野",
+    areaKey: "shiga",
+    areaLabel: "北志賀",
+    status: "unknown",
+  }),
+  more({
+    id: "kurohime",
+    name: "黒姫高原スノーパーク",
+    prefecture: "長野",
+    areaKey: "togakushi",
+    areaLabel: "黒姫",
+    status: "unknown",
+  }),
+  more({
+    id: "togakushi",
+    name: "戸隠スキー場",
+    prefecture: "長野",
+    areaKey: "togakushi",
+    areaLabel: "戸隠",
+    status: "planned",
+    openingLabel: "12月中旬（例年）",
+    stats: [{ label: "コース数", value: "19" }],
+    tags: ["キッズパーク"],
+  }),
+  more({
+    id: "iizuna",
+    name: "いいづなリゾートスキー場",
+    prefecture: "長野",
+    areaKey: "togakushi",
+    areaLabel: "飯綱",
+    status: "planned",
+    openingLabel: "12月下旬（例年）",
+    stats: [{ label: "コース数", value: "12" }],
   }),
 ];
 
@@ -1236,6 +1394,7 @@ export const resorts: Resort[] = [
   ...MORE_GUNMA_TOCHIGI,
   ...MORE_YUZAWA,
   ...MORE_MYOKO,
+  ...MORE_HAKUBA_HOKUSHIN,
 ];
 
 export function getResort(id: string): Resort | undefined {
@@ -1268,7 +1427,9 @@ export const AREA_GROUPS: {
       { key: "karuizawa", label: "軽井沢" },
       { key: "yatsu", label: "八ヶ岳・諏訪" },
       { key: "hakuba", label: "白馬" },
-      { key: "shiga", label: "志賀・野沢" },
+      { key: "shiga", label: "志賀・北志賀・野沢" },
+      { key: "madarao", label: "斑尾・飯山" },
+      { key: "togakushi", label: "戸隠・飯綱・黒姫" },
     ],
   },
   {
