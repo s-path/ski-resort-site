@@ -89,17 +89,21 @@ export function SiteHeader({ guides = [] }: { guides?: NavLink[] }) {
           aria-expanded={open}
           aria-controls={menuId}
           aria-label={open ? "メニューを閉じる" : "メニューを開く"}
-          onClick={() => setOpen((v) => !v)}
+          onClick={() => {
+            // ヘッダーは固定していないので、少しスクロールした状態で開くとメニューの上に隙間ができる。先頭に戻してから開く
+            if (!open && window.scrollY > 0) window.scrollTo({ top: 0 });
+            setOpen((v) => !v);
+          }}
         >
           <span className="relative block h-4 w-5" aria-hidden="true">
             <span
-              className={`absolute left-0 h-0.5 w-5 rounded bg-current transition-transform duration-300 ${open ? "top-[7px] rotate-45" : "top-0"}`}
+              className={`absolute left-0 h-0.5 w-5 rounded bg-current transition-transform duration-300 motion-reduce:transition-none ${open ? "top-[7px] rotate-45" : "top-0"}`}
             />
             <span
               className={`absolute left-0 top-[7px] h-0.5 w-5 rounded bg-current transition-opacity duration-200 ${open ? "opacity-0" : ""}`}
             />
             <span
-              className={`absolute left-0 h-0.5 w-5 rounded bg-current transition-transform duration-300 ${open ? "top-[7px] -rotate-45" : "top-[14px]"}`}
+              className={`absolute left-0 h-0.5 w-5 rounded bg-current transition-transform duration-300 motion-reduce:transition-none ${open ? "top-[7px] -rotate-45" : "top-[14px]"}`}
             />
           </span>
         </button>
@@ -107,7 +111,7 @@ export function SiteHeader({ guides = [] }: { guides?: NavLink[] }) {
 
       <div
         id={menuId}
-        className={`fixed inset-x-0 bottom-0 top-14 overflow-y-auto bg-white transition-[opacity,visibility] duration-200 md:hidden ${open ? "visible opacity-100" : "invisible opacity-0"}`}
+        className={`fixed inset-x-0 bottom-0 top-14 overflow-y-auto bg-white transition-[opacity,visibility] duration-200 motion-reduce:transition-none md:hidden ${open ? "visible opacity-100" : "invisible opacity-0"}`}
         inert={!open}
       >
         <nav aria-label="メニュー" className="flex flex-col px-4 pb-10 pt-2">
