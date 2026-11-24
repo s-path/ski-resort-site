@@ -49,6 +49,19 @@ export const NIGHT: NightInfo[] = [
     },
   },
   {
+    id: "norn",
+    days: "金・土・日",
+    period: "1/8〜3/21",
+    hours: "〜22:00",
+    closesAt: 22,
+    note: "土日は朝7時から営業。祝日は16:30まで",
+    season: "current",
+    source: {
+      label: "タイムズクラブ",
+      url: "https://www.timesclub.jp/benefit/shop/sports/detail.jsp?shop=S000002498",
+    },
+  },
+  {
     id: "yeti",
     days: "金・土・日・祝",
     period: "シーズン中",

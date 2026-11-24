@@ -9,6 +9,12 @@ const nextConfig: NextConfig = {
         destination: "/area/nagano",
         permanent: true,
       },
+      // マウントジーンズ那須はスキー営業を終了していたため掲載をやめた
+      {
+        source: "/resorts/mt-jeans",
+        destination: "/area/tochigi",
+        permanent: true,
+      },
     ];
   },
 };

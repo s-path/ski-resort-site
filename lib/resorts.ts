@@ -358,7 +358,8 @@ const MORE_GUNMA_TOCHIGI: Resort[] = [
     areaLabel: "水上",
     status: "planned",
     openingDate: "2026-12-18",
-    tags: ["ナイター", "駅から無料バス"],
+    tags: ["ナイター", "駅から無料バス", "キッズパーク"],
+    url: "https://www.norn.co.jp/",
   }),
   more({
     id: "houdaigi",
@@ -392,7 +393,12 @@ const MORE_GUNMA_TOCHIGI: Resort[] = [
     areaLabel: "尾瀬",
     status: "planned",
     openingDate: "2026-12-25",
-    tags: ["キッズパーク"],
+    stats: [
+      { label: "コース数", value: "13" },
+      { label: "リフト数", value: "6" },
+      { label: "標高", value: "1,200〜1,828 m" },
+    ],
+    tags: ["キッズパーク", "スノーパーク", "非圧雪パウダー"],
   }),
   more({
     id: "oze-tokura",
@@ -402,8 +408,13 @@ const MORE_GUNMA_TOCHIGI: Resort[] = [
     areaLabel: "尾瀬",
     status: "planned",
     openingDate: "2026-12-21",
-    stats: [{ label: "コース数", value: "9" }],
+    stats: [
+      { label: "コース数", value: "9" },
+      { label: "リフト数", value: "6" },
+      { label: "標高", value: "1,080〜1,410 m" },
+    ],
     tags: ["スノーパーク"],
+    url: "https://ozetokura.co.jp/",
   }),
   more({
     id: "palcall",
@@ -429,14 +440,6 @@ const MORE_GUNMA_TOCHIGI: Resort[] = [
       { label: "標高", value: "1,500〜1,800 m" },
     ],
     tags: ["温泉", "キッズパーク", "初心者ゲレンデ"],
-  }),
-  more({
-    id: "mt-jeans",
-    name: "マウントジーンズ那須",
-    prefecture: "栃木",
-    areaKey: "nasu",
-    areaLabel: "那須",
-    status: "unknown",
   }),
 ];
 
