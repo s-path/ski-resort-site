@@ -17,6 +17,7 @@ export type AreaKey =
   | "kusatsu"
   | "nasu"
   | "yuzawa"
+  | "myoko"
   | "karuizawa"
   | "yatsu"
   | "hakuba"
@@ -537,6 +538,81 @@ const MORE_YUZAWA: Resort[] = [
     status: "planned",
     openingDate: "2026-11-28",
     tags: ["春スキー"],
+  }),
+];
+
+/** 新潟・妙高（2026-11 追加） */
+const MORE_MYOKO: Resort[] = [
+  more({
+    id: "arai",
+    name: "アライマウンテンリゾート",
+    prefecture: "新潟",
+    areaKey: "myoko",
+    areaLabel: "妙高",
+    status: "planned",
+    openingDate: "2026-12-12",
+    tags: ["非圧雪パウダー", "ゴンドラ", "春スキー"],
+  }),
+  more({
+    id: "akakura-onsen",
+    name: "赤倉温泉スキー場",
+    prefecture: "新潟",
+    areaKey: "myoko",
+    areaLabel: "妙高",
+    status: "planned",
+    openingDate: "2026-12-12",
+    tags: ["温泉"],
+  }),
+  more({
+    id: "akakura-kanko",
+    name: "赤倉観光リゾートスキー場",
+    prefecture: "新潟",
+    areaKey: "myoko",
+    areaLabel: "妙高",
+    status: "planned",
+    openingDate: "2026-12-19",
+    tags: ["春スキー"],
+  }),
+  more({
+    id: "ikenotaira",
+    name: "池の平温泉アルペンブリックスキー場",
+    prefecture: "新潟",
+    areaKey: "myoko",
+    areaLabel: "妙高",
+    status: "planned",
+    openingDate: "2026-12-12",
+    tags: ["キッズパーク", "温泉"],
+  }),
+  more({
+    id: "suginohara",
+    name: "妙高杉ノ原スキー場",
+    prefecture: "新潟",
+    areaKey: "myoko",
+    areaLabel: "妙高",
+    status: "planned",
+    openingDate: "2026-12-19",
+    stats: [{ label: "最長滑走", value: "8.5 km" }],
+    tags: ["ゴンドラ"],
+  }),
+  more({
+    id: "charmant-hiuchi",
+    name: "シャルマン火打スキー場",
+    prefecture: "新潟",
+    areaKey: "myoko",
+    areaLabel: "糸魚川",
+    status: "planned",
+    openingDate: "2026-12-18",
+    tags: ["非圧雪パウダー", "春スキー"],
+  }),
+  more({
+    id: "myoko-runrun",
+    name: "休暇村妙高ルンルンスキー場",
+    prefecture: "新潟",
+    areaKey: "myoko",
+    areaLabel: "妙高",
+    status: "planned",
+    openingLabel: "12月下旬（例年）",
+    tags: ["初心者ゲレンデ"],
   }),
 ];
 
@@ -1159,6 +1235,7 @@ export const resorts: Resort[] = [
   },
   ...MORE_GUNMA_TOCHIGI,
   ...MORE_YUZAWA,
+  ...MORE_MYOKO,
 ];
 
 export function getResort(id: string): Resort | undefined {
@@ -1178,7 +1255,13 @@ export const AREA_GROUPS: {
     ],
   },
   { label: "栃木", areas: [{ key: "nasu", label: "那須塩原・日光" }] },
-  { label: "新潟", areas: [{ key: "yuzawa", label: "湯沢・魚沼" }] },
+  {
+    label: "新潟",
+    areas: [
+      { key: "yuzawa", label: "湯沢・魚沼" },
+      { key: "myoko", label: "妙高" },
+    ],
+  },
   {
     label: "長野",
     areas: [
