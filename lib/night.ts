@@ -160,6 +160,33 @@ export const NIGHT: NightInfo[] = [
     },
   },
   {
+    id: "ryuo",
+    days: "火〜土（日・月は休み）",
+    period: "シーズン中",
+    hours: "17:00〜20:00",
+    closesAt: 20,
+    note: "ナイター券の今季料金は未発表（昨季は大人2,400円）",
+    season: "current",
+    source: {
+      label: "プレスリリース",
+      url: "https://prtimes.jp/main/html/rd/p/000000233.000031800.html",
+    },
+  },
+  {
+    id: "shiga-yakebitaiyama",
+    days: "特定日",
+    period: "シーズン中",
+    hours: "18:00〜20:00",
+    closesAt: 20,
+    area: "プリンスホテル側のゲレンデ",
+    note: "営業日はスキー場のカレンダーで確認を",
+    season: "unverified",
+    source: {
+      label: "公式サイト",
+      url: "https://www.princehotels.co.jp/ski/shiga/winter/",
+    },
+  },
+  {
     id: "chateraise-nobeyama",
     days: "1〜3月の土曜と12/29・12/30・1/10",
     period: "12/29〜3/6",

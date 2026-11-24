@@ -54,8 +54,8 @@ const HOTEL_KEYWORD: Record<string, string | null> = {
   maiko: "舞子",
   goryu: "五竜",
   tsugaike: "栂池",
-  shiga: "志賀高原",
   nozawa: "野沢温泉",
+  ryuo: "竜王",
   "fujimi-panorama": "富士見",
   kurumayama: "車山",
   "chateraise-nobeyama": "野辺山",
@@ -109,7 +109,7 @@ export function parseHotels(json: unknown): Hotel[] {
 }
 
 export function hotelKeyword(r: Resort) {
-  return HOTEL_KEYWORD[r.id] ?? null;
+  return HOTEL_KEYWORD[r.id] ?? (r.group === "志賀高原" ? "志賀高原" : null);
 }
 
 /** 楽天APIのキーが設定されているか（未設定なら宿の表示とアフィリエイト表記を出さない） */

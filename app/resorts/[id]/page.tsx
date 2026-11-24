@@ -5,7 +5,7 @@ import { ExternalIcon, PrefChip, StatusBadge } from "@/components/Badges";
 import { FavoriteButton } from "@/components/FavoriteButton";
 import { NearbyHotels } from "@/components/NearbyHotels";
 import { TicketSection } from "@/components/TicketSection";
-import { getResort, NO_VALUE, resorts } from "@/lib/resorts";
+import { getResort, NO_VALUE, type Resort, resorts } from "@/lib/resorts";
 import {
   jsonLdString,
   openingSentence,
@@ -115,6 +115,19 @@ export default async function ResortPage({ params }: Props) {
                   <span className="sr-only">（新しいタブで開く）</span>
                 </a>
               )}
+              {r.links?.map((l) => (
+                <a
+                  key={l.url}
+                  href={l.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="chip inline-flex h-11 items-center gap-2 rounded-lg border border-line bg-white px-[18px] text-sm font-semibold text-navy-950"
+                >
+                  {l.label}
+                  <ExternalIcon color="#556070" />
+                  <span className="sr-only">（新しいタブで開く）</span>
+                </a>
+              ))}
             </div>
           </div>
         </div>
@@ -308,6 +321,8 @@ export default async function ResortPage({ params }: Props) {
 
           <TicketSection tickets={getTickets(r.id)} officialUrl={r.url} />
 
+          {r.group && <GroupSection resort={r} />}
+
           <NearbyHotels resort={r} />
         </div>
 
@@ -374,5 +389,40 @@ export default async function ResortPage({ params }: Props) {
         </aside>
       </div>
     </>
+  );
+}
+
+/** 共通リフト券でつながるスキー場の一覧（志賀高原など） */
+function GroupSection({ resort: r }: { resort: Resort }) {
+  const siblings = resorts.filter((x) => x.group === r.group && x.id !== r.id);
+  if (siblings.length === 0) return null;
+  return (
+    <section className="flex flex-col gap-4" aria-labelledby="group-heading">
+      <h2 id="group-heading" className="text-xl font-bold text-navy-950">
+        {r.group}のほかのスキー場
+      </h2>
+      <p className="text-sm leading-[1.8] text-[#3A4456]">
+        {r.group}の{siblings.length + 1}
+        スキー場は、全山共通リフト券1枚で滑れます。
+      </p>
+      <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+        {siblings.map((x) => (
+          <li key={x.id}>
+            <Link
+              href={`/resorts/${x.id}`}
+              className="lift flex h-full items-center justify-between gap-3 rounded-lg border border-line px-4 py-3"
+            >
+              <span className="flex min-w-0 flex-col gap-0.5">
+                <span className="text-sm font-semibold text-navy-950">
+                  {x.name}
+                </span>
+                <span className="text-xs text-sub">{x.areaLabel}</span>
+              </span>
+              <StatusBadge resort={x} />
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }

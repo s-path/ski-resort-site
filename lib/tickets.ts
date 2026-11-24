@@ -1,3 +1,4 @@
+import { resorts } from "./resorts";
 // リフト券の料金・お得な買い方・購入ページ。
 // 2026-11-22 に公式サイト・プレスリリース・チケット販売サイトで確認した値。
 // 今季の料金が見つからなかったスキー場は、昨季の料金や公式掲載の料金を載せ、そのことを seasonNote に書く。
@@ -34,6 +35,42 @@ export type TicketInfo = {
 };
 
 export const TICKETS_CHECKED_AT = "2026-11-22";
+
+/** 志賀高原の全山共通リフト券（18スキー場共通） */
+const SHIGA_TICKET: TicketInfo = {
+  season: "current",
+  adultMin: 7500,
+  adultMax: 9500,
+  ageNote: "全18スキー場共通。こども＝小学生、中高生6,500円",
+  rows: [
+    { label: "共通1日券（窓口）", adult: "9,500円", child: "4,000円" },
+    { label: "共通1日券（オンライン）", adult: "8,500円", child: "3,500円" },
+    { label: "初すべり・春スキー", adult: "7,500円", child: "3,000円" },
+  ],
+  deals: [
+    {
+      title: "オンライン購入",
+      detail: "窓口より1日1,000円安い",
+      url: "https://shigakogen-ski.or.jp/winter/ticket/online.html",
+    },
+  ],
+  buy: {
+    label: "公式オンライン",
+    url: "https://shigakogen-ski.or.jp/winter/ticket/online.html",
+  },
+  source: {
+    label: "公式サイト",
+    url: "https://shigakogen-ski.or.jp/ticket/",
+  },
+};
+
+function shigaTickets(): Record<string, TicketInfo> {
+  return Object.fromEntries(
+    resorts
+      .filter((r) => r.group === "志賀高原")
+      .map((r) => [r.id, SHIGA_TICKET]),
+  );
+}
 
 export const tickets: Record<string, TicketInfo> = {
   "karuizawa-prince": {
@@ -727,30 +764,28 @@ export const tickets: Record<string, TicketInfo> = {
       url: "https://dmksnowboard.com/hakuba-lift-ticket-2026-2027/",
     },
   },
-  shiga: {
+  ...shigaTickets(),
+  ryuo: {
     season: "current",
-    adultMin: 7500,
-    adultMax: 9500,
-    ageNote: "全18スキー場共通。こども＝小学生、中高生6,500円",
+    adultMin: 6000,
+    adultMax: 6200,
+    ageNote: "大人＝中学生以上、こども＝4歳〜小学生、4歳未満は無料",
     rows: [
-      { label: "共通1日券（窓口）", adult: "9,500円", child: "4,000円" },
-      { label: "共通1日券（オンライン）", adult: "8,500円", child: "3,500円" },
-      { label: "初すべり・春スキー", adult: "7,500円", child: "3,000円" },
+      { label: "1日券（平日）", adult: "6,000円", child: "3,000円" },
+      { label: "1日券（土日祝）", adult: "6,200円", child: "3,200円" },
     ],
+    notes: ["初滑り・春スキー期間は別料金", "ICカード保証金500円"],
     deals: [
       {
-        title: "オンライン購入",
-        detail: "窓口より1日1,000円安い",
-        url: "https://shigakogen-ski.or.jp/winter/ticket/online.html",
+        title: "早割1日券",
+        detail: "大人4,500円（3枚綴り12,900円）",
+        until: "2026-12-18",
+        url: "https://surfsnow.jp/guide/htm/r0112tk.htm/",
       },
     ],
-    buy: {
-      label: "公式オンライン",
-      url: "https://shigakogen-ski.or.jp/winter/ticket/online.html",
-    },
     source: {
-      label: "公式サイト",
-      url: "https://shigakogen-ski.or.jp/ticket/",
+      label: "プレスリリース",
+      url: "https://prtimes.jp/main/html/rd/p/000000233.000031800.html",
     },
   },
   nozawa: {
