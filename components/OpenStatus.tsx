@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import type { Resort } from "@/lib/resorts";
 import { formatShortDate, openingSortKey } from "@/lib/resorts";
 import { PrefChip } from "./Badges";
+import { FavoriteStar } from "./FavoriteButton";
 
 const TABS: { key: string; label: string; prefs: string[] | null }[] = [
   { key: "all", label: "すべて", prefs: null },
@@ -168,7 +169,7 @@ export function OpenStatus({ resorts }: { resorts: Resort[] }) {
           {rows.map((r, n) => (
             <li
               key={r.id}
-              className="reveal"
+              className="reveal flex items-center pr-1"
               style={{
                 animationDelay: `${n * 0.04}s`,
                 animationDuration: "0.45s",
@@ -176,7 +177,7 @@ export function OpenStatus({ resorts }: { resorts: Resort[] }) {
             >
               <Link
                 href={`/resorts/${r.id}`}
-                className="flex items-center justify-between gap-3 px-4 py-3.5 active:bg-mist"
+                className="flex min-w-0 flex-1 items-center justify-between gap-3 py-3.5 pl-4 pr-1 active:bg-mist"
               >
                 <span className="flex min-w-0 flex-col gap-1">
                   <span className="text-[15px] font-semibold text-ink">
@@ -198,11 +199,9 @@ export function OpenStatus({ resorts }: { resorts: Resort[] }) {
                       {r.status === "open" && " から"}
                     </span>
                   </span>
-                  <span aria-hidden="true" className="text-sub">
-                    ›
-                  </span>
                 </span>
               </Link>
+              <FavoriteStar id={r.id} name={r.name} />
             </li>
           ))}
           {rows.length === 0 && (
@@ -214,6 +213,9 @@ export function OpenStatus({ resorts }: { resorts: Resort[] }) {
         <table className="hidden w-full border-collapse text-sm md:table">
           <thead>
             <tr className="bg-mist text-left text-xs text-sub">
+              <th scope="col" className="w-12 py-3.5 pl-3">
+                <span className="sr-only">お気に入り</span>
+              </th>
               <th scope="col" className="px-5 py-3.5 font-semibold">
                 スキー場
               </th>
@@ -241,6 +243,9 @@ export function OpenStatus({ resorts }: { resorts: Resort[] }) {
                   animationDuration: "0.45s",
                 }}
               >
+                <td className="relative z-10 py-2 pl-3">
+                  <FavoriteStar id={r.id} name={r.name} />
+                </td>
                 <td className="px-5 py-4 font-semibold">
                   <Link
                     href={`/resorts/${r.id}`}
@@ -271,7 +276,7 @@ export function OpenStatus({ resorts }: { resorts: Resort[] }) {
             ))}
             {rows.length === 0 && (
               <tr className="reveal relative border-t border-line transition-colors hover:bg-mist">
-                <td colSpan={5} className="px-5 py-10 text-center text-sub">
+                <td colSpan={6} className="px-5 py-10 text-center text-sub">
                   この県のスキー場はまだ登録されていません。
                 </td>
               </tr>

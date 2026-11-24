@@ -3,6 +3,7 @@ import { prefColor } from "@/lib/prefectures";
 import { NO_VALUE, type Resort } from "@/lib/resorts";
 import { adultPriceLabel, getTickets } from "@/lib/tickets";
 import { ExternalIcon, PrefChip, StatusBadge } from "./Badges";
+import { FavoriteStar } from "./FavoriteButton";
 
 /** スキー場一覧のカード。右上に県の色ラベル、下に詳細と公式サイトへのリンク */
 export function ResortCard({
@@ -36,7 +37,10 @@ export function ResortCard({
             </Link>
           </h3>
         </div>
-        <StatusBadge resort={r} />
+        <span className="-mr-2 -mt-1.5 flex items-center gap-1">
+          <StatusBadge resort={r} />
+          <FavoriteStar id={r.id} name={r.name} />
+        </span>
       </div>
 
       <dl

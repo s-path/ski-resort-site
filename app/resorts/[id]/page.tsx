@@ -102,7 +102,7 @@ export default async function ResortPage({ params }: Props) {
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <FavoriteButton />
+              <FavoriteButton id={r.id} />
               {r.url && (
                 <a
                   href={r.url}
