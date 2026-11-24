@@ -293,6 +293,148 @@ const SHIGA_RESORTS: Resort[] = [
   }),
 ];
 
+/** 一覧に追加したスキー場（2026-11 追加分）。データが少ないものは分かる項目だけ入れる */
+function more(o: {
+  id: string;
+  name: string;
+  prefecture: Prefecture;
+  areaKey: AreaKey;
+  areaLabel: string;
+  status: ResortStatus;
+  openingDate?: string;
+  openingLabel?: string;
+  stats?: Stat[];
+  tags?: string[];
+  url?: string;
+}): Resort {
+  const stats = o.stats ?? [];
+  return {
+    ...o,
+    stats: [
+      SNOW,
+      ...stats,
+      ...Array.from({ length: Math.max(0, 3 - stats.length) }, (_, i) => ({
+        label: ["コース数", "リフト数", "最長滑走"][i] ?? "—",
+        value: NO_VALUE,
+      })),
+    ].slice(0, 4),
+    tags: o.tags ?? [],
+  };
+}
+
+/** 群馬・栃木（2026-11 追加） */
+const MORE_GUNMA_TOCHIGI: Resort[] = [
+  more({
+    id: "minakami-kogen",
+    name: "水上高原スキーリゾート",
+    prefecture: "群馬",
+    areaKey: "minakami",
+    areaLabel: "水上",
+    status: "planned",
+    openingDate: "2026-12-18",
+    stats: [{ label: "コース数", value: "12" }],
+    tags: ["キッズパーク"],
+  }),
+  more({
+    id: "fujiwara",
+    name: "水上高原・奥利根温泉 藤原スキー場",
+    prefecture: "群馬",
+    areaKey: "minakami",
+    areaLabel: "水上",
+    status: "planned",
+    openingDate: "2026-12-19",
+    tags: ["キッズパーク", "温泉"],
+  }),
+  more({
+    id: "norn",
+    name: "ノルンみなかみスキー場",
+    prefecture: "群馬",
+    areaKey: "minakami",
+    areaLabel: "水上",
+    status: "planned",
+    openingDate: "2026-12-18",
+    tags: ["ナイター", "駅から無料バス"],
+  }),
+  more({
+    id: "houdaigi",
+    name: "群馬みなかみほうだいぎスキー場",
+    prefecture: "群馬",
+    areaKey: "minakami",
+    areaLabel: "水上",
+    status: "planned",
+    openingDate: "2026-12-12",
+    stats: [
+      { label: "コース数", value: "16" },
+      { label: "リフト数", value: "7" },
+    ],
+    tags: ["キッズパーク"],
+  }),
+  more({
+    id: "mt-t",
+    name: "Mt.T by 星野リゾート",
+    prefecture: "群馬",
+    areaKey: "minakami",
+    areaLabel: "谷川岳",
+    status: "unknown",
+    tags: ["ロープウェイ", "非圧雪パウダー"],
+    url: "https://tanigawadake-joch.com/mt-t/",
+  }),
+  more({
+    id: "oguna-hotaka",
+    name: "オグナほたかスキー場",
+    prefecture: "群馬",
+    areaKey: "minakami",
+    areaLabel: "尾瀬",
+    status: "planned",
+    openingDate: "2026-12-25",
+    tags: ["キッズパーク"],
+  }),
+  more({
+    id: "oze-tokura",
+    name: "スノーパーク尾瀬戸倉",
+    prefecture: "群馬",
+    areaKey: "minakami",
+    areaLabel: "尾瀬",
+    status: "planned",
+    openingDate: "2026-12-21",
+    stats: [{ label: "コース数", value: "9" }],
+    tags: ["スノーパーク"],
+  }),
+  more({
+    id: "palcall",
+    name: "パルコール嬬恋リゾート",
+    prefecture: "群馬",
+    areaKey: "kusatsu",
+    areaLabel: "嬬恋",
+    status: "planned",
+    openingDate: "2026-12-06",
+    tags: ["ゴンドラ"],
+  }),
+  more({
+    id: "nikko-yumoto",
+    name: "日光湯元温泉スキー場",
+    prefecture: "栃木",
+    areaKey: "nasu",
+    areaLabel: "日光",
+    status: "planned",
+    openingLabel: "12月下旬（例年）",
+    stats: [
+      { label: "コース数", value: "4" },
+      { label: "リフト数", value: "3" },
+      { label: "標高", value: "1,500〜1,800 m" },
+    ],
+    tags: ["温泉", "キッズパーク", "初心者ゲレンデ"],
+  }),
+  more({
+    id: "mt-jeans",
+    name: "マウントジーンズ那須",
+    prefecture: "栃木",
+    areaKey: "nasu",
+    areaLabel: "那須",
+    status: "unknown",
+  }),
+];
+
 export const resorts: Resort[] = [
   {
     id: "karuizawa-prince",
@@ -910,6 +1052,7 @@ export const resorts: Resort[] = [
     tags: ["キッズパーク"],
     url: "https://koumi.chateraiseski.jp/",
   },
+  ...MORE_GUNMA_TOCHIGI,
 ];
 
 export function getResort(id: string): Resort | undefined {
