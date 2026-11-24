@@ -801,6 +801,42 @@ export const tickets: Record<string, TicketInfo> = {
       url: "https://l-tike.com/leisure/mevent/?mid=771379",
     },
   },
+  iwappara: {
+    season: "current",
+    adultMin: 5500,
+    adultMax: 5500,
+    rows: [{ label: "1日入場券", adult: "5,500円" }],
+    notes: ["前シーズンから据え置き"],
+    deals: [],
+    source: {
+      label: "旅行総合研究所タビリス",
+      url: "https://tabiris.com/?p=66745",
+    },
+  },
+  "joetsu-kokusai": {
+    season: "current",
+    adultMin: 5500,
+    adultMax: 5500,
+    rows: [{ label: "1日入場券", adult: "5,500円" }],
+    notes: ["前シーズンから据え置き。オープン週（12/12〜18）は1日券2,000円"],
+    deals: [],
+    source: {
+      label: "旅行総合研究所タビリス",
+      url: "https://tabiris.com/?p=66745",
+    },
+  },
+  naspa: {
+    season: "current",
+    adultMin: 7000,
+    adultMax: 7000,
+    rows: [{ label: "1日券", adult: "7,000円" }],
+    notes: ["前シーズンから据え置き"],
+    deals: [],
+    source: {
+      label: "旅行総合研究所タビリス",
+      url: "https://tabiris.com/?p=66745",
+    },
+  },
   suginohara: {
     season: "previous",
     adultMin: 8000,
