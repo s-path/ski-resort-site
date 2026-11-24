@@ -5,7 +5,9 @@ import { ExternalIcon, PrefChip, StatusBadge } from "@/components/Badges";
 import { FavoriteButton } from "@/components/FavoriteButton";
 import { IconTile } from "@/components/Icons";
 import { NearbyHotels } from "@/components/NearbyHotels";
+import { SnowNearResort } from "@/components/SnowReport";
 import { TicketSection } from "@/components/TicketSection";
+import { getSnowReport } from "@/lib/amedas";
 import { getResort, NO_VALUE, type Resort, resorts } from "@/lib/resorts";
 import {
   jsonLdString,
@@ -20,7 +22,8 @@ import { adultPriceLabel, getTickets } from "@/lib/tickets";
 type Props = { params: Promise<{ id: string }> };
 
 // お得情報の締め切りを過ぎたら消えるよう、1日1回作り直す
-export const revalidate = 86400;
+// 積雪（アメダス）を1時間ごとに取り直す
+export const revalidate = 3600;
 
 export function generateStaticParams() {
   return resorts.map((r) => ({ id: r.id }));
@@ -62,6 +65,7 @@ export default async function ResortPage({ params }: Props) {
     (s) => hasValue(s.value),
   );
   const t = getTickets(r.id);
+  const snow = await getSnowReport();
 
   return (
     <>
@@ -176,6 +180,8 @@ export default async function ResortPage({ params }: Props) {
               オープン日は積雪によって変わることがあるので、出かける前に公式サイトで最新の情報を確認してください。
             </p>
           </section>
+
+          <SnowNearResort report={snow} areaKey={r.areaKey} />
 
           {LIVE_DATA && (
             <>
