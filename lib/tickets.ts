@@ -837,6 +837,79 @@ export const tickets: Record<string, TicketInfo> = {
       url: "https://tabiris.com/?p=66745",
     },
   },
+  iwatake: {
+    season: "previous",
+    adultMin: 7000,
+    adultMax: 7000,
+    rows: [{ label: "岩岳1日券", adult: "7,000円", child: "4,300円" }],
+    notes: ["シニア（60歳以上）6,600円", "ICカード保証金1,000円（返却で返金）"],
+    deals: [],
+    source: {
+      label: "ウォーカープラス",
+      url: "https://www.walkerplus.com/spot/ar0420s34761/price.html",
+    },
+  },
+  madarao: {
+    season: "current",
+    adultMin: 9000,
+    adultMax: 9000,
+    ageNote: "こども＝6〜12歳、5歳以下は1,000円",
+    rows: [
+      {
+        label: "マウンテンパス1日券（タングラム共通）",
+        adult: "9,000円",
+        child: "6,000円",
+      },
+    ],
+    notes: ["シニア（55歳以上）8,500円"],
+    deals: [],
+    source: {
+      label: "ハピスノ（2026-27）",
+      url: "https://hapisnow.jp/prefectures/nagano/?theme-first=",
+    },
+  },
+  tangram: {
+    season: "current",
+    adultMin: 9000,
+    adultMax: 9000,
+    rows: [
+      {
+        label: "マウンテンパス1日券（斑尾共通）",
+        adult: "9,000円",
+        child: "6,000円",
+      },
+    ],
+    deals: [],
+    source: {
+      label: "ハピスノ（2026-27）",
+      url: "https://hapisnow.jp/prefectures/nagano/?theme-first=",
+    },
+  },
+  romance: {
+    season: "current",
+    adultMin: 6200,
+    adultMax: 6200,
+    ageNote: "未就学児は無料",
+    rows: [{ label: "1日券（土日祝）", adult: "6,200円", child: "3,000円" }],
+    notes: ["シニア（60歳以上）5,700円"],
+    deals: [],
+    source: {
+      label: "ハピスノ（2026-27）",
+      url: "https://hapisnow.jp/prefectures/nagano/?theme-first=",
+    },
+  },
+  yunomaru: {
+    season: "current",
+    adultMin: 5600,
+    adultMax: 5600,
+    rows: [{ label: "1日券", adult: "5,600円", child: "3,000円" }],
+    notes: ["小学生以下リフト無料の「スキー子供の日」あり"],
+    deals: [],
+    source: {
+      label: "日本旅行",
+      url: "https://www.nta.co.jp/kokunai/special/eventinfo/10653641.htm",
+    },
+  },
   suginohara: {
     season: "previous",
     adultMin: 8000,
