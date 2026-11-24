@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
+import { FavoriteCount } from "./FavoriteButton";
 
 const NAV = [
   { href: "/resorts", label: "スキー場を探す" },
@@ -80,33 +81,64 @@ export function SiteHeader({ guides = [] }: { guides?: NavLink[] }) {
               {n.label}
             </Link>
           ))}
+          <Link
+            href="/favorites"
+            className={`navlink inline-flex items-center ${isCurrent("/favorites") ? "font-semibold text-navy-700" : "text-ink"}`}
+            aria-current={isCurrent("/favorites") ? "page" : undefined}
+          >
+            お気に入り
+            <FavoriteCount />
+          </Link>
         </nav>
 
-        <button
-          ref={buttonRef}
-          type="button"
-          className="-mr-2 flex h-11 w-11 items-center justify-center rounded-lg text-navy-950 md:hidden"
-          aria-expanded={open}
-          aria-controls={menuId}
-          aria-label={open ? "メニューを閉じる" : "メニューを開く"}
-          onClick={() => {
-            // ヘッダーは固定していないので、少しスクロールした状態で開くとメニューの上に隙間ができる。先頭に戻してから開く
-            if (!open && window.scrollY > 0) window.scrollTo({ top: 0 });
-            setOpen((v) => !v);
-          }}
-        >
-          <span className="relative block h-4 w-5" aria-hidden="true">
-            <span
-              className={`absolute left-0 h-0.5 w-5 rounded bg-current transition-transform duration-300 motion-reduce:transition-none ${open ? "top-[7px] rotate-45" : "top-0"}`}
-            />
-            <span
-              className={`absolute left-0 top-[7px] h-0.5 w-5 rounded bg-current transition-opacity duration-200 ${open ? "opacity-0" : ""}`}
-            />
-            <span
-              className={`absolute left-0 h-0.5 w-5 rounded bg-current transition-transform duration-300 motion-reduce:transition-none ${open ? "top-[7px] -rotate-45" : "top-[14px]"}`}
-            />
-          </span>
-        </button>
+        <div className="-mr-2 flex items-center md:hidden">
+          <Link
+            href="/favorites"
+            aria-label="お気に入り"
+            className="relative flex h-11 w-11 items-center justify-center rounded-lg text-navy-950"
+          >
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z" />
+            </svg>
+            <span className="absolute right-0.5 top-1">
+              <FavoriteCount />
+            </span>
+          </Link>
+          <button
+            ref={buttonRef}
+            type="button"
+            className="flex h-11 w-11 items-center justify-center rounded-lg text-navy-950"
+            aria-expanded={open}
+            aria-controls={menuId}
+            aria-label={open ? "メニューを閉じる" : "メニューを開く"}
+            onClick={() => {
+              // ヘッダーは固定していないので、少しスクロールした状態で開くとメニューの上に隙間ができる。先頭に戻してから開く
+              if (!open && window.scrollY > 0) window.scrollTo({ top: 0 });
+              setOpen((v) => !v);
+            }}
+          >
+            <span className="relative block h-4 w-5" aria-hidden="true">
+              <span
+                className={`absolute left-0 h-0.5 w-5 rounded bg-current transition-transform duration-300 motion-reduce:transition-none ${open ? "top-[7px] rotate-45" : "top-0"}`}
+              />
+              <span
+                className={`absolute left-0 top-[7px] h-0.5 w-5 rounded bg-current transition-opacity duration-200 ${open ? "opacity-0" : ""}`}
+              />
+              <span
+                className={`absolute left-0 h-0.5 w-5 rounded bg-current transition-transform duration-300 motion-reduce:transition-none ${open ? "top-[7px] -rotate-45" : "top-[14px]"}`}
+              />
+            </span>
+          </button>
+        </div>
       </div>
 
       <div
@@ -116,7 +148,7 @@ export function SiteHeader({ guides = [] }: { guides?: NavLink[] }) {
       >
         <nav aria-label="メニュー" className="flex flex-col px-4 pb-10 pt-2">
           <ul className="flex flex-col divide-y divide-line border-b border-line">
-            {NAV.map((n) => (
+            {[...NAV, { href: "/favorites", label: "お気に入り" }].map((n) => (
               <li key={n.href}>
                 <Link
                   href={n.href}
