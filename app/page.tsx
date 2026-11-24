@@ -60,11 +60,24 @@ export default function Home() {
         <div className="reveal relative mx-auto flex max-w-[1200px] flex-col gap-6 px-4 pb-12 pt-10 sm:gap-8 sm:px-6 sm:pb-[72px] sm:pt-[88px]">
           <div className="relative flex flex-wrap items-center gap-x-14 gap-y-2 sm:gap-y-6">
             <div className="flex max-w-[760px] flex-col gap-4">
-              <p className="text-[13px] font-semibold tracking-[0.08em] text-navy-700">
-                2026–27 SEASON
-                <span className="mx-2 text-muted">/</span>
-                <RotatingPlace />
-              </p>
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-[13px] font-semibold tracking-[0.08em] text-navy-700">
+                  2026–27 SEASON
+                  <span className="mx-2 text-muted">/</span>
+                  <RotatingPlace />
+                </p>
+                <span aria-hidden="true" className="-my-3 shrink-0 sm:hidden">
+                  <span
+                    className="write -rotate-6 whitespace-nowrap font-script text-[38px] leading-none text-navy-700"
+                    style={{
+                      padding: "0.1em 0.2em 0.15em 0.1em",
+                      animationDuration: "3s",
+                    }}
+                  >
+                    snowline
+                  </span>
+                </span>
+              </div>
               <h1
                 className="font-mincho font-bold leading-[1.4] tracking-[0.04em] text-navy-900"
                 style={{ fontSize: "clamp(24px, 4vw, 52px)" }}
@@ -80,7 +93,7 @@ export default function Home() {
             </div>
             <span
               aria-hidden="true"
-              className="snowmark flex flex-row font-script leading-none text-white sm:flex-col"
+              className="snowmark hidden font-script leading-none text-white sm:flex sm:flex-col"
               style={{
                 fontSize: "clamp(56px, 14vw, 210px)",
                 textShadow:

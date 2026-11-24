@@ -94,7 +94,7 @@ export const resorts: Resort[] = [
       { label: "コース数", value: "4" },
       { label: "御殿場ICから", value: "約30分" },
     ],
-    tags: ["初心者ゲレンデ"],
+    tags: ["初心者ゲレンデ", "ナイター"],
     url: "https://www.yeti-resort.com/",
   },
   {
@@ -424,7 +424,7 @@ export const resorts: Resort[] = [
       { label: "コース数", value: "7" },
       { label: "河口湖ICから", value: "約20分" },
     ],
-    tags: ["スノーパーク", "キッズパーク"],
+    tags: ["スノーパーク", "キッズパーク", "ナイター"],
   },
   {
     id: "kamui-misaka",
