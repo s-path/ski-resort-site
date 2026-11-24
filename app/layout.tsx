@@ -89,9 +89,9 @@ export default function RootLayout({
                 <Icon name="data" size={15} />
                 データ出典
               </span>
-              <span>積雪：気象庁ホームページのデータを加工して作成</span>
-              <span>予報：Open-Meteo（CC BY 4.0）</span>
-              <span>地図：© OpenStreetMap contributors</span>
+              <span>
+                積雪：気象庁ホームページ（アメダス）のデータを加工して作成
+              </span>
             </div>
           </div>
         </footer>

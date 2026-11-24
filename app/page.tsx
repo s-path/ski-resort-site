@@ -5,7 +5,8 @@ import { Icon, type IconName, IconTile } from "@/components/Icons";
 import { OpenStatus } from "@/components/OpenStatus";
 import { RotatingPlace } from "@/components/RotatingPlace";
 import { Snowfall } from "@/components/Snowfall";
-import { SNOW_AREAS } from "@/lib/areas";
+import { SnowAreas } from "@/components/SnowReport";
+import { getSnowReport } from "@/lib/amedas";
 import { AREA_GROUPS, resorts } from "@/lib/resorts";
 import { jsonLdString } from "@/lib/seo";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
@@ -39,7 +40,11 @@ const QUICK: { key: string; label: string; icon: IconName }[] = [
 const field =
   "h-11 rounded-lg border border-field bg-white px-3 text-[15px] text-ink";
 
-export default function Home() {
+// 積雪（アメダス）を1時間ごとに取り直す
+export const revalidate = 3600;
+
+export default async function Home() {
+  const snow = await getSnowReport();
   return (
     <>
       <script
@@ -285,36 +290,11 @@ export default function Home() {
             </p>
             <h2 className="flex items-center gap-2.5 text-2xl font-bold text-navy-950 sm:text-[28px]">
               <IconTile name="snow" />
-              エリアの積雪と降雪予報
+              エリアの積雪
             </h2>
           </div>
-          <p className="text-[13px] text-sub">
-            積雪は近隣のアメダス観測点の値を表示します（準備中）
-          </p>
         </div>
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-4">
-          {SNOW_AREAS.map((name) => (
-            <div
-              key={name}
-              className="lift flex flex-col gap-4 rounded-xl border border-line p-6"
-            >
-              <div className="flex items-baseline justify-between">
-                <span className="text-[15px] font-bold">{name}</span>
-                <span className="text-xs text-sub">観測点 準備中</span>
-              </div>
-              <div className="flex items-baseline gap-1.5">
-                <span className="text-[40px] font-bold tabular-nums text-navy-950">
-                  —
-                </span>
-                <span className="text-sm text-sub">cm</span>
-              </div>
-              <div className="flex justify-between border-t border-line pt-3 text-[13px] text-sub">
-                <span>24時間降雪 — cm</span>
-                <span>今後3日 — cm</span>
-              </div>
-            </div>
-          ))}
-        </div>
+        <SnowAreas report={snow} />
       </section>
     </>
   );
