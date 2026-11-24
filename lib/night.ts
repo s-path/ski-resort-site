@@ -49,6 +49,19 @@ export const NIGHT: NightInfo[] = [
     },
   },
   {
+    id: "norn",
+    days: "金・土・日",
+    period: "1/8〜3/21",
+    hours: "〜22:00",
+    closesAt: 22,
+    note: "土日は朝7時から営業。祝日は16:30まで",
+    season: "current",
+    source: {
+      label: "タイムズクラブ",
+      url: "https://www.timesclub.jp/benefit/shop/sports/detail.jsp?shop=S000002498",
+    },
+  },
+  {
     id: "yeti",
     days: "金・土・日・祝",
     period: "シーズン中",
@@ -71,6 +84,19 @@ export const NIGHT: NightInfo[] = [
     source: {
       label: "SURF&SNOW",
       url: "https://surfsnow.jp/",
+    },
+  },
+  {
+    id: "joetsu-kokusai",
+    days: "毎日",
+    period: "12/19〜3/22",
+    hours: "〜21:00",
+    closesAt: 21,
+    note: "JR上越国際スキー場前駅の目の前。ナイター後も東京行きの最終新幹線に間に合う",
+    season: "unverified",
+    source: {
+      label: "watabi",
+      url: "https://watabi.org/articles/joetsu-kokusai-ski-guide",
     },
   },
   {

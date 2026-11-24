@@ -358,7 +358,8 @@ const MORE_GUNMA_TOCHIGI: Resort[] = [
     areaLabel: "水上",
     status: "planned",
     openingDate: "2026-12-18",
-    tags: ["ナイター", "駅から無料バス"],
+    tags: ["ナイター", "駅から無料バス", "キッズパーク"],
+    url: "https://www.norn.co.jp/",
   }),
   more({
     id: "houdaigi",
@@ -392,7 +393,12 @@ const MORE_GUNMA_TOCHIGI: Resort[] = [
     areaLabel: "尾瀬",
     status: "planned",
     openingDate: "2026-12-25",
-    tags: ["キッズパーク"],
+    stats: [
+      { label: "コース数", value: "13" },
+      { label: "リフト数", value: "6" },
+      { label: "標高", value: "1,200〜1,828 m" },
+    ],
+    tags: ["キッズパーク", "スノーパーク", "非圧雪パウダー"],
   }),
   more({
     id: "oze-tokura",
@@ -402,8 +408,13 @@ const MORE_GUNMA_TOCHIGI: Resort[] = [
     areaLabel: "尾瀬",
     status: "planned",
     openingDate: "2026-12-21",
-    stats: [{ label: "コース数", value: "9" }],
+    stats: [
+      { label: "コース数", value: "9" },
+      { label: "リフト数", value: "6" },
+      { label: "標高", value: "1,080〜1,410 m" },
+    ],
     tags: ["スノーパーク"],
+    url: "https://ozetokura.co.jp/",
   }),
   more({
     id: "palcall",
@@ -429,14 +440,6 @@ const MORE_GUNMA_TOCHIGI: Resort[] = [
       { label: "標高", value: "1,500〜1,800 m" },
     ],
     tags: ["温泉", "キッズパーク", "初心者ゲレンデ"],
-  }),
-  more({
-    id: "mt-jeans",
-    name: "マウントジーンズ那須",
-    prefecture: "栃木",
-    areaKey: "nasu",
-    areaLabel: "那須",
-    status: "unknown",
   }),
 ];
 
@@ -491,7 +494,7 @@ const MORE_YUZAWA: Resort[] = [
     areaLabel: "南魚沼",
     status: "planned",
     openingDate: "2026-12-12",
-    tags: ["キッズパーク", "ナイター"],
+    tags: ["キッズパーク", "ナイター", "駅直結"],
   }),
   more({
     id: "chateau-shiozawa",
@@ -554,7 +557,7 @@ const MORE_MYOKO: Resort[] = [
     areaKey: "myoko",
     areaLabel: "妙高",
     status: "planned",
-    openingDate: "2026-12-12",
+    openingDate: "2026-12-19",
     tags: ["非圧雪パウダー", "ゴンドラ", "春スキー"],
   }),
   more({
@@ -596,7 +599,8 @@ const MORE_MYOKO: Resort[] = [
     status: "planned",
     openingDate: "2026-12-19",
     stats: [{ label: "最長滑走", value: "8.5 km" }],
-    tags: ["ゴンドラ"],
+    tags: ["ゴンドラ", "小学生リフト無料"],
+    url: "https://www.princehotels.co.jp/ski/myoko/winter/",
   }),
   more({
     id: "charmant-hiuchi",
@@ -660,7 +664,8 @@ const MORE_HAKUBA_HOKUSHIN: Resort[] = [
     prefecture: "長野",
     areaKey: "hakuba",
     areaLabel: "小谷",
-    status: "unknown",
+    status: "planned",
+    openingLabel: "12月中旬（例年）",
     tags: ["温泉"],
   }),
   more({
@@ -669,7 +674,9 @@ const MORE_HAKUBA_HOKUSHIN: Resort[] = [
     prefecture: "長野",
     areaKey: "hakuba",
     areaLabel: "大町",
-    status: "unknown",
+    status: "planned",
+    openingLabel: "12月中旬（例年）",
+    tags: ["キッズパーク"],
   }),
   more({
     id: "jigatake",
@@ -762,7 +769,8 @@ const MORE_HAKUBA_HOKUSHIN: Resort[] = [
     status: "planned",
     openingLabel: "12月中旬（例年）",
     stats: [{ label: "コース数", value: "19" }],
-    tags: ["キッズパーク"],
+    tags: ["キッズパーク", "非圧雪パウダー"],
+    url: "https://www.togakusi.com/ski/",
   }),
   more({
     id: "iizuna",
@@ -802,8 +810,9 @@ const MORE_TOSHIN: Resort[] = [
     prefecture: "長野",
     areaKey: "sugadaira",
     areaLabel: "東御",
-    status: "planned",
-    openingLabel: "11月下旬（例年）",
+    status: "open",
+    openingDate: "2026-11-21",
+    tags: ["キッズパーク"],
   }),
   more({
     id: "takamine",
@@ -836,8 +845,15 @@ const MORE_TOSHIN: Resort[] = [
     prefecture: "長野",
     areaKey: "yatsu",
     areaLabel: "白樺湖",
-    status: "open",
-    openingDate: "2026-11-21",
+    status: "planned",
+    openingLabel: "11月下旬",
+    stats: [
+      { label: "コース数", value: "9" },
+      { label: "リフト数", value: "6" },
+      { label: "標高", value: "1,565〜1,834 m" },
+    ],
+    tags: ["キッズパーク"],
+    url: "https://8peaks-resort.com/shirakaba2in1/",
   }),
   more({
     id: "shirakaba-kokusai",
