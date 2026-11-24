@@ -765,6 +765,17 @@ export const tickets: Record<string, TicketInfo> = {
     },
   },
   ...shigaTickets(),
+  "nikko-yumoto": {
+    season: "previous",
+    adultMin: 4000,
+    adultMax: 4000,
+    rows: [{ label: "1日券", adult: "4,000円", child: "2,900円" }],
+    deals: [],
+    source: {
+      label: "ウェザーニュース",
+      url: "https://weathernews.jp/ski/spot/34102/",
+    },
+  },
   ryuo: {
     season: "current",
     adultMin: 6000,
