@@ -1,3 +1,4 @@
+import { todayInTokyo } from "./site";
 // スキー場のマスタデータ。
 // 標高・コース数・アクセス時間・営業開始日などは、公開情報で確認できた値だけを入れている。
 // 積雪や当日の営業状況はまだ取得していないので、表示は「—」になる。
@@ -684,7 +685,8 @@ const MORE_HAKUBA_HOKUSHIN: Resort[] = [
     prefecture: "長野",
     areaKey: "hakuba",
     areaLabel: "大町",
-    status: "unknown",
+    status: "planned",
+    openingLabel: "12月中旬（例年）",
   }),
   more({
     id: "madarao",
@@ -733,7 +735,9 @@ const MORE_HAKUBA_HOKUSHIN: Resort[] = [
     prefecture: "長野",
     areaKey: "shiga",
     areaLabel: "北志賀",
-    status: "unknown",
+    status: "planned",
+    openingLabel: "12月下旬（例年）",
+    tags: ["スノーパーク", "キッズパーク"],
   }),
   more({
     id: "yomase",
@@ -759,6 +763,12 @@ const MORE_HAKUBA_HOKUSHIN: Resort[] = [
     areaKey: "togakushi",
     areaLabel: "黒姫",
     status: "unknown",
+    stats: [
+      { label: "コース数", value: "13" },
+      { label: "リフト数", value: "6" },
+      { label: "標高", value: "770〜1,200 m" },
+    ],
+    tags: ["ペット同伴OK"],
   }),
   more({
     id: "togakushi",
@@ -794,7 +804,8 @@ const MORE_TOSHIN: Resort[] = [
     areaLabel: "菅平",
     status: "planned",
     openingLabel: "11月下旬",
-    tags: ["ナイター", "キッズパーク"],
+    stats: [{ label: "コース数", value: "60" }],
+    tags: ["ナイター", "キッズパーク", "駐車場無料"],
   }),
   more({
     id: "minenohara",
@@ -821,6 +832,7 @@ const MORE_TOSHIN: Resort[] = [
     areaKey: "saku",
     areaLabel: "小諸",
     status: "unknown",
+    tags: ["キッズパーク"],
   }),
   more({
     id: "parada",
@@ -828,7 +840,9 @@ const MORE_TOSHIN: Resort[] = [
     prefecture: "長野",
     areaKey: "saku",
     areaLabel: "佐久",
-    status: "unknown",
+    status: "planned",
+    openingDate: "2026-12-19",
+    tags: ["キッズパーク", "初心者ゲレンデ"],
   }),
   more({
     id: "yachiho",
@@ -895,7 +909,9 @@ const MORE_TOSHIN: Resort[] = [
     prefecture: "長野",
     areaKey: "yatsu",
     areaLabel: "蓼科",
-    status: "unknown",
+    status: "planned",
+    openingLabel: "12月中旬（例年）",
+    tags: ["キッズパーク", "初心者ゲレンデ"],
   }),
 ];
 
@@ -1522,6 +1538,22 @@ export const resorts: Resort[] = [
   ...MORE_HAKUBA_HOKUSHIN,
   ...MORE_TOSHIN,
 ];
+
+// オープン予定日を過ぎたスキー場は「営業中」として扱う。
+// 日付は表示のたびに判定する（ページは1時間〜6時間ごとに作り直すので、手で更新しなくても切り替わる）
+for (const r of resorts) {
+  const planned = r.status;
+  Object.defineProperty(r, "status", {
+    enumerable: true,
+    get(): ResortStatus {
+      return planned === "planned" &&
+        r.openingDate !== undefined &&
+        r.openingDate <= todayInTokyo()
+        ? "open"
+        : planned;
+    },
+  });
+}
 
 export function getResort(id: string): Resort | undefined {
   return resorts.find((r) => r.id === id);

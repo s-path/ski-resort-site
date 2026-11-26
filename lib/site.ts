@@ -9,7 +9,7 @@ export const SITE_DESCRIPTION =
   "関東から行けるスキー場の2026-27シーズンのオープン日・営業状況・リフト券料金・早割をまとめてチェック。群馬・栃木・新潟・長野・山梨の35スキー場を掲載。";
 
 /** オープン日・料金のデータを最後に確認した日 */
-export const DATA_UPDATED_AT = "2026-11-23";
+export const DATA_UPDATED_AT = "2026-11-26";
 
 export function absoluteUrl(path: string) {
   return `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`;

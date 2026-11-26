@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 };
 
 // 早割の締め切りを過ぎたら表示が変わるよう、1日1回作り直す
-export const revalidate = 86400;
+export const revalidate = 21600;
 
 const groupSize = (g: string) => resorts.filter((r) => r.group === g).length;
 

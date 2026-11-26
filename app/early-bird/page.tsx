@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 };
 
 // 締め切りを過ぎた早割が消えるよう、1日1回作り直す
-export const revalidate = 86400;
+export const revalidate = 21600;
 
 export default function EarlyBirdPage() {
   const rows = earlyBirdDeals(todayInTokyo());

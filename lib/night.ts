@@ -100,6 +100,19 @@ export const NIGHT: NightInfo[] = [
     },
   },
   {
+    id: "sugadaira",
+    days: "シーズン中（一部エリア）",
+    period: "シーズン中",
+    hours: "18:00〜21:00",
+    closesAt: 21,
+    note: "営業日・エリアは公式サイトで確認を",
+    season: "previous",
+    source: {
+      label: "ウェザーニュース",
+      url: "https://weathernews.jp/ski/spot/34816/",
+    },
+  },
+  {
     id: "goryu",
     days: "毎日",
     period: "12/19〜3/28",

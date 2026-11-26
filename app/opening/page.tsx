@@ -14,6 +14,9 @@ export const metadata: Metadata = {
   openGraph: { url: "/opening", title, description },
 };
 
+// オープン予定日を過ぎたら「営業中」に切り替わるよう、6時間ごとに作り直す
+export const revalidate = 21600;
+
 export default function OpeningPage() {
   const items = byOpening(resorts);
   const open = items.filter((r) => r.status === "open").length;

@@ -34,7 +34,7 @@ export type TicketInfo = {
   source: { label: string; url: string };
 };
 
-export const TICKETS_CHECKED_AT = "2026-11-22";
+export const TICKETS_CHECKED_AT = "2026-11-26";
 
 /** 志賀高原の全山共通リフト券（18スキー場共通） */
 const SHIGA_TICKET: TicketInfo = {
