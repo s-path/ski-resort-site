@@ -1562,16 +1562,20 @@ export function getResort(id: string): Resort | undefined {
 /** 絞り込み欄で使う、県ごとのエリア */
 export const AREA_GROUPS: {
   label: string;
-  areas: { key: AreaKey; label: string }[];
+  /** short はチップなど狭い所で使う短い名前 */
+  areas: { key: AreaKey; label: string; short?: string }[];
 }[] = [
   {
     label: "群馬",
     areas: [
       { key: "minakami", label: "水上・尾瀬" },
-      { key: "kusatsu", label: "草津・万座・嬬恋" },
+      { key: "kusatsu", label: "草津・万座・嬬恋", short: "草津・万座" },
     ],
   },
-  { label: "栃木", areas: [{ key: "nasu", label: "那須塩原・日光" }] },
+  {
+    label: "栃木",
+    areas: [{ key: "nasu", label: "那須塩原・日光", short: "那須・日光" }],
+  },
   {
     label: "新潟",
     areas: [
@@ -1583,20 +1587,20 @@ export const AREA_GROUPS: {
     label: "長野",
     areas: [
       { key: "karuizawa", label: "軽井沢" },
-      { key: "sugadaira", label: "菅平・湯の丸" },
-      { key: "saku", label: "佐久・小諸" },
-      { key: "yatsu", label: "白樺湖・蓼科・八ヶ岳" },
+      { key: "sugadaira", label: "菅平・湯の丸", short: "菅平" },
+      { key: "saku", label: "佐久・小諸", short: "佐久" },
+      { key: "yatsu", label: "白樺湖・蓼科・八ヶ岳", short: "白樺湖・蓼科" },
       { key: "hakuba", label: "白馬" },
-      { key: "shiga", label: "志賀・北志賀・野沢" },
+      { key: "shiga", label: "志賀・北志賀・野沢", short: "志賀・野沢" },
       { key: "madarao", label: "斑尾・飯山" },
-      { key: "togakushi", label: "戸隠・飯綱・黒姫" },
+      { key: "togakushi", label: "戸隠・飯綱・黒姫", short: "戸隠・黒姫" },
     ],
   },
   {
     label: "山梨",
     areas: [
-      { key: "kiyosato", label: "清里・八ヶ岳南麓" },
-      { key: "fuji", label: "富士山・河口湖" },
+      { key: "kiyosato", label: "清里・八ヶ岳南麓", short: "清里" },
+      { key: "fuji", label: "富士山・河口湖", short: "富士山" },
     ],
   },
   { label: "埼玉", areas: [{ key: "sayama", label: "屋内" }] },

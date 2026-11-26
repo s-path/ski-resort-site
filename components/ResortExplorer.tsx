@@ -246,23 +246,32 @@ export function ResortExplorer({
                       {state}
                     </span>
                   </label>
-                  {g.areas.map((a) => (
-                    <label
-                      key={a.key}
-                      className="flex cursor-pointer items-center gap-2.5 pl-7 text-sm"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={selected.has(a.key)}
-                        onChange={() => toggleArea(a.key)}
-                        className={checkbox}
-                      />
-                      {a.label}
-                      <span className="ml-auto text-xs tabular-nums text-muted">
-                        {countBy.get(a.key) ?? 0}
-                      </span>
-                    </label>
-                  ))}
+                  <div className="flex flex-wrap gap-1.5 pl-7 md:pl-0">
+                    {g.areas.map((a) => {
+                      const on = selected.has(a.key);
+                      return (
+                        <button
+                          key={a.key}
+                          type="button"
+                          aria-pressed={on}
+                          onClick={() => toggleArea(a.key)}
+                          title={a.label}
+                          className={`chip inline-flex h-8 items-center gap-1.5 rounded-full border px-2.5 text-[13px] font-semibold ${
+                            on
+                              ? "border-navy-700 bg-[#EAF0FA] text-navy-700"
+                              : "border-line bg-white text-sub"
+                          }`}
+                        >
+                          {a.short ?? a.label}
+                          <span
+                            className={`tabular-nums text-[11px] ${on ? "text-navy-700/70" : "text-muted"}`}
+                          >
+                            {countBy.get(a.key) ?? 0}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               );
             })}
