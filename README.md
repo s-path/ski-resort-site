@@ -17,6 +17,19 @@ pnpm dev
 
 GitHubにpushし、VercelでこのリポジトリをImportする。設定はすべてデフォルト（Framework: Next.js）でよい。環境変数は不要。
 
+## Googleマップ（スキー場詳細の地図）
+
+詳細ページの地図は [Maps Embed API](https://developers.google.com/maps/documentation/embed/get-started)（無料・回数無制限）で埋め込みます。キーが未設定のときは地図を出さず、「Googleマップでルートを調べる／開く」のリンクだけを表示します。
+
+| 環境変数                            | 内容                               |
+| ----------------------------------- | ---------------------------------- |
+| `NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY` | Maps Embed API を有効にしたAPIキー |
+
+キーはブラウザに見えるため、Google Cloud コンソールで必ず制限をかけてください。
+
+- アプリケーションの制限：ウェブサイト（`https://ski-resort-site.vercel.app/*`、プレビュー用に `https://*-solid11235llcs-projects.vercel.app/*`、独自ドメイン）
+- APIの制限：Maps Embed API のみ
+
 ## 楽天トラベル（近くの宿）
 
 詳細ページの「周辺の宿」は楽天トラベルのキーワード検索APIから取得します。Vercel の環境変数に次を設定すると表示されます（未設定なら非表示）。

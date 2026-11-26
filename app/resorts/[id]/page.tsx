@@ -5,6 +5,7 @@ import { ExternalIcon, PrefChip, StatusBadge } from "@/components/Badges";
 import { FavoriteButton } from "@/components/FavoriteButton";
 import { IconTile } from "@/components/Icons";
 import { NearbyHotels } from "@/components/NearbyHotels";
+import { ResortMap } from "@/components/ResortMap";
 import { SnowNearResort } from "@/components/SnowReport";
 import { TicketSection } from "@/components/TicketSection";
 import { getSnowReport } from "@/lib/amedas";
@@ -333,6 +334,8 @@ export default async function ResortPage({ params }: Props) {
           )}
 
           <TicketSection tickets={getTickets(r.id)} officialUrl={r.url} />
+
+          <ResortMap resort={r} />
 
           {r.group && <GroupSection resort={r} />}
 
