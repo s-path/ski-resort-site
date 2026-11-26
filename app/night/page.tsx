@@ -24,6 +24,9 @@ const SEASON_NOTE = {
   unverified: "今季分か未確認",
 } as const;
 
+// オープン予定日を過ぎたら「営業中」に切り替わるよう、6時間ごとに作り直す
+export const revalidate = 21600;
+
 export default function NightPage() {
   const rows = nightsByClosing().flatMap((n) => {
     const r = getResort(n.id);

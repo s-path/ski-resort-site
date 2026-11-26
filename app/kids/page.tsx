@@ -19,6 +19,9 @@ export const metadata: Metadata = {
 const yen = (n: number) =>
   n === 0 ? "無料" : `${n.toLocaleString("ja-JP")}円`;
 
+// オープン予定日を過ぎたら「営業中」に切り替わるよう、6時間ごとに作り直す
+export const revalidate = 21600;
+
 export default function KidsPage() {
   const { always, partial } = kidsFreeResorts();
   const parks = kidsParkResorts();
