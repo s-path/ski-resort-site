@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import type { Resort } from "@/lib/resorts";
-import { formatShortDate, openingSortKey } from "@/lib/resorts";
+import { AREA_GROUPS, formatShortDate, openingSortKey } from "@/lib/resorts";
 import { PrefChip } from "./Badges";
 import { FavoriteStar } from "./FavoriteButton";
 
@@ -17,6 +17,64 @@ const TABS: { key: string; label: string; prefs: string[] | null }[] = [
   { key: "other", label: "埼玉・静岡", prefs: ["埼玉", "静岡"] },
 ];
 
+/** エリアのチップにする最少件数。これより少ないエリアは「その他」にまとめる */
+const MIN_AREA = 3;
+
+/** チップ用の短いエリア名。合わせて1つのチップにするエリアは同じ名前にする */
+const CHIP: Record<string, { group: string; label: string }> = {
+  minakami: { group: "minakami", label: "水上・尾瀬" },
+  kusatsu: { group: "kusatsu", label: "草津・万座" },
+  yuzawa: { group: "yuzawa", label: "湯沢・魚沼" },
+  myoko: { group: "myoko", label: "妙高" },
+  // 軽井沢は1か所だけなので、となりの佐久・小諸とまとめる
+  karuizawa: { group: "karuizawa", label: "軽井沢・佐久" },
+  saku: { group: "karuizawa", label: "軽井沢・佐久" },
+  sugadaira: { group: "sugadaira", label: "菅平" },
+  yatsu: { group: "yatsu", label: "白樺湖・蓼科" },
+  hakuba: { group: "hakuba", label: "白馬" },
+  shiga: { group: "shiga", label: "志賀高原・野沢" },
+  madarao: { group: "madarao", label: "斑尾・飯山" },
+  togakushi: { group: "togakushi", label: "戸隠・黒姫" },
+};
+
+/** AREA_GROUPS の並び順 */
+const AREA_ORDER = AREA_GROUPS.flatMap((g) =>
+  g.areas.map((a) => a.key as string),
+);
+
+type AreaChip = { key: string; label: string; keys: string[]; count: number };
+
+/** 県のタブ内のスキー場を、エリアごとのチップに分ける */
+function areaChips(rows: Resort[]): AreaChip[] {
+  const groups = new Map<string, AreaChip>();
+  for (const key of AREA_ORDER) {
+    const n = rows.filter((r) => r.areaKey === key).length;
+    if (n === 0) continue;
+    const c = CHIP[key] ?? { group: key, label: key };
+    const g = groups.get(c.group) ?? {
+      key: c.group,
+      label: c.label,
+      keys: [],
+      count: 0,
+    };
+    g.keys.push(key);
+    g.count += n;
+    groups.set(c.group, g);
+  }
+  const big = [...groups.values()].filter((g) => g.count >= MIN_AREA);
+  const small = [...groups.values()].filter((g) => g.count < MIN_AREA);
+  if (small.length > 0 && big.length > 0) {
+    big.push({
+      key: "rest",
+      label: "その他",
+      keys: small.flatMap((g) => g.keys),
+      count: small.reduce((n, g) => n + g.count, 0),
+    });
+  }
+  // 1つしかないなら分ける意味がないので出さない
+  return big.length > 1 ? big : [];
+}
+
 /** 自動で切り替える間隔（ミリ秒） */
 const INTERVAL = 10_000;
 /** 自動切り替えで回すタブ（「すべて」は長いので外す） */
@@ -28,6 +86,7 @@ const ROTATION = TABS.filter((t) => t.prefs).map((t) => t.key);
  */
 export function OpenStatus({ resorts }: { resorts: Resort[] }) {
   const [tab, setTab] = useState("gunma");
+  const [area, setArea] = useState("all");
   const [auto, setAuto] = useState(true);
   // 表にマウスが乗っている間・画面外にある間は一時停止
   const [hovered, setHovered] = useState(false);
@@ -75,6 +134,7 @@ export function OpenStatus({ resorts }: { resorts: Resort[] }) {
   const next = () => {
     const i = ROTATION.indexOf(tab);
     setTab(ROTATION[(i + 1) % ROTATION.length]);
+    setArea("all");
   };
   const running = auto && visible && !hovered;
   // 営業中 → オープン予定（日付順） → 確認中 の順に並べる
@@ -88,7 +148,13 @@ export function OpenStatus({ resorts }: { resorts: Resort[] }) {
   const rowsFor = (prefs: string[] | null) =>
     withDates.filter((r) => !prefs || prefs.includes(r.prefecture));
   const active = TABS.find((t) => t.key === tab) ?? TABS[0];
-  const rows = rowsFor(active.prefs);
+  const prefRows = rowsFor(active.prefs);
+  // 「すべて」タブは県が混ざるのでエリアのチップを出さない
+  const chips = active.prefs ? areaChips(prefRows) : [];
+  const chip = chips.find((c) => c.key === area);
+  const rows = chip
+    ? prefRows.filter((r) => chip.keys.includes(r.areaKey))
+    : prefRows;
 
   return (
     // biome-ignore lint/a11y/noStaticElementInteractions: マウスが乗っている間だけ自動切り替えを一時停止する補助で、操作は「自動切り替えを停止」ボタンでもできる
@@ -117,6 +183,7 @@ export function OpenStatus({ resorts }: { resorts: Resort[] }) {
                 data-tab={t.key}
                 onClick={() => {
                   setTab(t.key);
+                  setArea("all");
                   setAuto(false);
                 }}
                 className={`chip relative inline-flex min-h-10 shrink-0 items-center gap-2 overflow-hidden rounded-full border px-4 text-sm font-semibold ${
@@ -160,8 +227,41 @@ export function OpenStatus({ resorts }: { resorts: Resort[] }) {
         </button>
       </div>
 
+      {chips.length > 0 && (
+        <fieldset className="flex flex-wrap gap-1.5">
+          <legend className="sr-only">{active.label}のエリア</legend>
+          {[
+            { key: "all", label: "すべて", count: prefRows.length },
+            ...chips,
+          ].map((c) => {
+            const on = c.key === area || (c.key === "all" && !chip);
+            return (
+              <button
+                key={c.key}
+                type="button"
+                aria-pressed={on}
+                onClick={() => {
+                  setArea(c.key);
+                  setAuto(false);
+                }}
+                className={`chip inline-flex h-8 items-center gap-1.5 rounded-full border px-3 text-xs font-semibold ${
+                  on
+                    ? "border-navy-700 bg-[#EAF0FA] text-navy-700"
+                    : "border-line bg-white text-[#3A4456]"
+                }`}
+              >
+                {c.label}
+                <span className="tabular-nums text-[11px] font-medium text-sub">
+                  {c.count}
+                </span>
+              </button>
+            );
+          })}
+        </fieldset>
+      )}
+
       <div
-        key={tab}
+        key={`${tab}-${area}`}
         role="tabpanel"
         className="overflow-hidden rounded-xl border border-line"
       >
