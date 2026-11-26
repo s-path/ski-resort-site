@@ -64,6 +64,8 @@ export type Resort = {
   url?: string;
   /** 公式サイト以外の便利なリンク（ゲレンデマップ・リフト運行状況など） */
   links?: { label: string; url: string }[];
+  /** Googleマップの検索語（名前だけで場所が定まらないときに指定） */
+  mapQuery?: string;
   /** 共通リフト券などでつながるスキー場のまとまり（例：「志賀高原」） */
   group?: string;
   detail?: ResortDetail;
