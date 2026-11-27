@@ -125,97 +125,33 @@ export default async function Home() {
             </span>
           </div>
 
-          {/* 検索フォームは初期は閉じておき、ボタンで開く（JSなしでも動く details を使う） */}
-          <details className="search-toggle group">
-            <summary className="btn inline-flex h-11 w-fit cursor-pointer list-none items-center gap-2 rounded-lg border border-field bg-white px-[18px] text-sm font-semibold text-navy-950 shadow-[0_1px_2px_rgba(10,31,68,0.04)] [&::-webkit-details-marker]:hidden">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                aria-hidden="true"
-              >
-                <circle cx="11" cy="11" r="7" />
-                <path d="M20 20l-3.5-3.5" />
-              </svg>
-              <span className="group-open:hidden">条件でスキー場を検索</span>
-              <span className="hidden group-open:inline">検索を閉じる</span>
-              <svg
-                width="12"
-                height="12"
-                viewBox="0 0 12 12"
-                aria-hidden="true"
-                className="transition-transform duration-200 group-open:rotate-180 motion-reduce:transition-none"
-              >
-                <path
-                  d="M2 4l4 4 4-4"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                />
-              </svg>
-            </summary>
-            <form
-              action="/resorts"
-              method="get"
-              className="search-panel mt-3 grid grid-cols-1 items-end gap-4 rounded-xl border border-line bg-white p-5 shadow-[0_1px_2px_rgba(10,31,68,0.04)] sm:grid-cols-2 lg:grid-cols-4"
-            >
-              <label className="flex flex-col gap-1.5 text-xs font-semibold text-sub">
-                キーワード
-                <input
-                  type="text"
-                  name="q"
-                  placeholder="スキー場名・地名"
-                  className={field}
-                />
-              </label>
-              <label className="flex flex-col gap-1.5 text-xs font-semibold text-sub">
-                エリア
-                <select name="area" className={field} defaultValue="">
-                  <option value="">すべてのエリア</option>
-                  {AREA_GROUPS.map((g) => (
-                    <optgroup key={g.label} label={g.label}>
-                      {g.areas.map((a) => (
-                        <option key={a.key} value={a.key}>
-                          {a.label}
-                        </option>
-                      ))}
-                    </optgroup>
-                  ))}
-                </select>
-              </label>
-              <label className="flex flex-col gap-1.5 text-xs font-semibold text-sub">
-                出発地からの時間
-                <select name="time" className={field} defaultValue="">
-                  <option value="">練馬ICから・指定なし</option>
-                  <option value="120">練馬ICから2時間以内</option>
-                  <option value="shinkansen">東京駅から新幹線＋バス</option>
-                </select>
-              </label>
-              <button
-                type="submit"
-                className="btn h-11 cursor-pointer rounded-lg bg-navy-700 text-[15px] font-semibold text-white"
-              >
-                検索する
-              </button>
-            </form>
-          </details>
+          {/* 検索はスキー場一覧ページで行う（絞り込みパネルを開いた状態で表示） */}
+          <Link
+            href="/resorts?filter=open"
+            className="btn inline-flex h-11 w-fit items-center gap-2 rounded-lg border border-field bg-white px-[18px] text-sm font-semibold text-navy-950 shadow-[0_1px_2px_rgba(10,31,68,0.04)]"
+          >
+            <Icon name="search" size={16} />
+            条件でスキー場を検索
+            <span aria-hidden="true" className="text-sub">
+              →
+            </span>
+          </Link>
 
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="mr-1 text-[13px] text-sub">よく使う条件</span>
-            {QUICK.map((q) => (
-              <Link
-                key={q.key}
-                href={`/resorts?f=${q.key}`}
-                className="chip inline-flex items-center gap-1.5 rounded-full border border-field bg-white px-3.5 py-2 text-[13px] text-ink"
-              >
-                <Icon name={q.icon} size={14} className="text-navy-700" />
-                {q.label}
-              </Link>
-            ))}
+          <div className="flex flex-col gap-2">
+            <span className="text-[13px] text-sub">よく使う条件</span>
+            {/* 1行に並べ、はみ出す分は横スクロール（スクロールバーは出さない） */}
+            <div className="no-scrollbar -mx-4 flex max-w-[100vw] gap-2 overflow-x-auto px-4 sm:-mx-6 sm:px-6">
+              {QUICK.map((q) => (
+                <Link
+                  key={q.key}
+                  href={`/resorts?f=${q.key}`}
+                  className="chip inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-field bg-white px-3.5 py-2 text-[13px] text-ink"
+                >
+                  <Icon name={q.icon} size={14} className="text-navy-700" />
+                  {q.label}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </section>
