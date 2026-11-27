@@ -41,8 +41,8 @@ export default async function ResortsPage({ searchParams }: Props) {
   const area = first(sp.area);
   const q = first(sp.q);
   const f = first(sp.f);
-  // トップページの「東京駅から新幹線＋バス」は、新幹線で行けるスキー場に絞る
-  const time = first(sp.time);
+  // トップの「条件でスキー場を検索」から来たときは、絞り込みパネルを開いて表示する
+  const filterOpen = first(sp.filter) === "open";
   const sort = first(sp.sort);
   const initialSort: SortKey | undefined =
     sort === "opening" || sort === "name" || sort === "prefecture"
@@ -50,8 +50,6 @@ export default async function ResortsPage({ searchParams }: Props) {
       : undefined;
   const features: FeatureKey[] = [];
   if (f && FEATURE_KEYS.has(f)) features.push(f as FeatureKey);
-  if (time === "shinkansen" && !features.includes("shinkansen"))
-    features.push("shinkansen");
 
   return (
     <div className="mx-auto flex max-w-[1200px] flex-col gap-6 px-4 pb-16 pt-6 sm:gap-7 sm:px-6 sm:pb-[88px] sm:pt-10">
@@ -66,7 +64,7 @@ export default async function ResortsPage({ searchParams }: Props) {
       </div>
       <ResortExplorer
         // 同じページ内でURLの条件だけが変わったとき（ヘッダーの「スキー場を探す」など）も、条件を読み直す
-        key={JSON.stringify([area, q, f, time, sort])}
+        key={JSON.stringify([area, q, f, sort, filterOpen])}
         resorts={resorts}
         initialArea={
           area && AREA_KEYS.has(area) ? (area as AreaKey) : undefined
@@ -74,7 +72,7 @@ export default async function ResortsPage({ searchParams }: Props) {
         initialQuery={q}
         initialFeatures={features}
         initialSort={initialSort}
-        initialMinutes={time && /^\d+$/.test(time) ? Number(time) : undefined}
+        initialPanelOpen={filterOpen}
       />
     </div>
   );

@@ -296,23 +296,3 @@ tbody tr:hover {
   animation-timing-function: linear;
   animation-fill-mode: forwards;
 }
-
-/* トップの検索フォーム：開いたときにふわっと出す */
-.search-toggle[open] .search-panel {
-  animation: search-open 0.25s ease-out;
-}
-@keyframes search-open {
-  from {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .search-toggle[open] .search-panel {
-    animation: none;
-  }
-}
