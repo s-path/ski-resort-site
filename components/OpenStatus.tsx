@@ -152,6 +152,15 @@ export function OpenStatus({ resorts }: { resorts: Resort[] }) {
   // 「すべて」タブは県が混ざるのでエリアのチップを出さない
   const chips = active.prefs ? areaChips(prefRows) : [];
   const chip = chips.find((c) => c.key === area);
+  // スマホ表示用に「すべて」＋エリアのチップを2段に分ける（前半を上段、後半を下段）
+  const chipItems = [
+    { key: "all", label: "すべて", count: prefRows.length },
+    ...chips,
+  ];
+  const half = Math.ceil(chipItems.length / 2);
+  const chipRows = [chipItems.slice(0, half), chipItems.slice(half)].filter(
+    (row) => row.length > 0,
+  );
   const rows = chip
     ? prefRows.filter((r) => chip.keys.includes(r.areaKey))
     : prefRows;
@@ -228,35 +237,43 @@ export function OpenStatus({ resorts }: { resorts: Resort[] }) {
       </div>
 
       {chips.length > 0 && (
-        <fieldset className="flex flex-wrap gap-1.5">
+        <fieldset
+          // スマホは2段に分けて横スクロール（スクロールバーは出さない）。PCは折り返し
+          // fieldset は既定で中身の幅まで広がるため min-w-0 で画面幅に収める
+          className="no-scrollbar -mx-4 min-w-0 max-w-[100vw] overflow-x-auto px-4 sm:mx-0 sm:max-w-full sm:px-0"
+        >
           <legend className="sr-only">{active.label}のエリア</legend>
-          {[
-            { key: "all", label: "すべて", count: prefRows.length },
-            ...chips,
-          ].map((c) => {
-            const on = c.key === area || (c.key === "all" && !chip);
-            return (
-              <button
-                key={c.key}
-                type="button"
-                aria-pressed={on}
-                onClick={() => {
-                  setArea(c.key);
-                  setAuto(false);
-                }}
-                className={`chip inline-flex h-8 items-center gap-1.5 rounded-full border px-3 text-xs font-semibold ${
-                  on
-                    ? "border-navy-700 bg-[#EAF0FA] text-navy-700"
-                    : "border-line bg-white text-[#3A4456]"
-                }`}
-              >
-                {c.label}
-                <span className="tabular-nums text-[11px] font-medium text-sub">
-                  {c.count}
-                </span>
-              </button>
-            );
-          })}
+          <div className="flex w-max flex-col gap-1.5 sm:w-auto sm:flex-row sm:flex-wrap">
+            {chipRows.map((row) => (
+              // PCでは段の区切りをなくし（contents）、すべてのチップを1つの折り返し行に並べる
+              <div key={row[0]?.key} className="flex gap-1.5 sm:contents">
+                {row.map((c) => {
+                  const on = c.key === area || (c.key === "all" && !chip);
+                  return (
+                    <button
+                      key={c.key}
+                      type="button"
+                      aria-pressed={on}
+                      onClick={() => {
+                        setArea(c.key);
+                        setAuto(false);
+                      }}
+                      className={`chip inline-flex h-8 shrink-0 items-center whitespace-nowrap gap-1.5 rounded-full border px-3 text-xs font-semibold ${
+                        on
+                          ? "border-navy-700 bg-[#EAF0FA] text-navy-700"
+                          : "border-line bg-white text-[#3A4456]"
+                      }`}
+                    >
+                      {c.label}
+                      <span className="tabular-nums text-[11px] font-medium text-sub">
+                        {c.count}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
         </fieldset>
       )}
 
